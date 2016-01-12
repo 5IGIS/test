@@ -1,0 +1,482 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A710E9A3-1535-4855-A04C-A0A2C1AA8FA5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JJWATQuery</RootNamespace>
+    <AssemblyName>JJWATQuery</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\dlls\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <RegisterForComInterop>true</RegisterForComInterop>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <ResGenToolArchitecture>Managed32Bit</ResGenToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AOBaseLibC, Version=1.0.5456.29984, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\DLLS\AOBaseLibC.dll</HintPath>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.ADF.Local, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.ArcMapUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Carto, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.CartoUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Display, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Framework, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Geodatabase, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Geometry, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.System, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="JJWATBaseLibC">
+      <HintPath>..\..\dlls\JJWATBaseLibC.dll</HintPath>
+    </Reference>
+    <Reference Include="JJWATSysTool, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\JJWATSysTool.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\System.Windows.Forms.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="Utilitys, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\Utilitys.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dlls\WPFToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="WPFVisifire.Charts">
+      <HintPath>..\..\dlls\WPFVisifire.Charts.dll</HintPath>
+    </Reference>
+    <Reference Include="WPFVisifire.Gauges">
+      <HintPath>..\..\dlls\WPFVisifire.Gauges.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CloseValveAnalyse\ClsOutExcel.cs" />
+    <Compile Include="CloseValveAnalyse\ClsQueryData.cs" />
+    <Compile Include="CloseValveAnalyse\ClsResultSet .cs" />
+    <Compile Include="CloseValveAnalyse\FrmCloseValveResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CloseValveAnalyse\FrmCloseValveResult.designer.cs">
+      <DependentUpon>FrmCloseValveResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CloseValveAnalyse\FrmQueryGF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CloseValveAnalyse\FrmQueryGF.designer.cs">
+      <DependentUpon>FrmQueryGF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CloseValveAnalyse\FrmQueryRange.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CloseValveAnalyse\FrmQueryRange.designer.cs">
+      <DependentUpon>FrmQueryRange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CloseValveAnalyse\FrmQueryRangeResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CloseValveAnalyse\FrmQueryRangeResult.designer.cs">
+      <DependentUpon>FrmQueryRangeResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CloseValveAnalyse\Frm_LoadOutEXCLE.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CloseValveAnalyse\Frm_LoadOutEXCLE.designer.cs">
+      <DependentUpon>Frm_LoadOutEXCLE.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CmdRoutePrint.cs" />
+    <Compile Include="LocalCDBCon.cs" />
+    <Compile Include="CloseValveAnalyse\ProgressShow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CloseValveAnalyse\ProgressShow.designer.cs">
+      <DependentUpon>ProgressShow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CloseValveAnalyse\ShutdownValveScheme.cs" />
+    <Compile Include="CloseValveAnalyse\Struct.cs" />
+    <Compile Include="ClsFrmShow.cs" />
+    <Compile Include="CrossRoadPointForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrossRoadPointForm.Designer.cs">
+      <DependentUpon>CrossRoadPointForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrossRoadPositionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrossRoadPositionForm.designer.cs">
+      <DependentUpon>CrossRoadPositionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatisAnalyse\CalculateProjectCost.cs" />
+    <Compile Include="StatisAnalyse\FrmAreaStatis.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatisAnalyse\FrmAreaStatis.Designer.cs">
+      <DependentUpon>FrmAreaStatis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmInterface.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmInterface.designer.cs">
+      <DependentUpon>FrmInterface.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmQueryCaliber.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmQueryCaliber.designer.cs">
+      <DependentUpon>FrmQueryCaliber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmQueryGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmQueryGroup.designer.cs">
+      <DependentUpon>FrmQueryGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmQueryMaterial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmQueryMaterial.designer.cs">
+      <DependentUpon>FrmQueryMaterial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmQueryNum.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmQueryNum.designer.cs">
+      <DependentUpon>FrmQueryNum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmQueryRoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmQueryRoad.designer.cs">
+      <DependentUpon>FrmQueryRoad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatisAnalyse\FrmDoState.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatisAnalyse\FrmDoState.designer.cs">
+      <DependentUpon>FrmDoState.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatisAnalyse\FrmQuerySheet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatisAnalyse\FrmQuerySheet.Designer.cs">
+      <DependentUpon>FrmQuerySheet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmQuerySpace.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmQuerySpace.designer.cs">
+      <DependentUpon>FrmQuerySpace.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmQuerySQL.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmQuerySQL.Designer.cs">
+      <DependentUpon>FrmQuerySQL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmQueryTime.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmQueryTime.designer.cs">
+      <DependentUpon>FrmQueryTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmRoadPosition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRoadPosition.Designer.cs">
+      <DependentUpon>FrmRoadPosition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmSelect.designer.cs">
+      <DependentUpon>FrmSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmSqlDel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmSqlDel.designer.cs">
+      <DependentUpon>FrmSqlDel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmSqlLond.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmSqlLond.designer.cs">
+      <DependentUpon>FrmSqlLond.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmSqlSave.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmSqlSave.designer.cs">
+      <DependentUpon>FrmSqlSave.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmWarnAnalyse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmWarnAnalyse.designer.cs">
+      <DependentUpon>FrmWarnAnalyse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmWarnSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmWarnSet.designer.cs">
+      <DependentUpon>FrmWarnSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListViewColumnSorter.cs" />
+    <Compile Include="modMain.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectLayerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SelectLayerForm.designer.cs">
+      <DependentUpon>SelectLayerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SelReportControl.xaml.cs">
+      <DependentUpon>SelReportControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StatisAnalyse\FrmSelInvest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatisAnalyse\FrmSelInvest.designer.cs">
+      <DependentUpon>FrmSelInvest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatisAnalyse\RouteRecordsList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatisAnalyse\RouteRecordsList.Designer.cs">
+      <DependentUpon>RouteRecordsList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatisAnalyse\TFH.cs" />
+    <Compile Include="UserCoDate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCoDate.designer.cs">
+      <DependentUpon>UserCoDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCoGroupList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCoGroupList.designer.cs">
+      <DependentUpon>UserCoGroupList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCoTet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCoTet.designer.cs">
+      <DependentUpon>UserCoTet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UtilitysFields.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UtilitysFields.designer.cs">
+      <DependentUpon>UtilitysFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UtilitysResultForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UtilitysResultForm.designer.cs">
+      <DependentUpon>UtilitysResultForm.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CloseValveAnalyse\FrmCloseValveResult.resx">
+      <DependentUpon>FrmCloseValveResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CloseValveAnalyse\FrmQueryGF.resx">
+      <DependentUpon>FrmQueryGF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CloseValveAnalyse\FrmQueryRange.resx">
+      <DependentUpon>FrmQueryRange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CloseValveAnalyse\FrmQueryRangeResult.resx">
+      <DependentUpon>FrmQueryRangeResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CloseValveAnalyse\Frm_LoadOutEXCLE.resx">
+      <DependentUpon>Frm_LoadOutEXCLE.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CloseValveAnalyse\ProgressShow.resx">
+      <DependentUpon>ProgressShow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrossRoadPointForm.resx">
+      <DependentUpon>CrossRoadPointForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrossRoadPositionForm.resx">
+      <DependentUpon>CrossRoadPositionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatisAnalyse\FrmAreaStatis.resx">
+      <DependentUpon>FrmAreaStatis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmInterface.resx">
+      <DependentUpon>FrmInterface.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmQueryCaliber.resx">
+      <DependentUpon>FrmQueryCaliber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmQueryGroup.resx">
+      <DependentUpon>FrmQueryGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmQueryMaterial.resx">
+      <DependentUpon>FrmQueryMaterial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmQueryNum.resx">
+      <DependentUpon>FrmQueryNum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmQueryRoad.resx">
+      <DependentUpon>FrmQueryRoad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatisAnalyse\FrmDoState.resx">
+      <DependentUpon>FrmDoState.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatisAnalyse\FrmQuerySheet.resx">
+      <DependentUpon>FrmQuerySheet.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmQuerySpace.resx">
+      <DependentUpon>FrmQuerySpace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmQuerySQL.resx">
+      <DependentUpon>FrmQuerySQL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmQueryTime.resx">
+      <DependentUpon>FrmQueryTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmRoadPosition.resx">
+      <DependentUpon>FrmRoadPosition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmSelect.resx">
+      <DependentUpon>FrmSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmSqlDel.resx">
+      <DependentUpon>FrmSqlDel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmSqlLond.resx">
+      <DependentUpon>FrmSqlLond.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmSqlSave.resx">
+      <DependentUpon>FrmSqlSave.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmWarnAnalyse.resx">
+      <DependentUpon>FrmWarnAnalyse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmWarnSet.resx">
+      <DependentUpon>FrmWarnSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectLayerForm.resx">
+      <DependentUpon>SelectLayerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatisAnalyse\FrmSelInvest.resx">
+      <DependentUpon>FrmSelInvest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatisAnalyse\RouteRecordsList.resx">
+      <DependentUpon>RouteRecordsList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCoDate.resx">
+      <DependentUpon>UserCoDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCoGroupList.resx">
+      <DependentUpon>UserCoGroupList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCoTet.resx">
+      <DependentUpon>UserCoTet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UtilitysFields.resx">
+      <DependentUpon>UtilitysFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UtilitysResultForm.resx">
+      <DependentUpon>UtilitysResultForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="SelReportControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CmdRoutePrint.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

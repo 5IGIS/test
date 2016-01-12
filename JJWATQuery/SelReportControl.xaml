@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="JJWATQuery.SelReportControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vc="clr-namespace:Visifire.Charts;assembly=WPFVisifire.Charts"   
+    Height="300" Width="500">
+    <UserControl.Resources>
+        <Style x:Key="ChartStyle" TargetType="{x:Type vc:Chart}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Gray" Offset="0"/>
+                        <GradientStop Color="White" Offset=".5"/>
+                        <GradientStop Color="#FFB2ADAD" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="5"/>
+        </Style>
+        <Style x:Key="TitleStyle" TargetType="{x:Type vc:Title}">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontColor" Value="LightGray"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid Loaded="Grid_Loaded">
+        <vc:Chart Theme="Theme1" Name="rePortChar"  Style="{StaticResource ChartStyle}" View3D="True" UniqueColors="True">
+            <vc:Chart.Titles>
+                <vc:Title Text="图表分析" Style="{StaticResource TitleStyle}"/>
+            </vc:Chart.Titles>
+        </vc:Chart>
+    </Grid>
+</UserControl>
