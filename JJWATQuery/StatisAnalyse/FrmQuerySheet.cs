@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -12,6 +13,9 @@ using ESRI.ArcGIS.Framework;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using Utilitys;
+using Excel = Microsoft.Office.Interop.Excel;
+using JJWATQuery.StatisAnalyse;
+
 namespace JJWATQuery
 {
     public partial class FrmQuerySheet : Form
@@ -51,6 +55,15 @@ namespace JJWATQuery
         IField pField;
         int m_ExecuteResult;
 
+        private DataTable dtTable4StatResults = null;
+        private string m_strDefaultExcelFilePath = string.Empty;
+        public List<string> m_lstStrLastData2Select = null;
+        private string m_strSelectedLayerName = string.Empty;
+        private DataTable m_dtPutSelectedData=new DataTable();
+        private int m_iType = -1;
+        private string m_SCName = string.Empty;
+        public const double EXP = 0.00001;
+
         public void inApplication(IApplication Application)
         {
             m_App = Application;
@@ -85,6 +98,7 @@ namespace JJWATQuery
                 if (cbLayer.SelectedIndex != cbLayer.Items.Count - 1)
                 {
                     p_FeatureLayer = Mgs.GetFLayer(cbLayer.SelectedItem.ToString());
+                    m_strSelectedLayerName = cbLayer.SelectedItem.ToString();//add by wchm ,parameter1 pass to frmSelectExprtData
                 }
                 else
                 {
@@ -102,12 +116,14 @@ namespace JJWATQuery
                             if (m_ObjFLayers[i].FeatureLayer.Name == XMLConfig.ValveLine())
                             {
                                 p_FeatureLayer = m_ObjFLayers[i].FeatureLayer;
+                                m_strSelectedLayerName = XMLConfig.ValveLine();//add by wchm ,parameter1 pass to frmSelectExprtData
                             }
                         }
                     }
                 }
                 m_FeatureLayer = p_FeatureLayer;
                 string sName;
+                //add fields to list
                 if (cbLayer.SelectedIndex != cbLayer.Items.Count - 1)
                 {
                     for (int i = 0; i < p_FeatureLayer.FeatureClass.Fields.FieldCount; i++)
@@ -425,8 +441,8 @@ namespace JJWATQuery
                     }
                     this.Cursor = Cursors.WaitCursor;
                     string sCName = string.Empty;
-                    System.Data.DataTable dDataTableB = new System.Data.DataTable();
-                    System.Data.DataTable dDataTableA = new System.Data.DataTable();
+                    System.Data.DataTable dDataTableB = new System.Data.DataTable();//put data by execute sql 
+                    System.Data.DataTable dDataTableA = new System.Data.DataTable();//deal with tableB
                     int iType = 0;
                     if (cbLayer.SelectedIndex != cbLayer.Items.Count - 1)
                     {
@@ -492,12 +508,20 @@ namespace JJWATQuery
                             dDataTableA.Columns.Add(column);
                         }
                     }
+                    //added by wchm parameter2 pass to frmSelectExprtData
+                    m_lstStrLastData2Select=new List<string>();
+
                     for (int j = 0; j < dDataTableB.Rows.Count; j++)
                     {
                         DataRow row = dDataTableA.NewRow();
                         for (int i = 0; i < dDataTableB.Columns.Count; i++)
                         {
                             row[i] = dDataTableB.Rows[j][i].ToString();
+
+                            if (i == dDataTableB.Columns.Count - 1 )
+                            {
+                                m_lstStrLastData2Select.Add(dDataTableB.Rows[j][i].ToString());
+                            }
                         }
                         dDataTableA.Rows.Add(row);
                     }
@@ -518,6 +542,15 @@ namespace JJWATQuery
                     }
                     dDataTableA.Rows.Add(o);
                     dGridView.DataSource = dDataTableA;
+                    
+                    //add by wchm 20160112:export 
+                    dtTable4StatResults = new System.Data.DataTable();
+                    dtTable4StatResults = dDataTableA.Copy();//复制结构和数据
+                    m_dtPutSelectedData = dDataTableA.Clone();//克隆结构和约束等
+                    m_iType = iType;
+                    m_SCName = sCName;
+
+                    //end
                     dGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
                     for (int i = 0; i < dGridView.ColumnCount; i++)
                     {
@@ -547,10 +580,22 @@ namespace JJWATQuery
 
         private void btn_ExportExcel_Click(object sender, EventArgs e)
         {
+            string strSelectCondition=string.Empty;
             try
             {
                 if (dGridView.Rows.Count > 0)
                 {
+
+                    FrmSelectExprtData frmSelectData=new FrmSelectExprtData();
+
+                    frmSelectData.Init(m_strSelectedLayerName,m_lstStrLastData2Select);
+                    if(frmSelectData.ShowDialog()!=DialogResult.OK)
+                    {
+                        return;
+                    }
+                    strSelectCondition = frmSelectData.SelectDataCondition;
+
+                    string strTitleCondition = strSelectCondition == "JJGISALLDATA" ? "全部" : strSelectCondition;
                     SaveFileDialog saveFileDialog = new SaveFileDialog();
                     saveFileDialog.Filter = "Execl files(*.xlsx)|*.xls";
                     saveFileDialog.FilterIndex = 0;
@@ -559,47 +604,238 @@ namespace JJWATQuery
                     saveFileDialog.Title = "导出Excel文件到";
                     DateTime now = DateTime.Now;
                     object missing = Missing.Value;
-                    saveFileDialog.FileName = now.Year.ToString().PadLeft(2) + now.Month.ToString().PadLeft(2, '0') + now.Day.ToString().PadLeft(2, '0') + "-" + now.Hour.ToString().PadLeft(2, '0') + now.Minute.ToString().PadLeft(2, '0') + now.Second.ToString().PadLeft(2, '0');
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    saveFileDialog.FileName = m_strSelectedLayerName + "(" + strTitleCondition + ")" + now.Year.ToString().PadLeft(2) + now.Month.ToString().PadLeft(2, '0') + now.Day.ToString().PadLeft(2, '0') + "-" + now.Hour.ToString().PadLeft(2, '0') + now.Minute.ToString().PadLeft(2, '0') + now.Second.ToString().PadLeft(2, '0');
+                    if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
                     {
-                        Microsoft.Office.Interop.Excel.Application m_objExcel = new Microsoft.Office.Interop.Excel.Application();
-                        Microsoft.Office.Interop.Excel.Workbooks m_objWorkBooks = m_objExcel.Workbooks;
-                        Microsoft.Office.Interop.Excel.Workbook m_objBook = m_objWorkBooks.Add(true);
-                        Microsoft.Office.Interop.Excel.Sheets m_objWorkSheets = m_objBook.Sheets;
-                        Microsoft.Office.Interop.Excel.Worksheet m_objWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)m_objWorkSheets[1];
-                        this.Cursor = Cursors.WaitCursor;
-                        for (int i = 1; i < dGridView.Columns.Count + 1; i++)
-                        {
-                            m_objExcel.Cells[1, i] = dGridView.Columns[i - 1].Name;
-                            for (int j = 1; j < dGridView.Rows.Count + 1; j++)
-                            {
-                                m_objExcel.Cells[j + 1, i] = dGridView.Rows[j - 1].Cells[dGridView.Columns[i - 1].Name].Value.ToString();
-                            }
-                        }
-                        this.Cursor = Cursors.Default;
-                        m_objBook.SaveAs(saveFileDialog.FileName, missing, missing, missing, missing, missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange,
-                                    missing, missing, missing, missing, missing);
-                        m_objBook.Close(missing, missing, missing);
-                        m_objExcel.Workbooks.Close();
-                        m_objWorkBooks.Close();
-                        m_objExcel.Quit();
-                        System.Runtime.InteropServices.Marshal.ReleaseComObject(m_objBook);
-                        System.Runtime.InteropServices.Marshal.ReleaseComObject(m_objExcel);
-                        m_objBook = null;
-                        m_objExcel = null;
-                        GC.Collect();
-                        this.Cursor = Cursors.Default;
-                        MsgBox.Show("转出Excel成功！！！");
+                        return;
                     }
+
+                    StringWriter sw=new StringWriter();
+                    if(dtTable4StatResults==null||dtTable4StatResults.Rows.Count<1)
+                    {
+                        return;
+                    }
+
+                    //according to returned conditions to export data
+                    //all or portion
+                    if(strSelectCondition=="JJGISALLDATA")
+                    {
+                        string[] strColumnNames=new string[dtTable4StatResults.Columns.Count];
+                        this.Cursor = Cursors.WaitCursor;
+                        for(int i=0;i<dtTable4StatResults.Rows.Count;i++)
+                        {
+                            for(int j=0;j<dtTable4StatResults.Columns.Count;j++)
+                            {
+                                DataColumn DC = dtTable4StatResults.Columns[j];
+                                //write Columns' Name
+                                if(i==0&&j==0)
+                                {
+                                    int k = 0;
+                                    foreach (DataColumn dc in dtTable4StatResults.Columns)
+                                    {
+                                        sw.Write(string.Format("{0}\t",dc.ColumnName));
+                                        strColumnNames[k] = dc.ColumnName;
+                                        k++;
+                                    }
+                                    sw.WriteLine();
+                                }
+                                //write table's contents
+                                sw.Write(dtTable4StatResults.Rows[i][j].ToString().Trim()+"\t");
+                            
+                            }
+                            sw.WriteLine();
+                        }
+                    }
+                    else
+                    {
+                        #region 根据条件过滤结果
+                        for (int i=0;i<dtTable4StatResults.Rows.Count-1;i++)
+                        {
+
+                                string res=dtTable4StatResults.Rows[i][dtTable4StatResults.Columns.Count - 1].ToString();
+                                string conditions=strSelectCondition.Substring(0, 3);
+                                string number=strSelectCondition.Substring(3);
+                                if(res!="")
+                                {
+                                    switch (conditions)
+                                    {
+                                        case "介于之":
+                                            {
+                                                string[] numbers = number.Split('和');
+                                                if (numbers[0].Trim() != "" && numbers[1].Trim() != "")
+                                                {
+                                                    double min = 0.0, max = 0.0;
+                                                    min = Convert.ToDouble(numbers[0]);
+                                                    max = Convert.ToDouble(numbers[1]);
+                                                    if (min > max)
+                                                    {
+                                                        min = max - min;
+                                                        max = max - min;
+                                                        min = max + min;
+                                                    }
+                                                    if (Convert.ToDouble(res) >= min && Convert.ToDouble(res) <= max)
+                                                    {
+                                                        m_dtPutSelectedData.Rows.Add(dtTable4StatResults.Rows[i].ItemArray);
+                                                    }
+                                                    else
+                                                    {
+                                                        continue;
+                                                    }
+                                                }
+                                                break;
+                                            }
+                                        case "等于之":
+                                            {
+                                                if (Math.Abs(Convert.ToDouble(res)-Convert.ToDouble(number))<EXP)
+                                                {
+                                                    m_dtPutSelectedData.Rows.Add(dtTable4StatResults.Rows[i].ItemArray);
+                                                }
+                                                else
+                                                {
+                                                    continue;
+                                                }
+                                                break;
+                                            }
+                                        case "大于之":
+                                            {
+                                                if (Convert.ToDouble(res) > Convert.ToDouble(number))
+                                                {
+                                                    m_dtPutSelectedData.Rows.Add(dtTable4StatResults.Rows[i].ItemArray);
+                                                }
+                                                else
+                                                {
+                                                    continue;
+                                                }
+                                                break;
+                                            }
+                                        case "不小于":
+                                            {
+                                                if (Convert.ToDouble(res) > Convert.ToDouble(number)||Math.Abs(Convert.ToDouble(res) - Convert.ToDouble(number)) < EXP)
+                                                {
+                                                    m_dtPutSelectedData.Rows.Add(dtTable4StatResults.Rows[i].ItemArray);
+                                                }
+                                                else
+                                                {
+                                                    continue;
+                                                }
+                                                break;
+                                            }
+                                        case "小于之":
+                                            {
+                                                if (Convert.ToDouble(res) < Convert.ToDouble(number))
+                                                {
+                                                    m_dtPutSelectedData.Rows.Add(dtTable4StatResults.Rows[i].ItemArray);
+                                                }
+                                                else
+                                                {
+                                                    continue;
+                                                }
+                                                break;
+                                            }
+                                        case "不大于":
+                                            {
+                                                if (Convert.ToDouble(res) < Convert.ToDouble(number) || Math.Abs(Convert.ToDouble(res) - Convert.ToDouble(number)) < EXP)
+                                                {
+                                                    m_dtPutSelectedData.Rows.Add(dtTable4StatResults.Rows[i].ItemArray);
+                                                }
+                                                else
+                                                {
+                                                    continue;
+                                                }
+                                                break;
+                                            }
+
+                                            
+                                    }//end switch
+                                    
+                                }//end if(res!="")
+
+                        }//end for(int i=0;i<dtTable4StatResults.Rows.Count;i++)
+
+                        object[] o = new object[m_dtPutSelectedData.Columns.Count];
+                        if (m_iType == 2)
+                        {
+                            Decimal sum = m_dtPutSelectedData.AsEnumerable().Sum(a => a.Field<Decimal>(m_SCName.Split('/')[0]));
+                            Decimal sum1 = m_dtPutSelectedData.AsEnumerable().Sum(a => a.Field<Decimal>(m_SCName.Split('/')[1]));
+                            o[0] = "合计";
+                            o[o.Length - 1] = sum;
+                            o[o.Length - 2] = sum1;
+                        }
+                        else
+                        {
+                            Decimal sum = m_dtPutSelectedData.AsEnumerable().Sum(a => a.Field<Decimal>(m_SCName));
+                            o[0] = "合计";
+                            o[o.Length - 1] = sum;
+                        }
+                        m_dtPutSelectedData.Rows.Add(o);
+                        #endregion
+
+                        string[] strColumnNames = new string[m_dtPutSelectedData.Columns.Count];
+                        this.Cursor = Cursors.WaitCursor;
+                        for (int i = 0; i < m_dtPutSelectedData.Rows.Count; i++)
+                        {
+                            for (int j = 0; j < m_dtPutSelectedData.Columns.Count; j++)
+                            {
+                                DataColumn DC = m_dtPutSelectedData.Columns[j];
+                                //write Columns' Name
+                                if (i == 0 && j == 0)
+                                {
+                                    int k = 0;
+                                    foreach (DataColumn dc in m_dtPutSelectedData.Columns)
+                                    {
+                                        sw.Write(string.Format("{0}\t", dc.ColumnName));
+                                        strColumnNames[k] = dc.ColumnName;
+                                        k++;
+                                    }
+                                    sw.WriteLine();
+                                }
+                                //write table's contents
+                                sw.Write(m_dtPutSelectedData.Rows[i][j].ToString().Trim() + "\t");
+
+                            }
+                            sw.WriteLine();
+                        }
+
+
+
+                    }//end else
+
+                    
+                    byte[] s = System.Text.Encoding.GetEncoding("gb2312").GetBytes(sw.ToString());
+                    FileStream fs=new FileStream(saveFileDialog.FileName,FileMode.Create,FileAccess.Write);
+                    fs.Write(s,0,s.Length);
+                    fs.Close();
+                    sw.Flush();
+                    this.Cursor = Cursors.Default;
+                    if(MessageBox.Show("导出完毕，点击【确定】打开！","提示",MessageBoxButtons.OK)==DialogResult.OK)
+                    {
+                        OpenFolderAndSelectFile(saveFileDialog.FileName);
+                    }
+
                 }
                 else
                     MsgBox.Show("数据为空不可以导出!");
+
+
+
             }
             catch (Exception ex)
             {
+                this.Cursor = Cursors.Default;
                 MsgBox.Show(ex.ToString());
             }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+                //if (dtTable4StatResults != null) dtTable4StatResults.Clear();
+                //m_lstStrLastData2Select.Clear();
+                //m_strSelectedLayerName = "";
+                m_dtPutSelectedData.Clear();
+                //m_SCName = "";
+                //m_iType = -1;
+            }
         }
+
 
         private void cbLayer_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -951,5 +1187,47 @@ namespace JJWATQuery
                 MsgBox.Show(ex.ToString());
             }
         }
+
+        private void OpenFolderAndSelectFile(string fileFullName)
+        {
+            Excel.Application ExcelApp = new Excel.Application();
+            ExcelApp.DefaultFilePath = m_strDefaultExcelFilePath;
+            object missing = Missing.Value;
+            try
+            {
+                //打开文件
+                ExcelApp.Application.Workbooks.Open(fileFullName,
+                missing,
+                missing,
+                missing,
+                missing,
+                missing,
+                missing,
+                missing,
+                missing,
+                missing,
+                missing,
+                missing,
+                missing);
+
+                ExcelApp.Visible = true;
+                ExcelApp.DisplayAlerts = false;
+                ExcelApp.AlertBeforeOverwriting = false;
+
+                //ExcelApp.Run(strMacro4Run, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "错误提示");
+                return;
+            }
+
+        }
+
+
+
+
+
     }
 }
