@@ -43,7 +43,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 14);
+            this.label1.Location = new System.Drawing.Point(13, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(65, 12);
             this.label1.TabIndex = 0;
@@ -53,9 +53,9 @@
             // 
             this.txt_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_Name.Location = new System.Drawing.Point(67, 10);
+            this.txt_Name.Location = new System.Drawing.Point(84, 16);
             this.txt_Name.Name = "txt_Name";
-            this.txt_Name.Size = new System.Drawing.Size(195, 21);
+            this.txt_Name.Size = new System.Drawing.Size(163, 21);
             this.txt_Name.TabIndex = 1;
             // 
             // listBox1
@@ -65,53 +65,53 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(67, 37);
+            this.listBox1.Location = new System.Drawing.Point(84, 43);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(195, 232);
+            this.listBox1.Size = new System.Drawing.Size(163, 232);
             this.listBox1.TabIndex = 2;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // btn_Position
             // 
             this.btn_Position.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_Position.Location = new System.Drawing.Point(274, 216);
+            this.btn_Position.Location = new System.Drawing.Point(260, 223);
             this.btn_Position.Name = "btn_Position";
-            this.btn_Position.Size = new System.Drawing.Size(55, 23);
+            this.btn_Position.Size = new System.Drawing.Size(42, 23);
             this.btn_Position.TabIndex = 3;
-            this.btn_Position.Text = "定位(&L)";
+            this.btn_Position.Text = "定位";
             this.btn_Position.UseVisualStyleBackColor = true;
             this.btn_Position.Click += new System.EventHandler(this.btn_Position_Click);
             // 
             // btn_Query
             // 
             this.btn_Query.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_Query.Location = new System.Drawing.Point(274, 185);
+            this.btn_Query.Location = new System.Drawing.Point(260, 194);
             this.btn_Query.Name = "btn_Query";
-            this.btn_Query.Size = new System.Drawing.Size(55, 23);
+            this.btn_Query.Size = new System.Drawing.Size(42, 23);
             this.btn_Query.TabIndex = 3;
-            this.btn_Query.Text = "查询(&I)";
+            this.btn_Query.Text = "查询";
             this.btn_Query.UseVisualStyleBackColor = true;
             this.btn_Query.Click += new System.EventHandler(this.btn_Query_Click);
             // 
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(272, 246);
+            this.button3.Location = new System.Drawing.Point(260, 252);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(57, 23);
+            this.button3.Size = new System.Drawing.Size(42, 23);
             this.button3.TabIndex = 3;
-            this.button3.Text = "退出(&Q)";
+            this.button3.Text = "取消";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // btn_pickup
             // 
             this.btn_pickup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_pickup.Location = new System.Drawing.Point(273, 9);
+            this.btn_pickup.Location = new System.Drawing.Point(260, 14);
             this.btn_pickup.Name = "btn_pickup";
-            this.btn_pickup.Size = new System.Drawing.Size(55, 23);
+            this.btn_pickup.Size = new System.Drawing.Size(42, 23);
             this.btn_pickup.TabIndex = 3;
-            this.btn_pickup.Text = "拾取(&G)";
+            this.btn_pickup.Text = "拾取";
             this.btn_pickup.UseVisualStyleBackColor = true;
             this.btn_pickup.Visible = false;
             this.btn_pickup.Click += new System.EventHandler(this.btn_pickup_Click);
@@ -126,7 +126,7 @@
             this.AcceptButton = this.btn_Query;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(335, 286);
+            this.ClientSize = new System.Drawing.Size(315, 286);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.btn_pickup);
             this.Controls.Add(this.btn_Query);
@@ -139,7 +139,6 @@
             this.Name = "FrmRoadPosition";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "地理位置定位";
-            this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmRoadPosition_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();

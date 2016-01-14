@@ -57,9 +57,13 @@ namespace JJWATQuery
         private void cbType_CheckedChanged(object sender, EventArgs e)
         {
             if (cbType.Checked == true)
+            {
                 btnSelect.Enabled = true;
+            }
             else
+            {
                 btnSelect.Enabled = false;
+            }
         }
     }
 }

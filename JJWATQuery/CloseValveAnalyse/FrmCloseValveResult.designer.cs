@@ -150,7 +150,7 @@
             this.btn_Export.Name = "btn_Export";
             this.btn_Export.Size = new System.Drawing.Size(85, 23);
             this.btn_Export.TabIndex = 7;
-            this.btn_Export.Text = "导 出(&E)";
+            this.btn_Export.Text = "导出(&E)";
             this.btn_Export.UseVisualStyleBackColor = true;
             this.btn_Export.Click += new System.EventHandler(this.btn_Export_Click);
             // 
@@ -192,7 +192,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(85, 23);
             this.button1.TabIndex = 9;
-            this.button1.Text = "退 出(&Q)";
+            this.button1.Text = "退出(&O)";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -292,8 +292,7 @@
             this.MaximizeBox = false;
             this.Name = "FrmQueryResult";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "分析结果";
-            this.TopMost = true;
+            this.Text = "查询结果";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmQueryResult_FormClosed);
             this.Load += new System.EventHandler(this.FrmQueryResult_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid_QueryResult)).EndInit();

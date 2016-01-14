@@ -16,6 +16,7 @@ using JJWATBaseLibC;
 using System.IO;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Reflection;
+using System.Globalization;
 
 
 namespace JJWATQuery
@@ -32,7 +33,7 @@ namespace JJWATQuery
         private const string mc_strNameofTFH2000 = "网格2000";
         private const string mc_strNameofTFH10000 = "网格10000";
         //private const string mc_strExcelTemplate = @"C:\Users\Administrator\AppData\Roaming\Microsoft\Excel\XLSTART\PERSONAL.XLSB";
-        private const string mc_strExcelTemplate = @"d:\JJWATER\DLLS\PERSONAL.XLSB";
+        private  string m_strExcelTemplate = string.Empty;
 
         private CDBCon m_objDBCon = null;
         private SysParameters m_CurParameter;
@@ -57,6 +58,11 @@ namespace JJWATQuery
             m_CurParameter = SysParameters.GetInstance();
             m_objDBCon = CDBCon.GetInstance();
             m_strCurScale = "2000";
+
+
+            string configPath = System.Reflection.Assembly.GetExecutingAssembly().Location.ToString(CultureInfo.InvariantCulture);
+            configPath = System.IO.Path.GetDirectoryName(configPath);
+            m_strExcelTemplate = configPath + @"\PERSONAL.XLSB";
 
             var objFeatureLayer = m_objMap.GetLayerByName(mc_strNameofTFH2000);
             if (objFeatureLayer != null)
@@ -469,7 +475,7 @@ namespace JJWATQuery
                 if (MessageBox.Show("路由本制作完毕,点击确定打开", "操作提示", MessageBoxButtons.OK) == DialogResult.OK)
                 {
                     string strMacroName = "PERSONAL.XLSB!路由本";
-                    OpenFolderAndSelectFile(saveFileDialog.FileName, mc_strExcelTemplate, strMacroName);
+                    OpenFolderAndSelectFile(saveFileDialog.FileName, m_strExcelTemplate, strMacroName);
                 }
                 this.Cursor = Cursors.Default;
 
@@ -713,7 +719,7 @@ namespace JJWATQuery
                         if (MessageBox.Show("路由本制作完毕,点击确定打开", "操作提示",MessageBoxButtons.OK)==DialogResult.OK)
                         {
                             string strMacroName = "PERSONAL.XLSB!路由本";
-                            OpenFolderAndSelectFile(saveFileDialog.FileName, mc_strExcelTemplate, strMacroName); 
+                            OpenFolderAndSelectFile(saveFileDialog.FileName, m_strExcelTemplate, strMacroName); 
                         }
                         this.Cursor = Cursors.Default;
                         bWriteColumnsHead = false;
@@ -749,6 +755,7 @@ namespace JJWATQuery
             {
                 string[] sArray = OLDNO.Split('-');
                 return sArray[sArray.Length - 1];
+
             }
             else
             {

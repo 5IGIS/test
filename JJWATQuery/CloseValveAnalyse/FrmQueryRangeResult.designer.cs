@@ -106,7 +106,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(85, 25);
             this.button1.TabIndex = 12;
-            this.button1.Text = "退出(&Q)";
+            this.button1.Text = "退出";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -240,8 +240,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmQueryRangeResult";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "分析结果";
-            this.TopMost = true;
+            this.Text = "查询结果";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmQueryRangeResult_FormClosed);
             this.Load += new System.EventHandler(this.FrmQueryRangeResult_Load);
             this.tabControl1.ResumeLayout(false);

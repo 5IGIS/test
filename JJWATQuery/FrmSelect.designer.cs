@@ -43,7 +43,7 @@
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(57, 24);
             this.btnOK.TabIndex = 0;
-            this.btnOK.Text = "确定(&Q)";
+            this.btnOK.Text = "确定";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -95,11 +95,9 @@
             this.Controls.Add(this.gbSelect);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
             this.Name = "FrmSelect";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "筛选条件:";
-            this.TopMost = true;
             this.Shown += new System.EventHandler(this.frmSelect_Shown);
             this.VisibleChanged += new System.EventHandler(this.frmSelect_VisibleChanged);
             this.gbSelect.ResumeLayout(false);

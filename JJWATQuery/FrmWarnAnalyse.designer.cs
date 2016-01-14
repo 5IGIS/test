@@ -47,33 +47,33 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(286, 223);
+            this.btnClose.Location = new System.Drawing.Point(288, 223);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(55, 23);
+            this.btnClose.Size = new System.Drawing.Size(53, 23);
             this.btnClose.TabIndex = 65;
-            this.btnClose.Text = "退出(&Q)";
+            this.btnClose.Text = "退出";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnQuery
             // 
             this.btnQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnQuery.Location = new System.Drawing.Point(166, 223);
+            this.btnQuery.Location = new System.Drawing.Point(172, 223);
             this.btnQuery.Name = "btnQuery";
-            this.btnQuery.Size = new System.Drawing.Size(55, 23);
+            this.btnQuery.Size = new System.Drawing.Size(53, 23);
             this.btnQuery.TabIndex = 64;
-            this.btnQuery.Text = "查询(&I)";
+            this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = true;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(227, 223);
+            this.btnClear.Location = new System.Drawing.Point(231, 223);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(55, 23);
+            this.btnClear.Size = new System.Drawing.Size(53, 23);
             this.btnClear.TabIndex = 63;
-            this.btnClear.Text = "重置(&R)";
+            this.btnClear.Text = "重置";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
@@ -96,11 +96,11 @@
             // btnAreaClear
             // 
             this.btnAreaClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAreaClear.Location = new System.Drawing.Point(108, 178);
+            this.btnAreaClear.Location = new System.Drawing.Point(65, 180);
             this.btnAreaClear.Name = "btnAreaClear";
-            this.btnAreaClear.Size = new System.Drawing.Size(55, 23);
+            this.btnAreaClear.Size = new System.Drawing.Size(53, 23);
             this.btnAreaClear.TabIndex = 46;
-            this.btnAreaClear.Text = "清除(&C)";
+            this.btnAreaClear.Text = "清除";
             this.btnAreaClear.UseVisualStyleBackColor = true;
             this.btnAreaClear.Click += new System.EventHandler(this.btnAreaClear_Click);
             // 
@@ -108,11 +108,11 @@
             // 
             this.btnAreaSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnAreaSelect.Enabled = false;
-            this.btnAreaSelect.Location = new System.Drawing.Point(6, 178);
+            this.btnAreaSelect.Location = new System.Drawing.Point(6, 180);
             this.btnAreaSelect.Name = "btnAreaSelect";
-            this.btnAreaSelect.Size = new System.Drawing.Size(55, 23);
+            this.btnAreaSelect.Size = new System.Drawing.Size(53, 23);
             this.btnAreaSelect.TabIndex = 45;
-            this.btnAreaSelect.Text = "选择(&S)";
+            this.btnAreaSelect.Text = "选择";
             this.btnAreaSelect.UseVisualStyleBackColor = true;
             this.btnAreaSelect.Click += new System.EventHandler(this.btnAreaSelect_Click);
             // 

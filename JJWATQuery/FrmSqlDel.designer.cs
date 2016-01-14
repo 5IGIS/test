@@ -70,22 +70,22 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(285, 175);
+            this.btnClose.Location = new System.Drawing.Point(305, 175);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(67, 23);
+            this.btnClose.Size = new System.Drawing.Size(47, 23);
             this.btnClose.TabIndex = 45;
-            this.btnClose.Text = "退出(&Q)";
+            this.btnClose.Text = " 退出";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(212, 175);
+            this.btnOK.Location = new System.Drawing.Point(252, 175);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(67, 23);
+            this.btnOK.Size = new System.Drawing.Size(47, 23);
             this.btnOK.TabIndex = 44;
-            this.btnOK.Text = "删除(&D)";
+            this.btnOK.Text = "删除";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -98,7 +98,6 @@
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.gbSQL);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
             this.Name = "FrmSqlDel";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "SQL语句管理";

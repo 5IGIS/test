@@ -48,6 +48,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,9 +79,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboSB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboSB.FormattingEnabled = true;
-            this.cboSB.Location = new System.Drawing.Point(56, 23);
+            this.cboSB.Location = new System.Drawing.Point(62, 23);
             this.cboSB.Name = "cboSB";
-            this.cboSB.Size = new System.Drawing.Size(149, 20);
+            this.cboSB.Size = new System.Drawing.Size(150, 20);
             this.cboSB.TabIndex = 1;
             // 
             // label1
@@ -88,7 +89,7 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 26);
+            this.label1.Location = new System.Drawing.Point(15, 26);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 12);
             this.label1.TabIndex = 0;
@@ -107,11 +108,11 @@
             // 
             this.btnRegional.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRegional.Enabled = false;
-            this.btnRegional.Location = new System.Drawing.Point(141, 18);
+            this.btnRegional.Location = new System.Drawing.Point(144, 16);
             this.btnRegional.Name = "btnRegional";
-            this.btnRegional.Size = new System.Drawing.Size(82, 23);
+            this.btnRegional.Size = new System.Drawing.Size(77, 23);
             this.btnRegional.TabIndex = 2;
-            this.btnRegional.Text = "选择区域(&S)";
+            this.btnRegional.Text = "选择区域";
             this.btnRegional.UseVisualStyleBackColor = true;
             this.btnRegional.Click += new System.EventHandler(this.btnRegional_Click);
             // 
@@ -121,14 +122,14 @@
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(75, 23);
             this.btnQuery.TabIndex = 8;
-            this.btnQuery.Text = "分析(&I)";
+            this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = true;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
             // chkRegional
             // 
             this.chkRegional.AutoSize = true;
-            this.chkRegional.Location = new System.Drawing.Point(58, 21);
+            this.chkRegional.Location = new System.Drawing.Point(71, 20);
             this.chkRegional.Name = "chkRegional";
             this.chkRegional.Size = new System.Drawing.Size(72, 16);
             this.chkRegional.TabIndex = 1;
@@ -139,7 +140,7 @@
             // chkAllCity
             // 
             this.chkAllCity.AutoSize = true;
-            this.chkAllCity.Location = new System.Drawing.Point(7, 20);
+            this.chkAllCity.Location = new System.Drawing.Point(17, 20);
             this.chkAllCity.Name = "chkAllCity";
             this.chkAllCity.Size = new System.Drawing.Size(48, 16);
             this.chkAllCity.TabIndex = 0;
@@ -153,7 +154,6 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.btnRegional);
             this.groupBox3.Controls.Add(this.chkRegional);
-            this.groupBox3.Controls.Add(this.chkAllCity);
             this.groupBox3.Controls.Add(this.panel3);
             this.groupBox3.Location = new System.Drawing.Point(19, 161);
             this.groupBox3.Name = "groupBox3";
@@ -166,19 +166,20 @@
             // 
             this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel3.Controls.Add(this.chkAllCity);
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(227, 57);
+            this.panel3.Size = new System.Drawing.Size(227, 63);
             this.panel3.TabIndex = 3;
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(160, 232);
+            this.btnClose.Location = new System.Drawing.Point(171, 232);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(86, 23);
+            this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 9;
-            this.btnClose.Text = "退出(&Q)";
+            this.btnClose.Text = "关闭";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
@@ -206,7 +207,7 @@
             this.groupBox2.Controls.Add(this.txtMax);
             this.groupBox2.Controls.Add(this.txtMin);
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Location = new System.Drawing.Point(20, 86);
+            this.groupBox2.Location = new System.Drawing.Point(20, 89);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(226, 66);
             this.groupBox2.TabIndex = 6;
@@ -245,12 +246,13 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmQueryRange";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "距离设备分析";
-            this.TopMost = true;
+            this.Text = "距离设备查询";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);

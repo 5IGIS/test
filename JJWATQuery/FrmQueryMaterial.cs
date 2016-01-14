@@ -17,6 +17,7 @@ using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geodatabase;
 using JJWATSysTool;
+using AOBaseLibC.AFGeodatabase;
 
 namespace JJWATQuery
 {
@@ -53,55 +54,6 @@ namespace JJWATQuery
             Mgs.SfrmName = "材质";
             modMain.Init(Application);
         }
-
-        private void frmQueryMaterial_Shown(object sender, EventArgs e)
-        {
-            Mgs.GeoType = esriGeometryType.esriGeometryPolyline;
-            m_lsLayer = Mgs.GetLineLayers(); //Mgs.GetLayers();
-            if (m_lsLayer.Count > 0)
-            {
-                foreach (var layer in m_lsLayer)
-                {
-                    bool blnHaveField = true;
-                    var objLayer = modMain.m_objMap.GetLayerByName(layer);
-                    foreach (string value in modMain.m_CurParrmeter.QueryMaterial())
-                    {
-                        if (objLayer.FeatureLayer.FeatureClass.Fields.FindField(value) == -1)
-                        {
-                            blnHaveField = false;
-                        }
-                    }
-                    if (blnHaveField)
-                    {
-                        cblLayer.Items.Add(layer);
-                    }
-                }
-            }
-            cbArea.SelectedIndex = 0;
-            dTypeDomain = Mgs.GetDomainsByName(Mgs.SfrmName);
-            if (dTypeDomain.Count != 0)
-            {
-                iListSelectType.Clear();
-                foreach (object item in dTypeDomain.Keys)
-                {
-                    sTypeNamesE = item.ToString();
-                }
-                iListSelectType = dTypeDomain[sTypeNamesE];
-                cblSelect.Items.Clear();
-                for (int i = 0; i < iListSelectType.Count; i++)
-                {
-                    cblSelect.Items.Add(iListSelectType[i]);
-                }
-
-                if (string.IsNullOrEmpty(sTypeNamesE) == false)
-                {
-                    int i = sTypeNamesE.IndexOf("_", 0, sTypeNamesE.Length);
-                    if (i > -1)
-                        sTypeNamesE = sTypeNamesE.Substring(i + 1, sTypeNamesE.Length - i - 1);
-                }
-            }
-        }
-
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
@@ -296,8 +248,10 @@ namespace JJWATQuery
                 }
                 else
                 {
+                    frm.Close();
+                    frm = new UtilitysResultForm();
                     frm.Init(pQuery, m_App);
-                    frm.Activate();
+                    frm.Show();
                 }
                 this.Cursor = Cursors.Default;
             }
@@ -367,7 +321,59 @@ namespace JJWATQuery
             }
         }
 
+        private void FrmQueryMaterial_Load(object sender, EventArgs e)
+        {
+            Mgs.GeoType = esriGeometryType.esriGeometryPolyline;
+            m_lsLayer = Mgs.GetLineLayers(); //Mgs.GetLayers();
+            if (m_lsLayer.Count > 0)
+            {
+                foreach (var layer in m_lsLayer)
+                {
+                    bool blnHaveField = true;
+                    var objLayer = modMain.m_objMap.GetLayerByName(layer);
+                    foreach (string value in modMain.m_CurParrmeter.QueryMaterial())
+                    {
+                        if (objLayer.FeatureLayer.FeatureClass.Fields.FindField(value) == -1)
+                        {
+                            blnHaveField = false;
+                        }
+                    }
+                    if (blnHaveField)
+                    {
+                        cblLayer.Items.Add(layer);
+                    }
+                }
+            }
+            cbArea.SelectedIndex = 0;
+            AFFeatureLayer oLayer = modMain.m_objMap.GetLayerByName(XMLConfig.ValveDevice());
+            if (oLayer == null)
+            {
+                MsgBox.Show("地图没有加载‘" + XMLConfig.ValveDevice() + "’图层，请修改配置表！");
+                return;
+            }
+            IField pfd = oLayer.FeatureLayer.FeatureClass.Fields.get_Field(oLayer.FeatureLayer.FeatureClass.Fields.FindFieldByAliasName(Mgs.SfrmName));
+            dTypeDomain = Mgs.GetDomainsByName(pfd);
+            if (dTypeDomain.Count != 0)
+            {
+                iListSelectType.Clear();
+                foreach (object item in dTypeDomain.Keys)
+                {
+                    sTypeNamesE = item.ToString();
+                }
+                iListSelectType = dTypeDomain[sTypeNamesE];
+                cblSelect.Items.Clear();
+                for (int i = 0; i < iListSelectType.Count; i++)
+                {
+                    cblSelect.Items.Add(iListSelectType[i]);
+                }
 
- 
+                if (string.IsNullOrEmpty(sTypeNamesE) == false)
+                {
+                    int i = sTypeNamesE.IndexOf("_", 0, sTypeNamesE.Length);
+                    if (i > -1)
+                        sTypeNamesE = sTypeNamesE.Substring(i + 1, sTypeNamesE.Length - i - 1);
+                }
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ using Utilitys;
 using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.esriSystem;
 using JJWATSysTool;
+using AOBaseLibC.AFGeodatabase;
 
 namespace JJWATQuery
 {
@@ -74,7 +75,14 @@ namespace JJWATQuery
                 }
             }
             cbArea.SelectedIndex = 0;
-            dTypeDomain = Mgs.GetDomainsByName(Mgs.SfrmName);
+            AFFeatureLayer oLayer = modMain.m_objMap.GetLayerByName(XMLConfig.ValveDevice());
+            if (oLayer == null)
+            {
+                MsgBox.Show("地图没有加载‘" + XMLConfig.ValveDevice() + "’图层，请修改配置表！");
+                return;
+            }
+            IField pfd = oLayer.FeatureLayer.FeatureClass.Fields.get_Field(oLayer.FeatureLayer.FeatureClass.Fields.FindFieldByAliasName(Mgs.SfrmName));
+            dTypeDomain = Mgs.GetDomainsByName(pfd);
             if (dTypeDomain.Count != 0)
             {
                 iListSelectType.Clear();
@@ -278,8 +286,11 @@ namespace JJWATQuery
                 }
                 else
                 {
+                    frm.Close();
+                    frm = new UtilitysResultForm();
                     frm.Init(pQuery, m_App);
-                    frm.Activate();
+                    frm.Show();
+                   
                 }
                 this.Cursor = Cursors.Default;
             }

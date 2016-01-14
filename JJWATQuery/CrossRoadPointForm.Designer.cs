@@ -140,7 +140,7 @@
             this.pBtn.Name = "pBtn";
             this.pBtn.Size = new System.Drawing.Size(75, 23);
             this.pBtn.TabIndex = 2;
-            this.pBtn.Text = "定位(&L)";
+            this.pBtn.Text = "定位";
             this.pBtn.UseVisualStyleBackColor = true;
             this.pBtn.Click += new System.EventHandler(this.pBtn_Click);
             // 
@@ -151,7 +151,7 @@
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Size = new System.Drawing.Size(75, 23);
             this.closeBtn.TabIndex = 3;
-            this.closeBtn.Text = "退出(&Q)";
+            this.closeBtn.Text = "退出";
             this.closeBtn.UseVisualStyleBackColor = true;
             this.closeBtn.Click += new System.EventHandler(this.closeBtn_Click);
             // 

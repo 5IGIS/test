@@ -170,7 +170,8 @@ namespace JJWATQuery
                 System.Data.DataTable dt;
                 Dictionary<string, string> pDicSubs;
                 Dictionary<string, List<string>> pDicMaterial;
-                pDicMaterial = mgs.GetDomainsByName(pMaterial);
+                IField pfd = m_ObjFClass.Fields.get_Field(m_ObjFClass.Fields.FindFieldByAliasName(pMaterial));
+                pDicMaterial = mgs.GetDomainsByName(pfd);
                 for (int i = 0; i < pFeatureLayers.Count; i++)
                 {
                     if (pFeatureLayers[i].FeatureClass.ShapeType == esriGeometryType.esriGeometryPolyline)
@@ -1223,7 +1224,7 @@ namespace JJWATQuery
                                 continue;
                             d = new DetailInfo();
                             d.AttributeName = pField.AliasName;
-                            if (pField.Name.ToUpper() == subtypeName)
+                            if (pField.AliasName == subtypeName)
                             {
                                 if (dicSubtypes.ContainsKey(value.ToString().Trim()))
                                 {
@@ -1231,7 +1232,9 @@ namespace JJWATQuery
                                 }
                             }
                             else
+                            {
                                 d.AttributeValue = value.ToString().Trim();
+                            }
                             pDetails.Add(d);
                         }
                     }
@@ -1368,17 +1371,66 @@ namespace JJWATQuery
         public void PositionGraph(IFeatureLayer pFLayer)
         {
             AFFlash objFlash = new AFFlash(m_App);
-            AFGraphOrientation objGraphOri = new AFGraphOrientation(m_App);
-            AFCollection objLayers = objMap.GetLayers(AFConst.AFLayterType.AFGeoFeatureLayer);            
-            objGraphOri.OrientFeature(pFeature);
-            objFlash.Features = pFeature;
-            objFlash.StartFlash();
+            //AFGraphOrientation objGraphOri = new AFGraphOrientation(m_App);
+            AFCollection objLayers = objMap.GetLayers(AFConst.AFLayterType.AFGeoFeatureLayer);
+            //objGraphOri.OrientFeature(pFeature);
+            OrientFeature(pFeature);
+            //objFlash.Features = pFeature;
+            //objFlash.StartFlash();
             //objMap.RefreshMap();
             t1.Interval = 1000;
             t1.Tick += new EventHandler(t1_Tick);
             FlashShape(pFeature);
         }
+        public void OrientFeature(IFeature pFeature)
+        {
+            IEnvelope pEnv;
+            IGeometry pGeometry;
 
+            pEnv = new EnvelopeClass();
+
+            if (pFeature.Shape.GeometryType == esriGeometryType.esriGeometryPoint)
+            {
+                pGeometry = pFeature.Shape;
+                pEnv = pGeometry.Envelope;
+
+                if (pGeometry.SpatialReference is IGeographicCoordinateSystem)
+                {
+                    pEnv.Height = 0.0005;
+                    pEnv.Width = 0.0005;
+                }
+                else
+                {
+                    pEnv.Height = 20;
+                    pEnv.Width = 20;
+                }
+            }
+            else
+            {
+                pEnv = pFeature.Shape.Envelope; // .Extent;
+            }
+            //.Expand(1.5, 1.5, true);
+            pEnv.XMin = pEnv.XMin - 2;
+            pEnv.XMax = pEnv.XMax + 2;
+            pEnv.YMin = pEnv.YMin - 2;
+            pEnv.YMax = pEnv.YMax + 2;
+            if (pEnv != null)
+            {
+                OrientGeometry(pEnv);
+            }
+        }
+        /// <summary>
+        /// 定位指定图形到当前窗口
+        /// </summary>
+        /// <param name="pEnvelope">需要定位的图形</param>
+        public void OrientGeometry(IEnvelope pEnvelope)
+        {
+            IActiveView pActiveView;
+
+            pActiveView = objMap.Map as IActiveView;
+            pActiveView.Extent = pEnvelope;
+            pActiveView.Refresh();
+        }
         void t1_Tick(object sender, EventArgs e)
         {
             m_FlashNum++;

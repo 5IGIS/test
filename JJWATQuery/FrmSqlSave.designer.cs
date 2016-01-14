@@ -59,22 +59,22 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(122, 141);
+            this.btnOK.Location = new System.Drawing.Point(161, 141);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(61, 23);
+            this.btnOK.Size = new System.Drawing.Size(47, 23);
             this.btnOK.TabIndex = 30;
-            this.btnOK.Text = "确定(&Y)";
+            this.btnOK.Text = "确定";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(198, 141);
+            this.btnClose.Location = new System.Drawing.Point(214, 141);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(63, 23);
+            this.btnClose.Size = new System.Drawing.Size(47, 23);
             this.btnClose.TabIndex = 31;
-            this.btnClose.Text = "退出(&Q)";
+            this.btnClose.Text = "退出";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 

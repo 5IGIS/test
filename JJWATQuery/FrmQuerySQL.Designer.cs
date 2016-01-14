@@ -157,44 +157,44 @@
             // btnDelt
             // 
             this.btnDelt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelt.Location = new System.Drawing.Point(188, 99);
+            this.btnDelt.Location = new System.Drawing.Point(232, 99);
             this.btnDelt.Name = "btnDelt";
-            this.btnDelt.Size = new System.Drawing.Size(57, 23);
+            this.btnDelt.Size = new System.Drawing.Size(47, 23);
             this.btnDelt.TabIndex = 31;
-            this.btnDelt.Text = "管理(&M)";
+            this.btnDelt.Text = "管理";
             this.btnDelt.UseVisualStyleBackColor = true;
             this.btnDelt.Click += new System.EventHandler(this.btnDelt_Click);
             // 
             // btnRead
             // 
             this.btnRead.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRead.Location = new System.Drawing.Point(378, 99);
+            this.btnRead.Location = new System.Drawing.Point(391, 99);
             this.btnRead.Name = "btnRead";
-            this.btnRead.Size = new System.Drawing.Size(59, 23);
+            this.btnRead.Size = new System.Drawing.Size(47, 23);
             this.btnRead.TabIndex = 30;
-            this.btnRead.Text = "读取(&W)";
+            this.btnRead.Text = "读取";
             this.btnRead.UseVisualStyleBackColor = true;
             this.btnRead.Click += new System.EventHandler(this.btnRead_Click);
             // 
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(316, 99);
+            this.btnSave.Location = new System.Drawing.Point(338, 99);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(57, 23);
+            this.btnSave.Size = new System.Drawing.Size(47, 23);
             this.btnSave.TabIndex = 29;
-            this.btnSave.Text = "保存(&B)";
+            this.btnSave.Text = "保存";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnDel
             // 
             this.btnDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDel.Location = new System.Drawing.Point(252, 99);
+            this.btnDel.Location = new System.Drawing.Point(285, 99);
             this.btnDel.Name = "btnDel";
-            this.btnDel.Size = new System.Drawing.Size(56, 23);
+            this.btnDel.Size = new System.Drawing.Size(47, 23);
             this.btnDel.TabIndex = 28;
-            this.btnDel.Text = "清空(&L)";
+            this.btnDel.Text = "清空";
             this.btnDel.UseVisualStyleBackColor = true;
             this.btnDel.Click += new System.EventHandler(this.btnDel_Click);
             // 
@@ -230,7 +230,7 @@
             this.btnAreaClear.Name = "btnAreaClear";
             this.btnAreaClear.Size = new System.Drawing.Size(80, 23);
             this.btnAreaClear.TabIndex = 46;
-            this.btnAreaClear.Text = "清除(&C)";
+            this.btnAreaClear.Text = "清除";
             this.btnAreaClear.UseVisualStyleBackColor = true;
             this.btnAreaClear.Click += new System.EventHandler(this.btnAreaClear_Click);
             // 
@@ -242,7 +242,7 @@
             this.btnAreaSelect.Name = "btnAreaSelect";
             this.btnAreaSelect.Size = new System.Drawing.Size(80, 23);
             this.btnAreaSelect.TabIndex = 45;
-            this.btnAreaSelect.Text = "选择(&S)";
+            this.btnAreaSelect.Text = "选择";
             this.btnAreaSelect.UseVisualStyleBackColor = true;
             this.btnAreaSelect.Click += new System.EventHandler(this.btnAreaSelect_Click);
             // 
@@ -440,7 +440,7 @@
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(100, 23);
             this.btnQuery.TabIndex = 48;
-            this.btnQuery.Text = "查询(&I)";
+            this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = true;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
@@ -451,7 +451,7 @@
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(100, 23);
             this.btnClear.TabIndex = 49;
-            this.btnClear.Text = "重置(&R)";
+            this.btnClear.Text = "重置";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
@@ -462,7 +462,7 @@
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(100, 23);
             this.btnClose.TabIndex = 61;
-            this.btnClose.Text = "退出(&Q)";
+            this.btnClose.Text = "退出";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 

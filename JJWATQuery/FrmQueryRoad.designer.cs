@@ -54,7 +54,7 @@
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(55, 23);
             this.btnClose.TabIndex = 57;
-            this.btnClose.Text = "退出(&Q)";
+            this.btnClose.Text = "退出";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
@@ -65,18 +65,18 @@
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(55, 23);
             this.btnQuery.TabIndex = 56;
-            this.btnQuery.Text = "查询(&I)";
+            this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = true;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click_1);
             // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClear.Location = new System.Drawing.Point(251, 331);
+            this.btnClear.Location = new System.Drawing.Point(249, 331);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(55, 23);
             this.btnClear.TabIndex = 55;
-            this.btnClear.Text = "重置(&R)";
+            this.btnClear.Text = "重置";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click_1);
             // 
@@ -90,7 +90,7 @@
             this.gbSelect.Size = new System.Drawing.Size(179, 46);
             this.gbSelect.TabIndex = 54;
             this.gbSelect.TabStop = false;
-            this.gbSelect.Text = "输入道路";
+            this.gbSelect.Text = "输入地址：";
             // 
             // tbSelect
             // 
@@ -119,11 +119,11 @@
             // btnAreaClear
             // 
             this.btnAreaClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAreaClear.Location = new System.Drawing.Point(67, 232);
+            this.btnAreaClear.Location = new System.Drawing.Point(65, 232);
             this.btnAreaClear.Name = "btnAreaClear";
             this.btnAreaClear.Size = new System.Drawing.Size(55, 23);
             this.btnAreaClear.TabIndex = 46;
-            this.btnAreaClear.Text = "清除(&C)";
+            this.btnAreaClear.Text = "清除";
             this.btnAreaClear.UseVisualStyleBackColor = true;
             this.btnAreaClear.Click += new System.EventHandler(this.btnAreaClear_Click);
             // 
@@ -135,7 +135,7 @@
             this.btnAreaSelect.Name = "btnAreaSelect";
             this.btnAreaSelect.Size = new System.Drawing.Size(55, 23);
             this.btnAreaSelect.TabIndex = 45;
-            this.btnAreaSelect.Text = "选择(&S)";
+            this.btnAreaSelect.Text = "选择";
             this.btnAreaSelect.UseVisualStyleBackColor = true;
             this.btnAreaSelect.Click += new System.EventHandler(this.btnAreaSelect_Click);
             // 
@@ -178,7 +178,7 @@
             this.gbLayer.Size = new System.Drawing.Size(168, 344);
             this.gbLayer.TabIndex = 8;
             this.gbLayer.TabStop = false;
-            this.gbLayer.Text = "图层";
+            this.gbLayer.Text = "图层:";
             // 
             // cbLayerAll
             // 
@@ -220,7 +220,6 @@
             this.Name = "FrmQueryRoad";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "地址查询";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.frmQueryRoad_Load);
             this.gbSelect.ResumeLayout(false);
             this.gbSelect.PerformLayout();

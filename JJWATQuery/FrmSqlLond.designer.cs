@@ -50,7 +50,7 @@
             this.tbBZ.Location = new System.Drawing.Point(59, 167);
             this.tbBZ.Multiline = true;
             this.tbBZ.Name = "tbBZ";
-            this.tbBZ.Size = new System.Drawing.Size(197, 87);
+            this.tbBZ.Size = new System.Drawing.Size(190, 87);
             this.tbBZ.TabIndex = 45;
             // 
             // lblBZ
@@ -66,22 +66,22 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(200, 265);
+            this.btnClose.Location = new System.Drawing.Point(202, 261);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(56, 23);
+            this.btnClose.Size = new System.Drawing.Size(47, 23);
             this.btnClose.TabIndex = 43;
-            this.btnClose.Text = "退出(&Q)";
+            this.btnClose.Text = "退出";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(135, 265);
+            this.btnOK.Location = new System.Drawing.Point(149, 261);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(59, 23);
+            this.btnOK.Size = new System.Drawing.Size(47, 23);
             this.btnOK.TabIndex = 42;
-            this.btnOK.Text = "确定(&Y)";
+            this.btnOK.Text = "确定";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -102,7 +102,7 @@
             this.cbMS.FormattingEnabled = true;
             this.cbMS.Location = new System.Drawing.Point(59, 7);
             this.cbMS.Name = "cbMS";
-            this.cbMS.Size = new System.Drawing.Size(197, 20);
+            this.cbMS.Size = new System.Drawing.Size(190, 20);
             this.cbMS.TabIndex = 46;
             this.cbMS.SelectedIndexChanged += new System.EventHandler(this.cbMS_SelectedIndexChanged);
             // 
@@ -112,7 +112,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSX.Location = new System.Drawing.Point(59, 33);
             this.tbSX.Name = "tbSX";
-            this.tbSX.Size = new System.Drawing.Size(135, 21);
+            this.tbSX.Size = new System.Drawing.Size(137, 21);
             this.tbSX.TabIndex = 47;
             // 
             // lblSQL
@@ -133,17 +133,17 @@
             this.tbSQL.Location = new System.Drawing.Point(59, 62);
             this.tbSQL.Multiline = true;
             this.tbSQL.Name = "tbSQL";
-            this.tbSQL.Size = new System.Drawing.Size(197, 100);
+            this.tbSQL.Size = new System.Drawing.Size(190, 100);
             this.tbSQL.TabIndex = 49;
             // 
             // btnSX
             // 
             this.btnSX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSX.Location = new System.Drawing.Point(200, 31);
+            this.btnSX.Location = new System.Drawing.Point(202, 31);
             this.btnSX.Name = "btnSX";
-            this.btnSX.Size = new System.Drawing.Size(56, 23);
+            this.btnSX.Size = new System.Drawing.Size(47, 23);
             this.btnSX.TabIndex = 51;
-            this.btnSX.Text = "筛选(&S)";
+            this.btnSX.Text = "筛选";
             this.btnSX.UseVisualStyleBackColor = true;
             this.btnSX.Click += new System.EventHandler(this.btnSX_Click);
             // 
@@ -160,7 +160,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(263, 296);
+            this.ClientSize = new System.Drawing.Size(256, 296);
             this.Controls.Add(this.btnSX);
             this.Controls.Add(this.lbSX);
             this.Controls.Add(this.tbSQL);

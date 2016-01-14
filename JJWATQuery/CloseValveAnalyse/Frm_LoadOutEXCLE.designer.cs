@@ -48,7 +48,7 @@
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Location = new System.Drawing.Point(12, 12);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(214, 164);
+            this.checkedListBox1.Size = new System.Drawing.Size(171, 164);
             this.checkedListBox1.TabIndex = 0;
             // 
             // checkAll
@@ -78,11 +78,11 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(126, 4);
+            this.button1.Location = new System.Drawing.Point(100, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(85, 24);
+            this.button1.Size = new System.Drawing.Size(68, 24);
             this.button1.TabIndex = 3;
-            this.button1.Text = "确认导出(&E)";
+            this.button1.Text = "确认导出";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -90,9 +90,9 @@
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(12, 253);
+            this.progressBar1.Location = new System.Drawing.Point(12, 240);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(214, 21);
+            this.progressBar1.Size = new System.Drawing.Size(171, 21);
             this.progressBar1.TabIndex = 4;
             this.progressBar1.Visible = false;
             // 
@@ -103,7 +103,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(214, 189);
+            this.panel1.Size = new System.Drawing.Size(171, 176);
             this.panel1.TabIndex = 5;
             // 
             // panel2
@@ -113,16 +113,16 @@
             this.panel2.Controls.Add(this.checkNotAll);
             this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.checkAll);
-            this.panel2.Location = new System.Drawing.Point(12, 205);
+            this.panel2.Location = new System.Drawing.Point(12, 192);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(214, 37);
+            this.panel2.Size = new System.Drawing.Size(171, 37);
             this.panel2.TabIndex = 6;
             // 
             // Frm_LoadOutEXCLE
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(235, 286);
+            this.ClientSize = new System.Drawing.Size(192, 273);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.checkedListBox1);

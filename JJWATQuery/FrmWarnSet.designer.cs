@@ -199,32 +199,32 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(240, 340);
+            this.btnClose.Location = new System.Drawing.Point(244, 340);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(74, 23);
+            this.btnClose.Size = new System.Drawing.Size(61, 23);
             this.btnClose.TabIndex = 55;
-            this.btnClose.Text = "退出(&Q)";
+            this.btnClose.Text = "退出";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(162, 340);
+            this.btnOK.Location = new System.Drawing.Point(178, 340);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(72, 23);
+            this.btnOK.Size = new System.Drawing.Size(61, 23);
             this.btnOK.TabIndex = 56;
-            this.btnOK.Text = "确认(&Y)";
+            this.btnOK.Text = "确认";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click_1);
             // 
             // btnFrom
             // 
-            this.btnFrom.Location = new System.Drawing.Point(8, 340);
+            this.btnFrom.Location = new System.Drawing.Point(21, 340);
             this.btnFrom.Name = "btnFrom";
-            this.btnFrom.Size = new System.Drawing.Size(84, 23);
+            this.btnFrom.Size = new System.Drawing.Size(71, 23);
             this.btnFrom.TabIndex = 57;
-            this.btnFrom.Text = "预警分析(&W)";
+            this.btnFrom.Text = "预警分析";
             this.btnFrom.UseVisualStyleBackColor = true;
             this.btnFrom.Click += new System.EventHandler(this.btnFrom_Click);
             // 

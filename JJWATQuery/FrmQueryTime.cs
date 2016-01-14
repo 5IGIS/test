@@ -56,7 +56,7 @@ namespace JJWATQuery
         {
             try
             {
-                m_lsLayer = Mgs.GetPtFLayerList();
+                m_lsLayer = Mgs.GetFLayerList();
                 if (m_lsLayer.Count > 0)
                 {
                     foreach (var layer in m_lsLayer)
@@ -229,8 +229,10 @@ namespace JJWATQuery
                 }
                 else
                 {
+                    frm.Close();
+                    frm = new UtilitysResultForm();
                     frm.Init(pQuery, m_App);
-                    frm.Activate();
+                    frm.Show();
                 }
                 this.Cursor = Cursors.Default;
             }

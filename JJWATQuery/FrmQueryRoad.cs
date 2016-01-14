@@ -207,6 +207,7 @@ namespace JJWATQuery
                 else
                 {
                     frm.Init(pQuery, m_App);
+                    frm.WindowState = FormWindowState.Normal;
                     frm.Activate();
                 }
                 this.Cursor = Cursors.Default;

@@ -52,12 +52,12 @@
             // 
             // gbLayers
             // 
-            this.gbLayers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbLayers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.gbLayers.Controls.Add(this.cbLayer);
             this.gbLayers.Location = new System.Drawing.Point(10, 2);
             this.gbLayers.Name = "gbLayers";
-            this.gbLayers.Size = new System.Drawing.Size(347, 57);
+            this.gbLayers.Size = new System.Drawing.Size(383, 57);
             this.gbLayers.TabIndex = 9;
             this.gbLayers.TabStop = false;
             this.gbLayers.Text = "图层:";
@@ -69,20 +69,20 @@
             this.cbLayer.FormattingEnabled = true;
             this.cbLayer.Location = new System.Drawing.Point(13, 20);
             this.cbLayer.Name = "cbLayer";
-            this.cbLayer.Size = new System.Drawing.Size(328, 20);
+            this.cbLayer.Size = new System.Drawing.Size(364, 20);
             this.cbLayer.TabIndex = 1;
             this.cbLayer.SelectedIndexChanged += new System.EventHandler(this.cbLayer_SelectedIndexChanged);
             // 
             // plSelect
             // 
-            this.plSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.plSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.plSelect.AutoScroll = true;
             this.plSelect.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.plSelect.Location = new System.Drawing.Point(10, 65);
             this.plSelect.Name = "plSelect";
-            this.plSelect.Size = new System.Drawing.Size(432, 204);
+            this.plSelect.Size = new System.Drawing.Size(468, 204);
             this.plSelect.TabIndex = 10;
             // 
             // tableLayoutPanel7
@@ -115,15 +115,15 @@
             // 
             // gbArea
             // 
-            this.gbArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.gbArea.Controls.Add(this.btnAreaClear);
             this.gbArea.Controls.Add(this.btnAreaSelect);
             this.gbArea.Controls.Add(this.lbArea);
             this.gbArea.Controls.Add(this.cbArea);
             this.gbArea.Location = new System.Drawing.Point(10, 275);
             this.gbArea.Name = "gbArea";
-            this.gbArea.Size = new System.Drawing.Size(350, 145);
+            this.gbArea.Size = new System.Drawing.Size(386, 145);
             this.gbArea.TabIndex = 54;
             this.gbArea.TabStop = false;
             this.gbArea.Text = "区域选择";
@@ -131,11 +131,11 @@
             // btnAreaClear
             // 
             this.btnAreaClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAreaClear.Location = new System.Drawing.Point(275, 49);
+            this.btnAreaClear.Location = new System.Drawing.Point(311, 49);
             this.btnAreaClear.Name = "btnAreaClear";
             this.btnAreaClear.Size = new System.Drawing.Size(61, 23);
             this.btnAreaClear.TabIndex = 46;
-            this.btnAreaClear.Text = "清除(&C)";
+            this.btnAreaClear.Text = "清除";
             this.btnAreaClear.UseVisualStyleBackColor = true;
             this.btnAreaClear.Click += new System.EventHandler(this.btnAreaClear_Click);
             // 
@@ -143,30 +143,30 @@
             // 
             this.btnAreaSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAreaSelect.Enabled = false;
-            this.btnAreaSelect.Location = new System.Drawing.Point(275, 20);
+            this.btnAreaSelect.Location = new System.Drawing.Point(311, 20);
             this.btnAreaSelect.Name = "btnAreaSelect";
             this.btnAreaSelect.Size = new System.Drawing.Size(61, 23);
             this.btnAreaSelect.TabIndex = 45;
-            this.btnAreaSelect.Text = "选择(&S)";
+            this.btnAreaSelect.Text = "选择";
             this.btnAreaSelect.UseVisualStyleBackColor = true;
             this.btnAreaSelect.Click += new System.EventHandler(this.btnAreaSelect_Click);
             // 
             // lbArea
             // 
-            this.lbArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lbArea.FormattingEnabled = true;
             this.lbArea.ItemHeight = 12;
             this.lbArea.Location = new System.Drawing.Point(13, 45);
             this.lbArea.Name = "lbArea";
-            this.lbArea.Size = new System.Drawing.Size(249, 88);
+            this.lbArea.Size = new System.Drawing.Size(285, 88);
             this.lbArea.TabIndex = 44;
             // 
             // cbArea
             // 
-            this.cbArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cbArea.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbArea.FormattingEnabled = true;
             this.cbArea.Items.AddRange(new object[] {
@@ -175,40 +175,40 @@
             "图幅"});
             this.cbArea.Location = new System.Drawing.Point(13, 20);
             this.cbArea.Name = "cbArea";
-            this.cbArea.Size = new System.Drawing.Size(249, 20);
+            this.cbArea.Size = new System.Drawing.Size(285, 20);
             this.cbArea.TabIndex = 1;
             this.cbArea.SelectedIndexChanged += new System.EventHandler(this.cbArea_SelectedIndexChanged);
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(376, 397);
+            this.btnClose.Location = new System.Drawing.Point(412, 397);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(61, 23);
             this.btnClose.TabIndex = 60;
-            this.btnClose.Text = "退出(&Q)";
+            this.btnClose.Text = "退出";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnQuery
             // 
             this.btnQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnQuery.Location = new System.Drawing.Point(376, 339);
+            this.btnQuery.Location = new System.Drawing.Point(412, 339);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(61, 23);
             this.btnQuery.TabIndex = 59;
-            this.btnQuery.Text = "查询(&I)";
+            this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = true;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(376, 368);
+            this.btnClear.Location = new System.Drawing.Point(412, 368);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(61, 23);
             this.btnClear.TabIndex = 58;
-            this.btnClear.Text = "重置(&R)";
+            this.btnClear.Text = "重置";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
@@ -217,7 +217,7 @@
             this.gbOrAnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gbOrAnd.Controls.Add(this.rbAnd);
             this.gbOrAnd.Controls.Add(this.rbOr);
-            this.gbOrAnd.Location = new System.Drawing.Point(363, 2);
+            this.gbOrAnd.Location = new System.Drawing.Point(399, 2);
             this.gbOrAnd.Name = "gbOrAnd";
             this.gbOrAnd.Size = new System.Drawing.Size(79, 57);
             this.gbOrAnd.TabIndex = 61;
@@ -227,6 +227,7 @@
             // rbAnd
             // 
             this.rbAnd.AutoSize = true;
+            this.rbAnd.Checked = true;
             this.rbAnd.Location = new System.Drawing.Point(22, 35);
             this.rbAnd.Name = "rbAnd";
             this.rbAnd.Size = new System.Drawing.Size(41, 16);
@@ -238,12 +239,10 @@
             // rbOr
             // 
             this.rbOr.AutoSize = true;
-            this.rbOr.Checked = true;
             this.rbOr.Location = new System.Drawing.Point(22, 17);
             this.rbOr.Name = "rbOr";
             this.rbOr.Size = new System.Drawing.Size(35, 16);
             this.rbOr.TabIndex = 0;
-            this.rbOr.TabStop = true;
             this.rbOr.Text = "OR";
             this.rbOr.UseVisualStyleBackColor = true;
             // 
@@ -252,7 +251,7 @@
             this.AcceptButton = this.btnQuery;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(451, 426);
+            this.ClientSize = new System.Drawing.Size(487, 426);
             this.Controls.Add(this.gbOrAnd);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnQuery);
@@ -264,7 +263,6 @@
             this.Name = "FrmQueryGroup";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "组合查询";
-            this.TopMost = true;
             this.Shown += new System.EventHandler(this.frmQueryGroup_Shown);
             this.gbLayers.ResumeLayout(false);
             this.gbArea.ResumeLayout(false);

@@ -30,15 +30,13 @@ namespace JJWATQuery
         private FrmRoadPosition frmRoad;
         private FrmAreaStatis frmAreaStatis;
         private FrmDoState frmReport;
+        private RouteRecordsList frmRecord;
 
         public static IApplication m_App;
         public static Map m_Map = null;
         public static IMap m_pMap = null;
         public static IMxDocument m_MxDoc;
         public static AFMap m_objMap = new AFMap();
-        private FrmQueryGF frmQCVNform;
-        private FrmQueryRange frmQEPRform;
-        private RouteRecordsList frmsp;
 
         public ClsFrmShow(IApplication app)
         {
@@ -52,78 +50,34 @@ namespace JJWATQuery
         }
 
         /// <summary>
-        /// 打印路由本
+        /// 打印路由
         /// </summary>
-        public void ShowStatPanelForm()
+        /// <param name="owner"></param>
+        public void ShowRecordList(System.Windows.Forms.IWin32Window owner)
         {
-            if (frmsp == null || frmsp.IsDisposed)
+            if (frmRecord == null || frmRecord.IsDisposed)
             {
-                frmsp = new RouteRecordsList();
-                if (frmsp.Init(m_App) == true)
-                {
-                    frmsp.Show();
-                }
+                frmRecord = new RouteRecordsList();
+                frmRecord.Init(m_App);
+                frmRecord.Show(owner);
             }
             else
             {
-                frmsp.Activate();
-            }
-        }
-
-        public void ShowQueryValvebyNumberForm()
-        {
-            if (frmQCVNform == null || frmQCVNform.IsDisposed)
-            {
-                frmQCVNform = new FrmQueryGF();
-                if (frmQCVNform.inLication(m_App))
-                {
-                    frmQCVNform.Show();
-                }
-                else
-                {
-                    System.Windows.Forms.MessageBox.Show("程序遇到错误，请联系技术人员！", "提示！");
-                    return;
-                }
-            }
-            else
-            {
-                frmQCVNform.Activate();
-            }
-        }
-        //显示距离查询界面
-        public void ShowQueryEquipmentbyRangerForm()
-        {
-            if (frmQEPRform == null || frmQEPRform.IsDisposed)
-            {
-                frmQEPRform = new FrmQueryRange();
-                if (frmQEPRform.inLication(m_App))
-                {
-                    frmQEPRform.Show();
-                }
-                else
-                {
-                    System.Windows.Forms.MessageBox.Show("程序遇到错误，请联系技术人员！", "提示！");
-                    frmQEPRform = null;
-                    return;
-                }
-            }
-            else
-            {
-                frmQEPRform.Activate();
+                frmRecord.Activate();
             }
         }
 
         /// <summary>
         /// 统计报表
         /// </summary>
-        public void ShowReportForm()
+        public void ShowReportForm(System.Windows.Forms.IWin32Window owner)
         {
             if (frmReport == null || frmReport.IsDisposed)
             {
                 frmReport = new FrmDoState();
                 if (frmReport.Init(m_App))
                 {
-                    frmReport.Show();
+                    frmReport.Show(owner);
                 }
                 else
                 {
@@ -140,12 +94,12 @@ namespace JJWATQuery
         /// <summary>
         /// 显示行政区统计
         /// </summary>
-        public void ShowAreaStatisForm()
+        public void ShowAreaStatisForm(System.Windows.Forms.IWin32Window owner)
         {
             if (frmAreaStatis == null || frmAreaStatis.IsDisposed)
             {
                 frmAreaStatis = new FrmAreaStatis();
-                frmAreaStatis.Show();
+                frmAreaStatis.Show(owner);
             }
             else
             {
@@ -157,14 +111,14 @@ namespace JJWATQuery
         /// <summary>
         /// 地理位置定位
         /// </summary>
-        public void ShowRoadPositionForm(IApplication app)
+        public void ShowRoadPositionForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (frmRoad == null || frmRoad.IsDisposed)
             {
                 frmRoad = new FrmRoadPosition();
-                frmRoad.Init(app);
-                frmRoad.Show();
+                frmRoad.Init(m_App);
+                frmRoad.Show(owner);
             }
             else
             {
@@ -175,21 +129,21 @@ namespace JJWATQuery
         /// <summary>
         /// 查询选择集
         /// </summary>
-        public void ShowResultForm(IApplication app)
+        public void ShowResultForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             UtilitysResultForm.QueryClass pQuery = new UtilitysResultForm.QueryClass();
             pQuery.isSelQuery = true;
             if (resultFrm == null || resultFrm.IsDisposed)
             {
                 resultFrm = new UtilitysResultForm();
-                resultFrm.Init(pQuery, app);
+                resultFrm.Init(pQuery, m_App);
                 if (!resultFrm.IsShow)
                 {
                     resultFrm = null;
                     return;
                 }
-                resultFrm.Show();
+                resultFrm.Show(owner);
             }
             else
             {
@@ -200,14 +154,14 @@ namespace JJWATQuery
         /// <summary>
         /// 预警分析查询
         /// </summary>
-        public void ShowWarnForm(IApplication app)
+        public void ShowWarnForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (warn == null || warn.IsDisposed)
             {
                 warn = new FrmWarnAnalyse();
-                warn.inApplication(app);
-                warn.Show();
+                warn.inApplication(m_App);
+                warn.Show(owner);
             }
             else
                 warn.Activate();
@@ -216,14 +170,14 @@ namespace JJWATQuery
         /// <summary>
         /// 预警分析设置
         /// </summary>
-        public void ShowWarnSetForm(IApplication app)
+        public void ShowWarnSetForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (warnSet == null || warnSet.IsDisposed)
             {
                 warnSet = new FrmWarnSet();
-                warnSet.inApplication(app);
-                warnSet.Show();
+                warnSet.inApplication(m_App);
+                warnSet.Show(owner);
             }
             else
                 warnSet.Activate();
@@ -232,14 +186,14 @@ namespace JJWATQuery
         /// <summary>
         /// SQL语句查询
         /// </summary>
-        public void ShowSQLForm(IApplication app)
+        public void ShowSQLForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (querySql == null || querySql.IsDisposed)
             {
                 querySql = new FrmQuerySQL();
-                querySql.inApplication(app);
-                querySql.Show();
+                querySql.inApplication(m_App);
+                querySql.Show(owner);
             }
             else
                 inter.Activate();
@@ -248,14 +202,14 @@ namespace JJWATQuery
         /// <summary>
         /// 竣工时间查询
         /// </summary>
-        public void ShowTimeForm(IApplication app)
+        public void ShowTimeForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (time == null || time.IsDisposed)
             {
                 time = new FrmQueryTime();
-                time.inApplication(app);
-                time.Show();
+                time.inApplication(m_App);
+                time.Show(owner);
             }
             else
                 time.Activate();
@@ -264,14 +218,14 @@ namespace JJWATQuery
         /// <summary>
         /// 接口方式
         /// </summary>
-        public void ShowInterForm(IApplication app)
+        public void ShowInterForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (inter == null || inter.IsDisposed)
             {
                 inter = new FrmInterface();
-                inter.inApplication(app);
-                inter.Show();
+                inter.inApplication(m_App);
+                inter.Show(owner);
             }
             else
                 inter.Activate();
@@ -280,14 +234,14 @@ namespace JJWATQuery
         /// <summary>
         /// 管径查询
         /// </summary>
-        public void ShowCaliberForm(IApplication app)
+        public void ShowCaliberForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (caliber == null || caliber.IsDisposed)
             {
                 caliber = new FrmQueryCaliber();
-                caliber.inApplication(app);
-                caliber.Show();
+                caliber.inApplication(m_App);
+                caliber.Show(owner);
             }
             else
                 caliber.Activate();
@@ -296,14 +250,14 @@ namespace JJWATQuery
         /// <summary>
         /// 分组查询
         /// </summary>
-        public void ShowGroupForm(IApplication app)
+        public void ShowGroupForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (group == null || group.IsDisposed)
             {
                 group = new FrmQueryGroup();
-                group.inApplication(app);
-                group.Show();
+                group.inApplication(m_App);
+                group.Show(owner);
             }
             else
                 group.Activate();
@@ -312,14 +266,14 @@ namespace JJWATQuery
         /// <summary>
         /// 材质查询
         /// </summary>
-        public void ShowMaterForm(IApplication app)
+        public void ShowMaterForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (mater == null || mater.IsDisposed)
             {
                 mater = new FrmQueryMaterial();
-                mater.inApplication(app);
-                mater.Show();
+                mater.inApplication(m_App);
+                mater.Show(owner);
             }
             else
                 mater.Activate();
@@ -328,14 +282,14 @@ namespace JJWATQuery
         /// <summary>
         /// 编号查询
         /// </summary>
-        public void ShowNumForm(IApplication app)
+        public void ShowNumForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (num == null || num.IsDisposed)
             {
                 num = new FrmQueryNum();
-                num.inApplication(app);
-                num.Show();
+                num.inApplication(m_App);
+                num.Show(owner);
             }
             else
                 num.Activate();
@@ -344,30 +298,30 @@ namespace JJWATQuery
         /// <summary>
         /// 道路查询
         /// </summary>
-        public void ShowRoadForm(IApplication app)
+        public void ShowRoadForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (road == null || road.IsDisposed)
             {
                 road = new FrmQueryRoad();
-                road.inApplication(app);
-                road.Show();
+                road.inApplication(m_App);
+                road.Show(owner);
             }
             else
                 road.Activate();
         }
 
         /// <summary>
-        /// 查询报表
+        /// 固定格式报表
         /// </summary>
-        public void ShowSheetForm(IApplication app)
+        public void ShowSheetForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (sheet == null || sheet.IsDisposed)
             {
                 sheet = new FrmQuerySheet();
-                sheet.inApplication(app);
-                sheet.Show();
+                sheet.inApplication(m_App);
+                sheet.Show(owner);
             }
             else
                 sheet.Activate();
@@ -376,14 +330,14 @@ namespace JJWATQuery
         /// <summary>
         /// 空间查询
         /// </summary>
-        public void ShowSpaceForm(IApplication app)
+        public void ShowSpaceForm(System.Windows.Forms.IWin32Window owner)
         {
-            XMLConfig.MxdFileName = app.Document.Title;
+            XMLConfig.MxdFileName = m_App.Document.Title;
             if (space == null || space.IsDisposed)
             {
                 space = new FrmQuerySpace();
-                space.inApplication(app);
-                space.Show();
+                space.inApplication(m_App);
+                space.Show(owner);
             }
             else
                 space.Activate();

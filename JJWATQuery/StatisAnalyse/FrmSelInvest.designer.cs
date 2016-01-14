@@ -85,7 +85,7 @@
             this.lbl_To.Name = "lbl_To";
             this.lbl_To.Size = new System.Drawing.Size(18, 12);
             this.lbl_To.TabIndex = 4;
-            this.lbl_To.Text = "至";
+            this.lbl_To.Text = "到";
             // 
             // dTPDateFrom
             // 
@@ -128,7 +128,7 @@
             this.btn_OK.Name = "btn_OK";
             this.btn_OK.Size = new System.Drawing.Size(90, 24);
             this.btn_OK.TabIndex = 1;
-            this.btn_OK.Text = "确 定(&Y)";
+            this.btn_OK.Text = "确定(&O)";
             this.btn_OK.UseVisualStyleBackColor = true;
             this.btn_OK.Click += new System.EventHandler(this.btn_OK_Click);
             // 
@@ -138,7 +138,7 @@
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(91, 24);
             this.btn_Cancel.TabIndex = 2;
-            this.btn_Cancel.Text = "退 出(&Q)";
+            this.btn_Cancel.Text = "取消(&C)";
             this.btn_Cancel.UseVisualStyleBackColor = true;
             this.btn_Cancel.Click += new System.EventHandler(this.btn_Cancel_Click);
             // 
@@ -157,7 +157,6 @@
             this.Name = "FrmSelInvest";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "固定资产统计报表";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.FrmSelInvest_Load);
             this.Shown += new System.EventHandler(this.FrmSelInvest_Shown);
             this.gBinSelectInvest.ResumeLayout(false);

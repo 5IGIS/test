@@ -70,11 +70,11 @@
             // btn_Statis
             // 
             this.btn_Statis.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_Statis.Location = new System.Drawing.Point(364, 446);
+            this.btn_Statis.Location = new System.Drawing.Point(384, 443);
             this.btn_Statis.Name = "btn_Statis";
             this.btn_Statis.Size = new System.Drawing.Size(80, 23);
             this.btn_Statis.TabIndex = 4;
-            this.btn_Statis.Text = "统计(&S)";
+            this.btn_Statis.Text = "统计";
             this.btn_Statis.UseVisualStyleBackColor = true;
             this.btn_Statis.Click += new System.EventHandler(this.btn_Statis_Click);
             // 
@@ -147,22 +147,22 @@
             // btn_ExportExcel
             // 
             this.btn_ExportExcel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_ExportExcel.Location = new System.Drawing.Point(456, 446);
+            this.btn_ExportExcel.Location = new System.Drawing.Point(470, 443);
             this.btn_ExportExcel.Name = "btn_ExportExcel";
-            this.btn_ExportExcel.Size = new System.Drawing.Size(89, 23);
+            this.btn_ExportExcel.Size = new System.Drawing.Size(80, 23);
             this.btn_ExportExcel.TabIndex = 4;
-            this.btn_ExportExcel.Text = "转出Excel(&E)";
+            this.btn_ExportExcel.Text = "转出Excel";
             this.btn_ExportExcel.UseVisualStyleBackColor = true;
             this.btn_ExportExcel.Click += new System.EventHandler(this.btn_ExportExcel_Click);
             // 
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(556, 446);
+            this.button3.Location = new System.Drawing.Point(556, 443);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(80, 23);
             this.button3.TabIndex = 4;
-            this.button3.Text = "退出(&Q)";
+            this.button3.Text = "取消";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -180,8 +180,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmAreaStatis";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "行政区统计";
-            this.TopMost = true;
+            this.Text = "辖区统计";
             this.Load += new System.EventHandler(this.FrmAreaStatis_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);

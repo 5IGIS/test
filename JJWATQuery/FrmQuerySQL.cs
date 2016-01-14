@@ -244,8 +244,10 @@ namespace JJWATQuery
                 }
                 else
                 {
+                    frm.Close();
+                    frm = new UtilitysResultForm();
                     frm.Init(pQuery, m_App);
-                    frm.Activate();
+                    frm.Show();
                 }
                 this.Cursor = Cursors.Default;
             }
@@ -420,13 +422,17 @@ namespace JJWATQuery
                 MessageBox.Show(ex.ToString(), "提示!");
             }
         }
+
         private string sDate(string Date)
         {
             DateTime dt = Convert.ToDateTime(Date);
             string sTime = dt.ToString("yyyy-MM-dd");
-            sTime = "'" + sTime + "'";
+            //sTime = "'" + sTime + "'";  //wy修改日期类型获取的时候加TO_DATE函数
+            sTime = "TO_DATE('" + sTime + "','yyyy-MM-dd')";
             return sTime;
         }
+
+
         private void tbSelect_TextChanged(object sender, EventArgs e)
         {
             string sSelect = "";

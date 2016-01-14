@@ -16,6 +16,7 @@ using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.Geodatabase;
 using System.Text.RegularExpressions;
 using AOBaseLibC;
+using AOBaseLibC.AFGeodatabase;
 namespace JJWATQuery
 {
     public partial class FrmWarnSet : Form
@@ -47,7 +48,14 @@ namespace JJWATQuery
             pLineVale = LineVales[0];
             sLineNames = LineVales[1];
             Mgs = new UtilitysMgs(m_App);
-            dItem = Mgs.GetDomainsByName(pLineVale);
+            AFFeatureLayer oLayer = afMap.GetLayerByName(XMLConfig.ValveDevice());
+            if (oLayer == null)
+            {
+                MsgBox.Show("地图没有加载‘" + XMLConfig.ValveDevice() + "’图层，请修改配置表！");
+                return;
+            }
+            IField pfd = oLayer.FeatureLayer.FeatureClass.Fields.get_Field(oLayer.FeatureLayer.FeatureClass.Fields.FindFieldByAliasName(pLineVale));
+            dItem = Mgs.GetDomainsByName(pfd);
             Mgs.GeoType = esriGeometryType.esriGeometryPoint;
             Mgs.GetLayers();
         }

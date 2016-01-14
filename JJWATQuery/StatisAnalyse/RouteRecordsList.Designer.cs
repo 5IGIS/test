@@ -221,15 +221,16 @@
             // 
             // tfhList
             // 
-            this.tfhList.BackColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.tfhList.BackColor = System.Drawing.SystemColors.Control;
             this.tfhList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tfhList.ForeColor = System.Drawing.SystemColors.ControlText;
             this.tfhList.FormattingEnabled = true;
             this.tfhList.ItemHeight = 14;
             this.tfhList.Items.AddRange(new object[] {
             ""});
             this.tfhList.Location = new System.Drawing.Point(114, 81);
             this.tfhList.Name = "tfhList";
-            this.tfhList.Size = new System.Drawing.Size(157, 70);
+            this.tfhList.Size = new System.Drawing.Size(156, 70);
             this.tfhList.TabIndex = 7;
             this.tfhList.SelectedIndexChanged += new System.EventHandler(this.tfhList_SelectedIndexChanged);
             // 
@@ -321,7 +322,6 @@
             this.Name = "RouteRecordsList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "打印路由";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.RouteRecordsList_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

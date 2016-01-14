@@ -126,6 +126,7 @@ namespace JJWATQuery
                     else
                     {
                         frm.Init(pQuery, m_App);
+                        frm.WindowState = FormWindowState.Normal;
                         frm.Activate();
                     }
                     this.Cursor = Cursors.Default;
@@ -150,7 +151,10 @@ namespace JJWATQuery
                         }
                         else
                         {
-                            frm.Activate();
+                            frm.Close();
+                            frm = new UtilitysResultForm();
+                            frm.Init(pQuery, m_App);
+                            frm.Show();
                         }
                         this.Cursor = Cursors.Default;
                     }

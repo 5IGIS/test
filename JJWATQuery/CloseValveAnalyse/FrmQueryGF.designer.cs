@@ -109,11 +109,11 @@
             // 
             this.btnRegional.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRegional.Enabled = false;
-            this.btnRegional.Location = new System.Drawing.Point(135, 17);
+            this.btnRegional.Location = new System.Drawing.Point(135, 16);
             this.btnRegional.Name = "btnRegional";
-            this.btnRegional.Size = new System.Drawing.Size(81, 23);
+            this.btnRegional.Size = new System.Drawing.Size(75, 23);
             this.btnRegional.TabIndex = 2;
-            this.btnRegional.Text = "选择区域(&S)";
+            this.btnRegional.Text = "选择区域";
             this.btnRegional.UseVisualStyleBackColor = true;
             this.btnRegional.Click += new System.EventHandler(this.btnRegional_Click);
             // 
@@ -144,22 +144,22 @@
             // btnQuery
             // 
             this.btnQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnQuery.Location = new System.Drawing.Point(12, 375);
+            this.btnQuery.Location = new System.Drawing.Point(12, 369);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(75, 23);
             this.btnQuery.TabIndex = 2;
-            this.btnQuery.Text = "分析(&I)";
+            this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = true;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(153, 375);
+            this.btnClose.Location = new System.Drawing.Point(150, 369);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 3;
-            this.btnClose.Text = "退出(&Q)";
+            this.btnClose.Text = "关闭";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
@@ -175,8 +175,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmQueryGF";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "关阀数量分析";
-            this.TopMost = true;
+            this.Text = "关阀数量查询";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmQueryGF_FormClosed);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

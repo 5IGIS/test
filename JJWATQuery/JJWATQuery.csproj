@@ -12,17 +12,25 @@
     <AssemblyName>JJWATQuery</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ResGenToolArchitecture>Managed32Bit</ResGenToolArchitecture>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\dlls\</OutputPath>
+    <OutputPath>..\..\..\JJWATER\DLLS\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
-    <RegisterForComInterop>true</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,59 +39,44 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RegisterForComInterop>true</RegisterForComInterop>
-    <ResGenToolArchitecture>Managed32Bit</ResGenToolArchitecture>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AOBaseLibC, Version=1.0.5456.29984, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="AOBaseLibC, Version=1.0.5316.15993, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DLLS\AOBaseLibC.dll</HintPath>
+      <HintPath>D:\JJWATER\dlls\AOBaseLibC.dll</HintPath>
     </Reference>
-    <Reference Include="ESRI.ArcGIS.ADF.Local, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="ESRI.ArcGIS.ADF, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86" />
+    <Reference Include="ESRI.ArcGIS.ADF.Local, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
     <Reference Include="ESRI.ArcGIS.ArcMapUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Carto, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.CartoUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Display, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Framework, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Geodatabase, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Geometry, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.System, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="JJWATBaseLibC">
-      <HintPath>..\..\dlls\JJWATBaseLibC.dll</HintPath>
-    </Reference>
-    <Reference Include="JJWATSysTool, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="JJWATBaseLibC, Version=1.0.5476.30138, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dlls\JJWATSysTool.dll</HintPath>
+      <HintPath>D:\JJWATER\dlls\JJWATBaseLibC.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -98,18 +91,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Forms.DataVisualization, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dlls\System.Windows.Forms.DataVisualization.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
-    <Reference Include="Utilitys, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\dlls\Utilitys.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
     <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -124,49 +109,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CloseValveAnalyse\ClsOutExcel.cs" />
-    <Compile Include="CloseValveAnalyse\ClsQueryData.cs" />
-    <Compile Include="CloseValveAnalyse\ClsResultSet .cs" />
-    <Compile Include="CloseValveAnalyse\FrmCloseValveResult.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CloseValveAnalyse\FrmCloseValveResult.designer.cs">
-      <DependentUpon>FrmCloseValveResult.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CloseValveAnalyse\FrmQueryGF.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CloseValveAnalyse\FrmQueryGF.designer.cs">
-      <DependentUpon>FrmQueryGF.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CloseValveAnalyse\FrmQueryRange.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CloseValveAnalyse\FrmQueryRange.designer.cs">
-      <DependentUpon>FrmQueryRange.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CloseValveAnalyse\FrmQueryRangeResult.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CloseValveAnalyse\FrmQueryRangeResult.designer.cs">
-      <DependentUpon>FrmQueryRangeResult.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CloseValveAnalyse\Frm_LoadOutEXCLE.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CloseValveAnalyse\Frm_LoadOutEXCLE.designer.cs">
-      <DependentUpon>Frm_LoadOutEXCLE.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CmdRoutePrint.cs" />
-    <Compile Include="LocalCDBCon.cs" />
-    <Compile Include="CloseValveAnalyse\ProgressShow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CloseValveAnalyse\ProgressShow.designer.cs">
-      <DependentUpon>ProgressShow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CloseValveAnalyse\ShutdownValveScheme.cs" />
-    <Compile Include="CloseValveAnalyse\Struct.cs" />
     <Compile Include="ClsFrmShow.cs" />
     <Compile Include="CrossRoadPointForm.cs">
       <SubType>Form</SubType>
@@ -352,24 +294,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="CloseValveAnalyse\FrmCloseValveResult.resx">
-      <DependentUpon>FrmCloseValveResult.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CloseValveAnalyse\FrmQueryGF.resx">
-      <DependentUpon>FrmQueryGF.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CloseValveAnalyse\FrmQueryRange.resx">
-      <DependentUpon>FrmQueryRange.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CloseValveAnalyse\FrmQueryRangeResult.resx">
-      <DependentUpon>FrmQueryRangeResult.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CloseValveAnalyse\Frm_LoadOutEXCLE.resx">
-      <DependentUpon>Frm_LoadOutEXCLE.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CloseValveAnalyse\ProgressShow.resx">
-      <DependentUpon>ProgressShow.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="CrossRoadPointForm.resx">
       <DependentUpon>CrossRoadPointForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -466,10 +390,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="CmdRoutePrint.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
+    <ProjectReference Include="..\JJWATSysTool\JJWATSysTool.csproj">
+      <Project>{AA17CDF9-BB48-43DD-9D38-C3C38DBDDD4F}</Project>
+      <Name>JJWATSysTool</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilitys\Utilitys.csproj">
+      <Project>{6915129D-DBA3-4CFE-9CEB-B6C72E845EA2}</Project>
+      <Name>Utilitys</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

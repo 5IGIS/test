@@ -36,7 +36,7 @@ namespace JJWATQuery
         private const string mc_strPipesectionSourceName = "输水管线";
         private const string mc_strHydrant = "消火栓";
         private const string mc_StatusTempPipe = "'临时'";//临时管线修改为临时，且存储于status字段（原来为datatype）
-        private const string mc_StatusDisusedPipe= "'废弃'";
+        private const string mc_StatusDisusedPipe = "'废弃'";
         private const string mc_StatusCompletionPipe = "'竣工'";
         private const string mc_TableValveState = "VALVESTATE";//配水管线闸门统计
         private const string mc_TablePIPELINEMAINLENSTATE = "PIPELINEMAINLENSTATE";//市区输水管线长度统计
@@ -47,14 +47,15 @@ namespace JJWATQuery
         private const string mc_TableItem = "口径";
         private const string mc_TableItemSum = "合计";
         private const string mc_TableSubtotal = "小计";
-        
-        private const string mc_TableItemMaterial="材质";
+        private const string mc_TableTotal = "总计";
+
+        private const string mc_TableItemMaterial = "材质";
         private const string mc_TableItemDiameter = "管径";
-        private const string mc_TableItemUnit="单位";
-        private const string mc_TableItemLength="长度";
-        private const string mc_TableItemOriginalValue ="原值";
-        private const string mc_TableItemDepreciationMonth="月折旧额";
-        private const string mc_TableItemRemark="备注";
+        private const string mc_TableItemUnit = "单位";
+        private const string mc_TableItemLength = "长度";
+        private const string mc_TableItemOriginalValue = "原值";
+        private const string mc_TableItemDepreciationMonth = "月折旧额";
+        private const string mc_TableItemRemark = "备注";
 
         private const string mc_strNameReport_Valve = "配水管线闸门统计";
         private const string mc_strNameReport_Mains = "市区配水管网长度统计";
@@ -65,25 +66,27 @@ namespace JJWATQuery
         private const string mc_strNameReport_Pipes = "撤除管线长度统计月报";
         private const string mc_strNameofJJWaterltd = "北京市自来水公司";
         private const string mc_strNameReport_PipeInvestAddTotal = "管网固定资产增加汇总表";
-        private const string mc_strNameReport_PipeInvestAddList = "管网固定资产增加明细表";        
+        private const string mc_strNameReport_PipeInvestAddList = "管网固定资产增加明细表";
+        private const string mc_strNameReport_GWAnnual = "管网管线长度统计年报";
         private const string mc_strWaterType_All = "所有";
         private const string mc_strInvestDomainName = "投资方式";//PL_WORKCHAR
         private const string mc_Fn_WorkChar = "WORKCHAR";
         private const string mc_Fn_Drawprice = "DRAWPRICE";
-        private string mc_strUnknownDiameter = "未知管径";
+        private string mc_strUnknownDiameter = "其他管径";
         private string mc_strUnknownValveType = "未知闸型";
-        private string mc_strUnknownMaterial = "未知材质";
+        private string mc_strUnknownMaterial = "其他材质";//根据年报，统计除钢管、球墨铸铁、铸铁、塑料管、水泥管之外的算作其他管。20150703
         private const string mc_strDataTypeDigFound = "'刨找'";
         private const string mc_strPipeCharDistrict = "'小区'";//工程性质为小区：刨找
 
         private const string mc_WithinSymbol = "介于";
         private const string mc_EqualSymbol = "等于";
         private const string mc_MoreSymbol = "大于";
-        private const string mc_MoreEqualSymbol = "大于等于";        
+        private const string mc_MoreEqualSymbol = "大于等于";
         private const string mc_SmallSymbol = "小于";
         private const string mc_SmallEqualSymbol = "小于等于";
         private const string mc_StrQueryBFFieldNameRemovedt = "bfdate";
         private const string mc_StrQueryGWFieldNameCheckdt = "checkedate";
+        private const string mc_StrAnnualReportStatusDate = "WRITEDATE";
 
 
         private string m_strExcelTemplate = string.Empty;
@@ -113,14 +116,18 @@ namespace JJWATQuery
         private string m_strRet = string.Empty;
 
         public string InvestSelected = string.Empty;
-        public string RemoveDtComplex = string.Empty;
-        public string BuildDtSimple = string.Empty;
+
+        public string NewBuildDtSimple = string.Empty;
+        public string RemoveDtSimple = string.Empty;
+        public string AnnualDtSimple = string.Empty;
+
         public string BuildDataTitle = string.Empty;
         //为统一风格而修改：新增统计和撤除统计均带有时间条件选择2015-05-11
-        public string CheckDtComplex = string.Empty;
+        public string NewDtComplex = string.Empty; //新增统计时间条件
+        public string RemoveDtComplex = string.Empty;//撤除统计时间条件
+        public string AnnualDtComplex = string.Empty;//年报统计时间条件
 
 
-        
 
 
         public FrmDoState()
@@ -143,11 +150,11 @@ namespace JJWATQuery
                 string configPath = string.Empty;
 
                 pApp = app;
-                pMxDoc = pApp.Document as IMxDocument;                
+                pMxDoc = pApp.Document as IMxDocument;
                 pMap = pMxDoc.FocusMap;
                 m_objMap.Map = pMap;
                 m_objMgs = new UtilitysMgs(pApp);
-                
+
                 configPath = System.Reflection.Assembly.GetExecutingAssembly().Location.ToString(CultureInfo.InvariantCulture);
                 configPath = System.IO.Path.GetDirectoryName(configPath);
                 m_strDefaultExcelFilePath = configPath;
@@ -175,7 +182,17 @@ namespace JJWATQuery
 
                 cboCheckDt.Text = mc_WithinSymbol;
 
-                
+
+                cboCheckDt4.Items.Add(mc_EqualSymbol);
+                cboCheckDt4.Items.Add(mc_MoreSymbol);
+                cboCheckDt4.Items.Add(mc_MoreEqualSymbol);
+                cboCheckDt4.Items.Add(mc_SmallSymbol);
+                cboCheckDt4.Items.Add(mc_SmallEqualSymbol);
+                cboCheckDt4.Items.Add(mc_WithinSymbol);
+
+                cboCheckDt4.Text = mc_WithinSymbol;
+
+
 
                 m_CurParameter = SysParameters.GetInstance();
                 if (GetDomaisFromMap(mc_strInvestDomainName))
@@ -199,13 +216,9 @@ namespace JJWATQuery
         /// </summary>
         public enum WaterType
         {
-            二次供水,
+            所有,
             净水,
-            污水,
-            源水,
-            直饮水,
-            中水,
-            所有
+            中水
         }
 
         private void FrmReport_Load(object sender, EventArgs e)
@@ -217,52 +230,57 @@ namespace JJWATQuery
                 //SysParameters m_CurParameter = SysParameters.GetInstance();
                 //if (m_objMap.Map.LayerCount > 0)
                 //{
-                    //获取当前地图图层，查找数据所在数据库的所有属性域值，读取出水质类型，并加载到下拉框中
-                    //List<AFFeatureLayer> lstLayers = m_objMap.GetLayerByWorkpace(m_CurParameter.GWDataSetName);  
-                    //2014-12-22 修改为获取枚举值  watertype
-                    cboWaterType.Items.Clear();
-                    Array watertypes = Enum.GetValues(typeof(WaterType));
-                    foreach(WaterType wt in watertypes)
-                    {
-                        cboWaterType.Items.Add(wt.ToString());                        
-                    }
+                //获取当前地图图层，查找数据所在数据库的所有属性域值，读取出水质类型，并加载到下拉框中
+                //List<AFFeatureLayer> lstLayers = m_objMap.GetLayerByWorkpace(m_CurParameter.GWDataSetName);  
+                //2014-12-22 修改为获取枚举值  watertype
+                cboWaterType.Items.Clear();
+                Array watertypes = Enum.GetValues(typeof(WaterType));
+                foreach (WaterType wt in watertypes)
+                {
+                    cboWaterType.Items.Add(wt.ToString());
+                }
 
-                    cboWaterType.Text = mc_strWaterType_All;
+                cboWaterType.Text = mc_strWaterType_All;
+                //撤除界面
+                lbl_To.Enabled = true;
+                lbl_To.Visible = (cboRemoveDt.Text == mc_WithinSymbol);
+                dTPDateTo.Enabled = true;
+                dTPDateTo.Visible = (cboRemoveDt.Text == mc_WithinSymbol);
 
-                    lbl_To.Enabled = true;
-                    lbl_To.Visible = (cboRemoveDt.Text == mc_WithinSymbol);
-                    dTPDateTo.Enabled = true;
-                    dTPDateTo.Visible = lbl_To.Visible;
+                //新增界面
+                lblTo.Enabled = true;
+                lblTo.Visible = (cboCheckDt.Text == mc_WithinSymbol);
+                dtpEndStateDate.Enabled = true;
+                dtpEndStateDate.Visible = (cboRemoveDt.Text == mc_WithinSymbol);
+                //年报界面
+                lblTo4.Enabled = true;
+                lblTo4.Visible = (cboCheckDt4.Text == mc_WithinSymbol);
+                dtpEndStateDate4.Enabled = true;
+                dtpEndStateDate4.Visible = (cboRemoveDt.Text == mc_WithinSymbol);
 
+                //if (lstLayers.Count > 0)
+                //{
+                //    m_dicDomainNameList = m_objMgs.GetAllDomains(m_objMap.GetLayerByName(lstLayers[0].FeatureLayer.FeatureClass.AliasName).FetLayerDataset.Workspace);
+                //    if (m_dicDomainNameList.ContainsKey(mc_KeyofWaterType))
+                //    {
+                //        lstStrWaterTypes = m_dicDomainNameList[mc_KeyofWaterType];
+                //        foreach (var s in lstStrWaterTypes)
+                //        {
+                //            cboWaterType.Items.Add(s);
+                //        }
+                //        cboWaterType.Items.Add(mc_strWaterType_All);
+                //        cboWaterType.SelectedIndex = 0;
+                //    }
+                //    else
+                //    {
+                //        MessageBox.Show("数据库中没有水质类型属性域值", "提示！");
+                //    }
 
-                    lblTo.Enabled = true;
-                    lblTo.Visible = (cboCheckDt.Text == mc_WithinSymbol);
-                    dtpEndStateDate.Enabled = true;
-                    dtpEndStateDate.Visible = lblTo.Visible;
-
-                    //if (lstLayers.Count > 0)
-                    //{
-                    //    m_dicDomainNameList = m_objMgs.GetAllDomains(m_objMap.GetLayerByName(lstLayers[0].FeatureLayer.FeatureClass.AliasName).FetLayerDataset.Workspace);
-                    //    if (m_dicDomainNameList.ContainsKey(mc_KeyofWaterType))
-                    //    {
-                    //        lstStrWaterTypes = m_dicDomainNameList[mc_KeyofWaterType];
-                    //        foreach (var s in lstStrWaterTypes)
-                    //        {
-                    //            cboWaterType.Items.Add(s);
-                    //        }
-                    //        cboWaterType.Items.Add(mc_strWaterType_All);
-                    //        cboWaterType.SelectedIndex = 0;
-                    //    }
-                    //    else
-                    //    {
-                    //        MessageBox.Show("数据库中没有水质类型属性域值", "提示！");
-                    //    }
-
-                    //}
-                    //else
-                    //{
-                    //    MessageBox.Show("加载的数据不可用！", "提示");
-                    //    return;
+                //}
+                //else
+                //{
+                //    MessageBox.Show("加载的数据不可用！", "提示");
+                //    return;
                 //    //}
                 //}
                 //else
@@ -271,7 +289,7 @@ namespace JJWATQuery
                 //    return;
                 //}                    
 
-                 
+
             }
             catch (Exception ex)
             {
@@ -283,10 +301,10 @@ namespace JJWATQuery
 
         public bool GetDomaisFromMap(string strNameofDomain)
         {
-            if(m_objDBCON==null)
-            m_objDBCON = CDBCon.GetInstance();
-            if(m_CurParameter==null)
-            m_CurParameter = SysParameters.GetInstance();
+            if (m_objDBCON == null)
+                m_objDBCON = CDBCon.GetInstance();
+            if (m_CurParameter == null)
+                m_CurParameter = SysParameters.GetInstance();
             if (strNameofDomain == null && strNameofDomain.Trim() == "")
             {
                 MessageBox.Show("传入阈名" + strNameofDomain + "不能为空!");
@@ -306,9 +324,9 @@ namespace JJWATQuery
                         List<string> lstStrWaterTypes = m_dicDomainNameList[strNameofDomain];
                         foreach (var s in lstStrWaterTypes)
                         {
-                            if(!m_lstInvest.Contains(s.ToString()))
-                            m_lstInvest.Add(s);
-                        }                        
+                            if (!m_lstInvest.Contains(s.ToString()))
+                                m_lstInvest.Add(s);
+                        }
                         //cboWaterType.SelectedIndex = 0;
                         //cboWaterType.Text = mc_strWaterType_All;
                         return true;
@@ -1368,8 +1386,6 @@ namespace JJWATQuery
                 OleDbDataReader adoReader = null;
                 m_objDBCON.ExecuteSQLReturn(sql, ref adoReader);
                 return adoReader;
-
-
             }
             catch (Exception ex)
             {
@@ -1386,56 +1402,547 @@ namespace JJWATQuery
         /// <param name="e"></param>
         private void btnExprtExcel_Click(object sender, EventArgs e)
         {
-            if (optValvestat.Checked)
+            if (this.tabControl1.SelectedTab == this.tabPage1)
             {
-                //配水管线闸门统计
-                ValveStateReport2Excel();
+                if (optValvestat.Checked)
+                {
+                    //配水管线闸门统计
+                    ValveStateReport2Excel();
+                }
+                else if (optPipeLenStat.Checked)
+                {
+                    //市区配水管线长度统计
+                    MainsReport2Excel();
+                }
+                else if (optPipeInvestAddTable.Checked)
+                {
+                    //固定资产增加汇总表
+                    PipeInvestAddTotalTable2Excel();
+                }
+                else if (optPipeInvestAddDetail.Checked)
+                {
+                    //固定资产增加明细表
+                    PipeInvestAddTableDetail2Excel();
+                }
             }
-            else if (optPipeLenStat.Checked)
+            else if (this.tabControl1.SelectedTab == this.tabPage2)
             {
-                //市区配水管线长度统计
-                MainsReport2Excel();
+                if (optNewPipeLenMonthStat.Checked)
+                {
+                    //新增管线长度统计月报
+                    NewLineLenMonthReport2Excel(1);
+                }
+                else if (optNewHydrantMonthStat.Checked)
+                {
+                    //新安消火栓个数统计月报
+                    HydrantMonthReport2Excel();
+                }
+                else if (optNewWTPipeLenMonthStat.Checked)
+                {
+                    //新增配水管线长度统计月报
+                    NewLineLenMonthReport2Excel(2);
+                }
+                else if (optNewSWTPipeLenMonthStat.Checked)
+                {
+                    //新增输水管线长度统计月报                
+                    NewLineLenMonthReport2Excel(3);
+                }
             }
-            else if (optNewPipeLenMonthStat.Checked)
+            else if (this.tabControl1.SelectedTab == this.tabPage3)
             {
-                //新增管线长度统计月报
-                NewLineLenMonthReport2Excel(1);
+                if (rdBtn_PipeLenMons.Checked)
+                {
+                    //撤管长度统计
+                    RemovedPipeStat();
+                }
+            }
+            else if (this.tabControl1.SelectedTab == this.tabPage4)
+            {
+                if (rdBtn_GWAnnulReport.Checked)
+                {
+                    //管网统计年报
+                    GWAnnualStatReport();
+                }
+            }
+        }
+        /// <summary>
+        /// 管网统计年报
+        /// </summary>
+        private void GWAnnualStatReport()
+        {
+            string strSQL = string.Empty, strPipeSectionMain = string.Empty, strPipeSectionUser = string.Empty, strPipeSectionSource = string.Empty;
+            string strBegDate = string.Empty;
+            string strEndDate = string.Empty;
+
+            DataTable dDataTableA = new DataTable();
+            DataTable dDataTableB = new DataTable();
+
+            OleDbDataReader adoReader = null;
+
+            strPipeSectionMain = string.Format("(select * from jjwater.pipesectionmain a,jjwater.f{0} b where a.shape=b.fid)",
+                getLayerID("PIPESECTIONMAIN"));
+            strPipeSectionUser = string.Format("(select * from jjwater.pipesectionuser a,jjwater.f{0} b where a.shape=b.fid)",
+                getLayerID("PIPESECTIONUSER"));
+
+            strPipeSectionSource = string.Format("(select * from jjwater.pipesectionsource a,jjwater.f{0} b where a.shape=b.fid)",
+                getLayerID("PIPESECTIONSOURCE"));
+
+            m_pFeatureLayer = m_objMap.GetLayerByName(mc_strPipesectionMainName).FeatureLayer;
+            m_dicColumnCodeDesc = GetSubtypes(m_pFeatureLayer.FeatureClass, mc_FieldNameMaterial);
+            m_dicRowCodeDesc = GetSubtypes(m_pFeatureLayer.FeatureClass, mc_FieldNameDiameter);
+
+            DateTime dtBegDate = Convert.ToDateTime(dtpBegStateDate4.Text);
+            DateTime dtEndDate = Convert.ToDateTime(dtpEndStateDate4.Text);
+
+            strBegDate = dtBegDate.ToString("yyyyMMdd");//20140806 大小写有区别
+            strEndDate = dtEndDate.ToString("yyyyMMdd");//20010101
+
+            Boolean blnTONGJI1 = false;
+            Boolean blnTONGJI2 = false;
+            Boolean blnTONGJI3 = false;
+
+            string strWherePipesectionMain = GetWhere(mc_strPipesectionMainName, ref blnTONGJI1);
+            string strWherePipesectionUser = GetWhere(mc_strPipesectionUserName, ref blnTONGJI2);
+
+            string strWherePipesectionSource = GetWhere(mc_strPipesectionSourceName, ref blnTONGJI3);
+
+            if (strWherePipesectionMain.Trim() != "")
+            {
+                strWherePipesectionMain = " and " + strWherePipesectionMain;
+            }
+            if (strWherePipesectionUser.Trim() != "")
+            {
+                strWherePipesectionUser = " and " + strWherePipesectionUser;
+            }
+            if (strWherePipesectionSource.Trim() != "")
+            {
+                strWherePipesectionSource = " and " + strWherePipesectionSource;
+            }
+
+            if (blnTONGJI1 && blnTONGJI2 && blnTONGJI3)
+            {
+                //判断时间条件类型，小于或者小于等于按要求使用录入时间，其他使用审核时间。
+                if (cboCheckDt4.Text == mc_SmallEqualSymbol || cboCheckDt4.Text == mc_SmallSymbol)
+                {
+                    //X:供水；Y:输水
+                    strSQL =
+                        "select diameter,material,sum(cd) shape_length, flag from ((select diameter,material,len cd ,'x' as flag from " +
+                        strPipeSectionMain + " where " +
+                        AnnualDtComplex +
+                        //"where STATUS IS NULL or (STATUS <> " + mc_StatusDisusedPipe + " and STATUS <> " + mc_StatusTempPipe + 
+                        //"where STATUS=" + mc_StatusCompletionPipe + 
+                        //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
+                        //2015-06-18 贾：之前统计用录入时间同时统计为空的
+                        //" and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
+                        //")) union all " +
+                        ") union all " +
+                        "(select diameter,material,len cd , 'x' as flag from " +
+                        strPipeSectionUser + " where " +
+                        AnnualDtComplex +
+                        //"where STATUS=" + mc_StatusCompletionPipe +
+                        //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
+                        //2015-06-18 贾：之前统计用录入时间同时统计为空的
+                        //        " and  WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
+                        ") union all" +
+                        " (select diameter,material,len cd ,'y' as flag from " +
+                        strPipeSectionSource + " " +
+                        ")) group by diameter,material,flag order by  " + mc_FieldNameDiameter;
+
+                }
+                else
+                {
+                    strSQL =
+                        "select diameter,material,sum(cd) shape_length, flag from ((select diameter,material,len cd, 'x' as flag from " +
+                        strPipeSectionMain + " where " +
+                        AnnualDtComplex +
+                        //"where STATUS IS NULL or (STATUS <> " + mc_StatusDisusedPipe + " and STATUS <> " + mc_StatusTempPipe + 
+                        //"where STATUS=" + mc_StatusCompletionPipe + 
+                        //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
+                        " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
+                        ") union all " +
+                        "(select diameter,material,len cd,'x' as flag from " +
+                        strPipeSectionUser + " where " +
+                        AnnualDtComplex +
+                        " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
+                        //"where STATUS=" + mc_StatusCompletionPipe +
+                        //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
+                         ") union all" +
+                        " (select diameter,material,len cd ,'y' as flag from " +
+                        strPipeSectionSource + " " + "where" +
+                        AnnualDtComplex +
+                                " and  WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
+                        ")) group by diameter,material,flag order by  " + mc_FieldNameDiameter;
+
+                }
+                try
+                {
+                    if (m_objDBCON == null)
+                        m_objDBCON = CDBCon.GetInstance();
+                    m_objDBCON.ExecuteSQLReturn(strSQL, ref adoReader);
+                    //Get_sqlDBReader(strSQL, ref adoReader);
+                    if (adoReader.HasRows)
+                    {
+                        string strDBresult = string.Empty;
+                        string strDiameter = string.Empty;
+                        string strMaterial = string.Empty;
+                        string strNewRecord = string.Empty;
+                        string strSameRecord = string.Empty;
+                        double dblTempLength = 0;
+
+                        string strFlag = string.Empty;
+
+
+                        while (adoReader.Read())
+                        {
+                            strDBresult = "";
+                            dblTempLength = 0;
+                            strDiameter = adoReader[mc_FieldNameDiameter].ToString().Trim();
+                            strMaterial = adoReader[mc_FieldNameMaterial].ToString().Trim();
+                            strFlag = adoReader["flag"].ToString().ToUpper();
+
+
+                            if (adoReader[mc_FieldNameDiameter].ToString().Trim() == "")
+                            {
+                                strDiameter = mc_strUnknownDiameter;
+                            }
+                            //其他材质管：除了钢、球墨铸铁、铸铁、塑料水泥外，都是其他。条件需要再添加
+                            if (adoReader[mc_FieldNameMaterial].ToString().Trim() == "")
+                            {
+                                strMaterial = mc_strUnknownMaterial;
+                            }
+
+                            if (!m_lstRow.Contains(strDiameter))
+                            {
+                                m_lstRow.Add(strDiameter);
+                            }
+                            if (!m_lstColumns.Contains(strMaterial))
+                            {
+                                m_lstColumns.Add(strMaterial);
+                            }
+
+
+                            //存在数据不规范的情况，如重复记录，多n个空格，为“”，需要再判断，计算；
+
+                            foreach (string r in m_lstDBResults)
+                            {
+                                string[] s = r.Split(',');
+                                if ((strDiameter + "," + strMaterial + "," + strFlag) == (s[0] + "," + s[1] + "," + s[3]))
+                                {
+                                    strSameRecord = r;
+                                    dblTempLength = Convert.ToDouble(s[2]) + Convert.ToDouble(adoReader[mc_FieldNameShapeLength]);
+                                    strNewRecord = s[0] + "," + s[1] + "," + dblTempLength.ToString() + "," + strFlag;
+                                    break;
+                                }
+                            }
+
+                            if (strSameRecord != "")
+                            {
+                                m_lstDBResults.Remove(strSameRecord);
+                                m_lstDBResults.Add(strNewRecord);
+
+                                strSameRecord = "";
+                                strNewRecord = "";
+                            }
+                            else
+                            {
+                                strDBresult = strDiameter + "," + strMaterial + "," + adoReader[mc_FieldNameShapeLength].ToString() + "," + strFlag;
+                                m_lstDBResults.Add(strDBresult);
+                            }
+                        }
+                        //为数据表创建列
+                        for (int i = 0; i < m_lstColumns.Count; i++)
+                        {
+                            //供水统计信息
+                            if (i == 0)
+                            {
+                                dDataTableA.Columns.Add(mc_TableItem, Type.GetType("System.String"));
+                                dDataTableA.Columns.Add(mc_TableTotal, Type.GetType("System.Decimal"));
+                                dDataTableA.Columns.Add(mc_TableItemSum, Type.GetType("System.Decimal"));
+                            }
+                            dDataTableA.Columns.Add(m_lstColumns[i] + "X", Type.GetType("System.Decimal"));
+                            if (i == m_lstColumns.Count - 1)
+                            {
+                                //添加取水统计
+                                dDataTableA.Columns.Add(mc_TableItemSum + "Y", Type.GetType("System.Decimal"));
+                                for (int j = 0; j < m_lstColumns.Count; j++)
+                                {
+                                    dDataTableA.Columns.Add(m_lstColumns[j] + "Y", Type.GetType("System.Decimal"));
+                                }
+                            }
+                        }
+                        // m_lstColumns.Add(mc_TableItemSum);
+                        //数据表添加行头
+                        for (int j = 0; j < m_lstRow.Count; j++)
+                        {
+                            DataRow dr = dDataTableA.NewRow();
+                            dr[mc_TableItem] = "DN" + m_lstRow[j] + "mm";
+                            dDataTableA.Rows.Add(dr);
+                        }
+
+                        //数据表赋初值为0
+                        foreach (DataRow dr in dDataTableA.Rows)
+                        {
+                            for (int k = 1; k < dr.ItemArray.Length; k++)
+                            {
+                                dr[k] = 0;
+                            }
+                        }
+
+                        int count = 0, IndexofHejiY = 0;
+                        string strCodeofColumn = string.Empty;
+                        string strCodeofRow = string.Empty;
+                        string strOldColumnItem = string.Empty;
+                        string strOldRowItem = string.Empty;
+
+                        foreach (DataRow dr in dDataTableA.Rows)
+                        {
+                            count++;
+                            double dblHejiX = 0, dblHejiY = 0;
+                            int indexOfColumnsMaterial = 0;
+                            //dr.ItemArray[0]～dr.ItemArray[29]
+                            for (int k = 3; k < dr.ItemArray.Length; k++)
+                            {
+                                //code作为查询条件，description和code的替换
+                                string strSqlQueryDBvalue = string.Empty;
+                                //逐列判别属于哪个材质：2015-7-3
+                                //为输水合计
+                                if (k == m_lstColumns.Count + 3)
+                                {
+                                    //输水合计序号
+                                    IndexofHejiY = k;
+                                    //供水合计
+                                    dr[2] = dblHejiX;
+                                    indexOfColumnsMaterial = 0;
+                                    continue;
+                                }
+
+
+                                if (k > m_lstColumns.Count + 3 - 1)//口径、总计、合计，0开始计算
+                                {
+                                    indexOfColumnsMaterial = k - m_lstColumns.Count - 4;
+                                }
+                                else
+                                {
+                                    indexOfColumnsMaterial = k - 3;
+                                }
+
+                                #region 若存在子类型，需要用子类型的码值查询
+                                if (m_dicColumnCodeDesc.ContainsValue(m_lstColumns[indexOfColumnsMaterial]))
+                                {
+                                    if (strOldColumnItem != m_lstColumns[indexOfColumnsMaterial])
+                                    {
+                                        foreach (KeyValuePair<string, string> kvp in m_dicColumnCodeDesc)
+                                        {
+                                            if (kvp.Value.Equals(m_lstColumns[indexOfColumnsMaterial]))
+                                            {
+                                                strCodeofColumn = kvp.Key;
+                                                break;
+                                            }
+                                        }
+                                        strOldColumnItem = m_lstColumns[indexOfColumnsMaterial];
+                                    }
+                                }
+                                else
+                                {
+                                    strCodeofColumn = m_lstColumns[indexOfColumnsMaterial];
+                                }
+
+                                if (m_dicRowCodeDesc.ContainsValue(dr[mc_TableItem].ToString()))
+                                {
+                                    if (strOldRowItem != dr[mc_TableItem].ToString())
+                                    {
+                                        foreach (KeyValuePair<string, string> kvp in m_dicRowCodeDesc)
+                                        {
+                                            if (kvp.Value.Equals(dr[mc_TableItem].ToString()))
+                                            {
+                                                strCodeofRow = kvp.Key;
+                                                break;
+                                            }
+                                        }
+                                        strOldRowItem = dr[mc_TableItem].ToString();
+                                    }
+                                }
+                                else
+                                {
+                                    strCodeofRow = dr[mc_TableItem].ToString();
+                                }
+
+                                #endregion
+
+                                //判断并赋值,dr[k]:该行（管径）的合计，直到最后一个列材质结束才罢休
+                                foreach (string r in m_lstDBResults)
+                                {
+                                    string[] s = r.Split(',');
+                                    if (k < m_lstColumns.Count + 3 + 1)
+                                    {
+                                        if (strCodeofRow + "," + strCodeofColumn + "," + "X" == "DN" + s[0] + "mm" + "," + s[1] + "," + s[3].ToUpper())
+                                        {
+                                            dr[k] = Math.Round(Convert.ToDecimal(s[2]), 2);
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (strCodeofRow + "," + strCodeofColumn + "," + "Y" == "DN" + s[0] + "mm" + "," + s[1] + "," + s[3].ToUpper())
+                                        {
+                                            //dr[indexOfColumnsMaterial + m_lstColumns.Count+1] = Math.Round(Convert.ToDecimal(s[2]), 3);
+                                            dr[k] = Math.Round(Convert.ToDecimal(s[2]), 2);
+                                            break;
+                                        }
+                                    }
+
+
+                                }
+
+                                if (k == dr.ItemArray.Length - 1)
+                                {
+                                    //输水合计
+                                    dr[IndexofHejiY] = dblHejiY + Convert.ToDouble(dr[indexOfColumnsMaterial + m_lstColumns.Count + 3 + 1]);
+                                    //总计
+                                    dr[1] = System.Convert.ToDouble(dr[IndexofHejiY]) + System.Convert.ToDouble(dr[2]);
+                                }
+                                else
+                                {
+                                    dblHejiX = dblHejiX + Convert.ToDouble(dr[k]);
+                                    dblHejiY = dblHejiY + Convert.ToDouble(dr[indexOfColumnsMaterial + m_lstColumns.Count + 3 + 1]);//indexOfColumnsMaterial + m_lstColumns.Count + 3 + 1=k
+                                }
+
+
+                            }//end for (int k = 1; k < dr.ItemArray.Length; k++)
+
+                        }//end foreach (DataRow dr in dDataTableA.Rows)
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("所选统计类型记录为空,导出终止！", "提示！");
+                        this.Cursor = Cursors.Default;
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "错误");
+                    m_lstDBResults.Clear();
+                    return;
+                }
+
 
             }
-            else if (optNewHydrantMonthStat.Checked)
+
+            DateTime now = DateTime.Now;
+            SaveFileDialog objSave = new SaveFileDialog();
+            objSave.Filter = "电子表格(*.xls)|*.xls|所有文件(*.*)|*.*";
+            objSave.FilterIndex = 0;
+            objSave.RestoreDirectory = true;
+            objSave.AddExtension = true;
+            objSave.CreatePrompt = true;
+            objSave.Title = "导出" + mc_strNameReport_GWAnnual;
+            objSave.FileName = mc_strNameReport_GWAnnual + now.Year.ToString().PadLeft(2, '0') + now.Month.ToString().PadLeft(2, '0') + now.Day.ToString().PadLeft(2, '0')
+                + now.Hour.ToString().PadLeft(2, '0') + now.Minute.ToString().PadLeft(2, '0') + now.Second.ToString().PadLeft(2, '0') + ".xls";
+            try
             {
-                //新安消火栓个数统计月报
-                HydrantMonthReport2Excel();
+                if (objSave.ShowDialog() == DialogResult.OK)
+                {
+                    StringWriter sw = new StringWriter();
+                    sw.WriteLine("管 网 管 线 长 度 统 计 年 报");
+                    sw.WriteLine("");
+                    sw.WriteLine("\u0020\u0020 填报单位：管网管理分公司 \t \t \t \t {0} \t \t \t \t", dtBegDate.Year + "年");
+                    sw.WriteLine("");
+                    string[] strColumnNames = new string[dDataTableA.Columns.Count];
+                    object[] objLastRowofTable = new object[dDataTableA.Columns.Count];
+
+                    for (int i = 0; i < dDataTableA.Rows.Count; i++)
+                    {
+                        for (int j = 0; j < dDataTableA.Columns.Count; j++)
+                        {
+                            DataColumn dcols = dDataTableA.Columns[j];
+                            if (i == 0 && j == 0)
+                            {
+                                int k = 0;
+                                foreach (DataColumn dc in dDataTableA.Columns)
+                                {
+                                    sw.Write(string.Format("{0}\t", dc.ColumnName));
+                                    strColumnNames[k] = dc.ColumnName;
+                                    k++;
+                                }
+                                sw.Write("\r\n");
+                            }
+
+                            if ((i == dDataTableA.Rows.Count - 1) && (j == dDataTableA.Columns.Count - 1))
+                            {
+                                int k = 1;
+                                foreach (var c in strColumnNames)
+                                {
+                                    if (c != mc_TableItem)
+                                    {
+                                        Decimal sum = dDataTableA.AsEnumerable().Sum(a => a.Field<Decimal>(c));
+                                        objLastRowofTable[k] = sum;
+                                        k++;
+                                    }
+                                    else
+                                    {
+                                        objLastRowofTable[0] = mc_TableItemSum; //合计  //mc_TableSubtotal 小计
+                                    }
+                                }
+                            }
+
+                            if (dcols.ColumnName != mc_TableItem)
+                            {
+                                sw.Write(dDataTableA.Rows[i][j].ToString().Trim() + "\t");
+                            }
+                            else
+                            {
+                                string sValue = dDataTableA.Rows[i][j].ToString();
+                                sw.Write(sValue + "\t");
+                            }
+                        }
+                        sw.Write("\r\n");
+                    }
+
+                    foreach (var o in objLastRowofTable)
+                    {
+                        sw.Write(o.ToString() + "\t");
+                    }
+                    //sw.Write("\r\n 单位负责人:\t\t\t\t\t\t填表人:\t\t\t\t\t\t报出日期：\t");
+                    byte[] s = System.Text.Encoding.GetEncoding("gb2312").GetBytes(sw.ToString());
+                    FileStream fs = new FileStream(objSave.FileName, FileMode.Create, FileAccess.Write);
+                    fs.Write(s, 0, s.Length);
+                    fs.Close();
+                    if (MessageBox.Show("导出完毕,点击【确定】打开！", "提示", MessageBoxButtons.OK) == DialogResult.OK)
+                    {
+                        string strMacroName = "PERSONAL.XLSB!管网管线长度统计年报";
+                        OpenFolderAndSelectFile(objSave.FileName, m_strExcelTemplate, strMacroName);
+                    }
+
+                }
+                else
+                {
+                    this.Cursor = Cursors.Default;
+                    return;
+                }
+
             }
-            else if (optNewWTPipeLenMonthStat.Checked)
+            catch (Exception ex)
             {
-                //新增配水管线长度统计月报
-                NewLineLenMonthReport2Excel(2);
+                MessageBox.Show(ex.ToString(), "提示");
+                return;
             }
-            else if (optNewSWTPipeLenMonthStat.Checked)
+            finally
             {
-                //新增输水管线长度统计月报                
-                NewLineLenMonthReport2Excel(3);
+                this.Cursor = Cursors.Default;
+                m_lstRow.Clear();
+                m_lstColumns.Clear();
+                m_pFeatureLayer = null;
+                m_dicColumnCodeDesc.Clear();
+                m_dicRowCodeDesc.Clear();
+                m_lstDBResults.Clear();
             }
-            else if(optPipeInvestAddTable.Checked)
-            {
-                //固定资产增加汇总表
-                PipeInvestAddTotalTable2Excel();
-            }
-            else if (optPipeInvestAddDetail.Checked)
-            { 
-                //固定资产增加明细表
-                PipeInvestAddTableDetail2Excel();
-            }
-            else if (rdBtn_PipeLenMons.Checked)
-            {
-                //撤管长度统计
-                RemovedPipeStat();
-            }
+
         }
 
 
-        
+
         /// <summary>
         /// 撤除管线统计
         /// </summary>
@@ -1675,7 +2182,7 @@ namespace JJWATQuery
                     StringWriter sw = new StringWriter();
                     sw.WriteLine("撤除管线长度统计月报");
                     sw.WriteLine("");
-                    sw.WriteLine("\t\t\t\t\t\t 填报日期: \t\t 单位：m");
+                    sw.WriteLine("\t\t\t\t\t\t填报日期:\t\t单位：m");
                     string[] strColumnNames = new string[dDataTableA.Columns.Count];
                     object[] objLastRowofTable = new object[dDataTableA.Columns.Count];
 
@@ -1731,7 +2238,7 @@ namespace JJWATQuery
                     {
                         sw.Write(o.ToString() + "\t");
                     }
-
+                    sw.WriteLine("\r\n");
                     sw.WriteLine("\r\n 主管领导:\t\t财务负责人:\t\t审核人:\t\t制表人:");
 
                     byte[] s = System.Text.Encoding.GetEncoding("gb2312").GetBytes(sw.ToString());
@@ -1775,202 +2282,202 @@ namespace JJWATQuery
         /// 固定资产增加汇总表
         /// </summary>
         private void PipeInvestAddTotalTable2Excel()
-        {           
-            string TN_LEN_PMain=string.Empty;
-            string TN_LEN_PUser=string.Empty;
-            string TN_LEN_PSource=string.Empty;
+        {
+            string TN_LEN_PMain = string.Empty;
+            string TN_LEN_PUser = string.Empty;
+            string TN_LEN_PSource = string.Empty;
 
             try
             {
-            if (!m_blISCAL)
-            {
-                if (MessageBox.Show("统计前是否重新计算原值？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (!m_blISCAL)
                 {
-                    if (ReCalculateDrawprice() == 0)
+                    if (MessageBox.Show("统计前是否重新计算原值？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        m_blISCAL = true;
-                    }
-                    else
-                    {
-                        m_blISCAL = false;
-                        return;
+                        if (ReCalculateDrawprice() == 0)
+                        {
+                            m_blISCAL = true;
+                        }
+                        else
+                        {
+                            m_blISCAL = false;
+                            return;
+                        }
                     }
                 }
-            }            
 
-            DataTable dDataTableA = new DataTable();
+                DataTable dDataTableA = new DataTable();
 
-            string m_Vn_PipeMain =string.Empty;
-            string m_Vn_PipeUser = string.Empty;
-            string m_Vn_PipeSource = string.Empty;
+                string m_Vn_PipeMain = string.Empty;
+                string m_Vn_PipeUser = string.Empty;
+                string m_Vn_PipeSource = string.Empty;
 
-            if (m_objMap.GetLayerByName(mc_strPipesectionMainName) == null || m_objMap.GetLayerByName(mc_strPipesectionUserName) == null || m_objMap.GetLayerByName(mc_strPipesectionSourceName) == null)
-            {
-                    m_Vn_PipeMain="PIPESECTIONMAIN";
-                    m_Vn_PipeUser="PIPESECTIONUSER";
+                if (m_objMap.GetLayerByName(mc_strPipesectionMainName) == null || m_objMap.GetLayerByName(mc_strPipesectionUserName) == null || m_objMap.GetLayerByName(mc_strPipesectionSourceName) == null)
+                {
+                    m_Vn_PipeMain = "PIPESECTIONMAIN";
+                    m_Vn_PipeUser = "PIPESECTIONUSER";
                     m_Vn_PipeSource = "PIPESECTIONSOURCE";
 
-            }
-            else
-            {
-                m_Vn_PipeMain=m_objMap.GetLayerByName(mc_strPipesectionMainName).LayerTableName;
-                m_Vn_PipeUser=m_objMap.GetLayerByName(mc_strPipesectionUserName).LayerTableName;
-                m_Vn_PipeSource=m_objMap.GetLayerByName(mc_strPipesectionSourceName).LayerTableName;  
- 
-            }
-                                  
+                }
+                else
+                {
+                    m_Vn_PipeMain = m_objMap.GetLayerByName(mc_strPipesectionMainName).LayerTableName;
+                    m_Vn_PipeUser = m_objMap.GetLayerByName(mc_strPipesectionUserName).LayerTableName;
+                    m_Vn_PipeSource = m_objMap.GetLayerByName(mc_strPipesectionSourceName).LayerTableName;
 
-            if(m_CurParameter==null)
-                m_CurParameter=SysParameters.GetInstance();
+                }
 
-            string m_PrifixName=m_CurParameter.GWUserName;
 
-            TN_LEN_PMain=m_PrifixName+".f"+getLayerID(m_Vn_PipeMain);
-            TN_LEN_PUser=m_PrifixName+".f"+getLayerID(m_Vn_PipeUser);
-            TN_LEN_PSource=m_PrifixName+".f"+getLayerID(m_Vn_PipeSource);
+                if (m_CurParameter == null)
+                    m_CurParameter = SysParameters.GetInstance();
 
-            string strSelInvest = string.Empty;
-            string strBuildDateCondition = string.Empty;
-            string strBuilDateTitle = string.Empty;
+                string m_PrifixName = m_CurParameter.GWUserName;
 
-            FrmSelInvest frmInvest = new FrmSelInvest();
-            frmInvest.Init(m_lstInvest);
-            if (frmInvest.ShowDialog() == DialogResult.OK)
-            {
-                                
-                strSelInvest = frmInvest.cboInvestStyle.Text;     
-                //20150206 固定资产不统计录入时间为19000101或者为空的的记录
-                //strBuildDateCondition = frmInvest.BuildDtComplex;
-                strBuildDateCondition = frmInvest.BuildDtComplex + " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')";
+                TN_LEN_PMain = m_PrifixName + ".f" + getLayerID(m_Vn_PipeMain);
+                TN_LEN_PUser = m_PrifixName + ".f" + getLayerID(m_Vn_PipeUser);
+                TN_LEN_PSource = m_PrifixName + ".f" + getLayerID(m_Vn_PipeSource);
 
-                strBuilDateTitle = frmInvest.BuildDataTitle;
-                frmInvest.Close();
-            }
-            if (strSelInvest.Trim() == "")
-            {
-                return;
-            }
-            string strTemp = string.Empty, strFields = string.Empty,strSQL1=string.Empty,strSQL2=string.Empty,strSQL3=string.Empty,strSQL=string.Empty;
-            
-            this.Cursor=Cursors.WaitCursor;            
+                string strSelInvest = string.Empty;
+                string strBuildDateCondition = string.Empty;
+                string strBuilDateTitle = string.Empty;
 
-            if (cboWaterType.Text == mc_strWaterType_All)
-            {
-                //Main
-                strSQL1 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
-                    "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
-                    " from " + m_PrifixName + "." + m_Vn_PipeMain + " a, " + TN_LEN_PMain + " L " +
-                    " where A.Shape=L.FID " +
-                    " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
-                    " and " + strBuildDateCondition +
-                    //2015-01-19 状态由<>废弃 \临时 改为：状态=竣工
-                    //" and a.STATUS is null or (trim(a.STATUS)<>" + mc_StatusDisusedPipe + " and trim(a.STATUS)<>" + mc_StatusTempPipe + ") " +
-                    //" and trim(a.STATUS)=" + mc_StatusCompletionPipe + //临时去掉20150122
-                    //2015-03-03 不统计数据类型为刨找的
-                    //2015-03-13 周婧 仅统计录入日期不为空，且大于1900，刨找先不区分。
-                    //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
-                    " group by a.MATERIAL,a.DIAMETER" +
-                    " ";
-                //User
-                strSQL2 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
-                    "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
-                    " from " + m_PrifixName + "." + m_Vn_PipeUser + " a, " + TN_LEN_PUser + " L " +
-                    " where A.Shape=L.FID " +
-                    " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
-                    " and " + strBuildDateCondition +
-                    //" and trim(a.STATUS)=" + mc_StatusCompletionPipe +
+                FrmSelInvest frmInvest = new FrmSelInvest();
+                frmInvest.Init(m_lstInvest);
+                if (frmInvest.ShowDialog() == DialogResult.OK)
+                {
 
-                    //2015-03-03 不统计数据类型为刨找的
-                    //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
-                    " group by a.MATERIAL,a.DIAMETER" +
-                    "";
-                //source
-                strSQL3 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
-                    "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
-                    " from " + m_PrifixName + "." + m_Vn_PipeSource + " a, " + TN_LEN_PSource + " L " +
-                    " where A.Shape=L.FID " +
-                    " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
-                    " and " + strBuildDateCondition +
-                    //" and trim(a.STATUS)=" + mc_StatusCompletionPipe +
+                    strSelInvest = frmInvest.cboInvestStyle.Text;
+                    //20150206 固定资产不统计录入时间为19000101或者为空的的记录
+                    //strBuildDateCondition = frmInvest.BuildDtComplex;
+                    strBuildDateCondition = frmInvest.BuildDtComplex + " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')";
 
-                    //2015-03-03 不统计数据类型为刨找的
-                    //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
-                    " group by a.MATERIAL,a.DIAMETER" +
-                    "";
-            }
-            else
-            {
-                //Main
-                strSQL1 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
-                    "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
-                    " from " + m_PrifixName + "." + m_Vn_PipeMain + " a, " + TN_LEN_PMain + " L " +
-                    " where A.Shape=L.FID " +
-                    " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
-                    " and " + strBuildDateCondition +
-                    //" and a.STATUS is null or (trim(a.STATUS)<>" + mc_StatusDisusedPipe + " and trim(a.STATUS)<>" + mc_StatusTempPipe + ") " + " and a.WATERTYPE='" + cboWaterType.Text + "' " +
-                    //" and trim(a.STATUS)=" + mc_StatusCompletionPipe + //临时去掉20150122
-                    //2015-03-03 不统计数据类型为刨找的
-                    //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
-                    " and a.WATERTYPE='" + cboWaterType.Text + "' " +
-                    " group by a.MATERIAL,a.DIAMETER" +
-                    "";
-                //User
-                strSQL2 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
-                    "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
-                    " from " + m_PrifixName + "." + m_Vn_PipeUser + " a, " + TN_LEN_PUser + " L " +
-                    " where A.Shape=L.FID " +
-                    " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
-                    " and " + strBuildDateCondition +
-                     //" and trim(a.STATUS)=" + mc_StatusCompletionPipe + 
-                    //2015-03-03 不统计数据类型为刨找的
-                    //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
-                     " and a.WATERTYPE='" + cboWaterType.Text + "' " +
-                    " group by a.MATERIAL,a.DIAMETER" +
-                    "";
-                //source
-                strSQL3 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
-                    "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
-                    " from " + m_PrifixName + "." + m_Vn_PipeSource + " a, " + TN_LEN_PSource + " L " +
-                    " where A.Shape=L.FID " +
-                    " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
-                    " and " + strBuildDateCondition +
-                     //" and trim(a.STATUS)=" + mc_StatusCompletionPipe + 
-                    //2015-03-03 不统计数据类型为刨找的                    
-                    //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
-                     " and a.WATERTYPE='" + cboWaterType.Text + "' " +
-                    " group by a.MATERIAL,a.DIAMETER" +
-                    "";
-            }
+                    strBuilDateTitle = frmInvest.BuildDataTitle;
+                    frmInvest.Close();
+                }
+                if (strSelInvest.Trim() == "")
+                {
+                    return;
+                }
+                string strTemp = string.Empty, strFields = string.Empty, strSQL1 = string.Empty, strSQL2 = string.Empty, strSQL3 = string.Empty, strSQL = string.Empty;
 
-            //strSQL = " select distinct 材质,管径,round(sum(长度),3) as 长度,round(sum(原值),2) as 原值,round(sum(月折旧额),2) as 月折旧额,'' as 备注 from (" + strSQL1 + " Union " + strSQL2 + " " + " Union " + strSQL3 + ") group by 材质,管径 order by 材质,管径";
+                this.Cursor = Cursors.WaitCursor;
+
+                if (cboWaterType.Text == mc_strWaterType_All)
+                {
+                    //Main
+                    strSQL1 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
+                        "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
+                        " from " + m_PrifixName + "." + m_Vn_PipeMain + " a, " + TN_LEN_PMain + " L " +
+                        " where A.Shape=L.FID " +
+                        " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
+                        " and " + strBuildDateCondition +
+                        //2015-01-19 状态由<>废弃 \临时 改为：状态=竣工
+                        //" and a.STATUS is null or (trim(a.STATUS)<>" + mc_StatusDisusedPipe + " and trim(a.STATUS)<>" + mc_StatusTempPipe + ") " +
+                        //" and trim(a.STATUS)=" + mc_StatusCompletionPipe + //临时去掉20150122
+                        //2015-03-03 不统计数据类型为刨找的
+                        //2015-03-13 周婧 仅统计录入日期不为空，且大于1900，刨找先不区分。
+                        //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
+                        " group by a.MATERIAL,a.DIAMETER" +
+                        " ";
+                    //User
+                    strSQL2 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
+                        "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
+                        " from " + m_PrifixName + "." + m_Vn_PipeUser + " a, " + TN_LEN_PUser + " L " +
+                        " where A.Shape=L.FID " +
+                        " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
+                        " and " + strBuildDateCondition +
+                        //" and trim(a.STATUS)=" + mc_StatusCompletionPipe +
+
+                        //2015-03-03 不统计数据类型为刨找的
+                        //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
+                        " group by a.MATERIAL,a.DIAMETER" +
+                        "";
+                    //source
+                    strSQL3 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
+                        "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
+                        " from " + m_PrifixName + "." + m_Vn_PipeSource + " a, " + TN_LEN_PSource + " L " +
+                        " where A.Shape=L.FID " +
+                        " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
+                        " and " + strBuildDateCondition +
+                        //" and trim(a.STATUS)=" + mc_StatusCompletionPipe +
+
+                        //2015-03-03 不统计数据类型为刨找的
+                        //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
+                        " group by a.MATERIAL,a.DIAMETER" +
+                        "";
+                }
+                else
+                {
+                    //Main
+                    strSQL1 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
+                        "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
+                        " from " + m_PrifixName + "." + m_Vn_PipeMain + " a, " + TN_LEN_PMain + " L " +
+                        " where A.Shape=L.FID " +
+                        " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
+                        " and " + strBuildDateCondition +
+                        //" and a.STATUS is null or (trim(a.STATUS)<>" + mc_StatusDisusedPipe + " and trim(a.STATUS)<>" + mc_StatusTempPipe + ") " + " and a.WATERTYPE='" + cboWaterType.Text + "' " +
+                        //" and trim(a.STATUS)=" + mc_StatusCompletionPipe + //临时去掉20150122
+                        //2015-03-03 不统计数据类型为刨找的
+                        //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
+                        " and a.WATERTYPE='" + cboWaterType.Text + "' " +
+                        " group by a.MATERIAL,a.DIAMETER" +
+                        "";
+                    //User
+                    strSQL2 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
+                        "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
+                        " from " + m_PrifixName + "." + m_Vn_PipeUser + " a, " + TN_LEN_PUser + " L " +
+                        " where A.Shape=L.FID " +
+                        " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
+                        " and " + strBuildDateCondition +
+                        //" and trim(a.STATUS)=" + mc_StatusCompletionPipe + 
+                        //2015-03-03 不统计数据类型为刨找的
+                        //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
+                         " and a.WATERTYPE='" + cboWaterType.Text + "' " +
+                        " group by a.MATERIAL,a.DIAMETER" +
+                        "";
+                    //source
+                    strSQL3 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,'米' as 单位,sum(L.LEN) as 长度,sum(a.DRAWPRICE) as 原值," +
+                        "sum(a.DRAWPRICE)*0.04 as 月折旧额,'' as 备注" +
+                        " from " + m_PrifixName + "." + m_Vn_PipeSource + " a, " + TN_LEN_PSource + " L " +
+                        " where A.Shape=L.FID " +
+                        " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0 and not " + mc_Fn_Drawprice + " is null " +
+                        " and " + strBuildDateCondition +
+                        //" and trim(a.STATUS)=" + mc_StatusCompletionPipe + 
+                        //2015-03-03 不统计数据类型为刨找的                    
+                        //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
+                         " and a.WATERTYPE='" + cboWaterType.Text + "' " +
+                        " group by a.MATERIAL,a.DIAMETER" +
+                        "";
+                }
+
+                //strSQL = " select distinct 材质,管径,round(sum(长度),3) as 长度,round(sum(原值),2) as 原值,round(sum(月折旧额),2) as 月折旧额,'' as 备注 from (" + strSQL1 + " Union " + strSQL2 + " " + " Union " + strSQL3 + ") group by 材质,管径 order by 材质,管径";
                 //2015-03-04 要求按照档号\口径\材质的顺序统计结果;0313zhou 长度为3，原值为2；
-            strSQL = " select distinct 材质,管径,round(sum(长度),3) as 长度,round(sum(原值),2) as 原值,round(sum(月折旧额),4) as 月折旧额,'' as 备注 from (" + strSQL1 + " Union " + strSQL2 + " " + " Union " + strSQL3 + ") group by 材质,管径 order by 材质,管径";
-            dDataTableA = Get_QuerySheet(strSQL);
+                strSQL = " select distinct 材质,管径,round(sum(长度),3) as 长度,round(sum(原值),2) as 原值,round(sum(月折旧额),4) as 月折旧额,'' as 备注 from (" + strSQL1 + " Union " + strSQL2 + " " + " Union " + strSQL3 + ") group by 材质,管径 order by 材质,管径";
+                dDataTableA = Get_QuerySheet(strSQL);
 
-            if (dDataTableA.Rows.Count < 1)
-            {
-                MessageBox.Show("所选统计类型记录为空，导出终止！", "提示！");
-                this.Cursor=Cursors.Default;
-                return;
-            }
-            DateTime now = DateTime.Now;
-            SaveFileDialog objSave = new SaveFileDialog();
-            objSave.Filter = "电子表格(*.xls)|*.xls|所有文件(*.*)|*.*";
-            objSave.FilterIndex = 0;
-            objSave.RestoreDirectory = true;
-            objSave.AddExtension = true;
-            objSave.CreatePrompt = true;
-            objSave.Title = "导出" + mc_strNameReport_PipeInvestAddTotal;
-            objSave.FileName = mc_strNameReport_PipeInvestAddTotal + now.Year.ToString().PadLeft(2, '0') + now.Month.ToString().PadLeft(2, '0') + now.Day.ToString().PadLeft(2, '0')
-                + now.Hour.ToString().PadLeft(2, '0') + now.Minute.ToString().PadLeft(2, '0') + now.Second.ToString().PadLeft(2, '0') + ".xls";
-           
+                if (dDataTableA.Rows.Count < 1)
+                {
+                    MessageBox.Show("所选统计类型记录为空，导出终止！", "提示！");
+                    this.Cursor = Cursors.Default;
+                    return;
+                }
+                DateTime now = DateTime.Now;
+                SaveFileDialog objSave = new SaveFileDialog();
+                objSave.Filter = "电子表格(*.xls)|*.xls|所有文件(*.*)|*.*";
+                objSave.FilterIndex = 0;
+                objSave.RestoreDirectory = true;
+                objSave.AddExtension = true;
+                objSave.CreatePrompt = true;
+                objSave.Title = "导出" + mc_strNameReport_PipeInvestAddTotal;
+                objSave.FileName = mc_strNameReport_PipeInvestAddTotal + now.Year.ToString().PadLeft(2, '0') + now.Month.ToString().PadLeft(2, '0') + now.Day.ToString().PadLeft(2, '0')
+                    + now.Hour.ToString().PadLeft(2, '0') + now.Minute.ToString().PadLeft(2, '0') + now.Second.ToString().PadLeft(2, '0') + ".xls";
+
                 if (objSave.ShowDialog() == DialogResult.OK)
                 {
                     double dbl_YZJESum = 0;
                     double dbl_ChangDSum = 0;
                     double dbl_YuanZSum = 0;
                     StringWriter sw = new StringWriter();
-                    sw.WriteLine("{0}(水质类型：{1}){2}", mc_strNameofJJWaterltd,cboWaterType.Text, mc_strNameReport_PipeInvestAddTotal);
+                    sw.WriteLine("{0}(水质类型：{1}){2}", mc_strNameofJJWaterltd, cboWaterType.Text, mc_strNameReport_PipeInvestAddTotal);
                     sw.WriteLine("");
                     sw.WriteLine("投资方式：{0}", strSelInvest);
                     sw.WriteLine("统计区间：{0}", strBuilDateTitle);
@@ -1998,7 +2505,7 @@ namespace JJWATQuery
                             sw.Write(dDataTableA.Rows[i][j].ToString().Trim() + "\t");
                         }
                         //累加月折旧额
-                        if (dDataTableA.Rows[i][dDataTableA.Columns.Count - 2] != null && !Convert.IsDBNull(dDataTableA.Rows[i][dDataTableA.Columns.Count - 2]) && dDataTableA.Rows[i][dDataTableA.Columns.Count - 2].ToString().Trim()!="")
+                        if (dDataTableA.Rows[i][dDataTableA.Columns.Count - 2] != null && !Convert.IsDBNull(dDataTableA.Rows[i][dDataTableA.Columns.Count - 2]) && dDataTableA.Rows[i][dDataTableA.Columns.Count - 2].ToString().Trim() != "")
                             dbl_YZJESum = Convert.ToDouble(dDataTableA.Rows[i][dDataTableA.Columns.Count - 2]) + dbl_YZJESum;
                         //累加原值
                         if (dDataTableA.Rows[i][dDataTableA.Columns.Count - 3] != null && !Convert.IsDBNull(dDataTableA.Rows[i][dDataTableA.Columns.Count - 3]) && dDataTableA.Rows[i][dDataTableA.Columns.Count - 3].ToString().Trim() != "")
@@ -2009,30 +2516,27 @@ namespace JJWATQuery
 
                         sw.Write("\r\n");
                     }
-                    sw.WriteLine("月折旧额：{0} 元",Math.Round(dbl_YZJESum,2));
-                    sw.WriteLine("长度总计：{0} 米", Math.Round(dbl_ChangDSum,3));//要求改成2位：2015-3-4；要求改为3位：2015-03-13；
-                    sw.WriteLine("原值总计：{0} 元",Math.Round(dbl_YuanZSum,2));
+                    sw.WriteLine("月折旧额：{0} 元", Math.Round(dbl_YZJESum, 2));
+                    sw.WriteLine("长度总计：{0} 米", Math.Round(dbl_ChangDSum, 3));//要求改成2位：2015-3-4；要求改为3位：2015-03-13；
+                    sw.WriteLine("原值总计：{0} 元", Math.Round(dbl_YuanZSum, 2));
                     sw.Write("\r\n");
-                    sw.WriteLine("总管领导:\t财务负责人:\t审核人:\t制表人:");
+                    sw.WriteLine("主管领导:\t审核人:\t制表人:");
                     byte[] s = System.Text.Encoding.GetEncoding("gb2312").GetBytes(sw.ToString());
                     FileStream fs = new FileStream(objSave.FileName, FileMode.Create, FileAccess.Write);
                     fs.Write(s, 0, s.Length);
                     fs.Close();
                     this.Cursor = Cursors.Default;
-                    if(MessageBox.Show("导出完毕,点击【确定】打开！", "提示",MessageBoxButtons.OK)==DialogResult.OK)
+                    if (MessageBox.Show("导出完毕,点击【确定】打开！", "提示", MessageBoxButtons.OK) == DialogResult.OK)
                     {
-                        string strMacroName = "PERSONAL.XLSB!固定资产增加汇总表";                          
+                        string strMacroName = "PERSONAL.XLSB!固定资产增加汇总表";
                         OpenFolderAndSelectFile(objSave.FileName, m_strExcelTemplate, strMacroName);
                     }
-                    
                 }
                 else
                 {
                     this.Cursor = Cursors.Default;
                     return;
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -2086,12 +2590,10 @@ namespace JJWATQuery
             string TN_LEN_PMain = string.Empty;
             string TN_LEN_PUser = string.Empty;
             string TN_LEN_PSource = string.Empty;
-
             DataTable dDataTableM = new DataTable();
             DataTable dDataTableU = new DataTable();
             DataTable dDataTableS = new DataTable();
             DataTable dDataTableTotal = new DataTable();
-
             if (!m_blISCAL)
             {
                 if (MessageBox.Show("统计前是否重新计算原值？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -2104,11 +2606,9 @@ namespace JJWATQuery
                     {
                         m_blISCAL = false;
                         return;
-                    } 
-                }                
-            }            
-
-           
+                    }
+                }
+            }
             string m_Vn_Hydrant = string.Empty;
             string m_Vn_PipeMain = string.Empty;
             string m_Vn_PipeUser = string.Empty;
@@ -2148,7 +2648,7 @@ namespace JJWATQuery
             {
 
                 strSelInvest = frmInvest.cboInvestStyle.Text;
-               
+
                 //20150206 固定资产不统计录入时间为19000101或者为空的的记录
                 //strBuildDateCondition = frmInvest.BuildDtComplex;                  
                 strBuildDateCondition = frmInvest.BuildDtComplex + " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')";
@@ -2161,7 +2661,7 @@ namespace JJWATQuery
                 return;
             }
             string strTemp = string.Empty, strFields = string.Empty, strSQL1 = string.Empty, strSQL2 = string.Empty, strSQL3 = string.Empty, strSQL = string.Empty;
-            this.Cursor=Cursors.WaitCursor;
+            this.Cursor = Cursors.WaitCursor;
             if (cboWaterType.Text == mc_strWaterType_All)
             {
                 //MAIN
@@ -2169,7 +2669,7 @@ namespace JJWATQuery
                     "a.ADDR as 地址,a.PIPEFILE as 档号,a.WORKNO as 工号,a.USERNAME as 户名,a.ASSEMBLER as 施工单位," +
                     "( select count(b.OBJECTID) from " + m_PrifixName + "." + m_Vn_Hydrant + " b " +
                     "where trim(b.PIPEFILE)=trim(a.PIPEFILE) and trim(b.MATERIAL)=trim(a.MATERIAL) and trim(b.DIAMETER)=trim(a.DIAMETER) " +
-                    ") as 消防栓" +
+                    ") as 消火栓" +
                     " from " + m_PrifixName + "." + m_Vn_PipeMain + " a, " + TN_LEN_PMain + " L " +
                     " where A.Shape=L.FID " +
                     " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0.0 and not " + mc_Fn_Drawprice + " is null " +
@@ -2181,13 +2681,13 @@ namespace JJWATQuery
 
                     " group by a.MATERIAL,a.DIAMETER,a.ADDR,a.PIPEFILE,a.WORKNO,a.USERNAME,a.ASSEMBLER" +
                     " ";
-                    //" order by a.MATERIAL,a.DIAMETER";
+                //" order by a.MATERIAL,a.DIAMETER";
                 //USER
                 strSQL2 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,sum(L.LEN) as 长度_米,sum(a.DRAWPRICE) as 原值," +
                     "a.ADDR as 地址,a.PIPEFILE as 档号,a.WORKNO as 工号,a.USERNAME as 户名,a.ASSEMBLER as 施工单位," +
                     "( select count(b.OBJECTID) from " + m_PrifixName + "." + m_Vn_Hydrant + " b " +
                     "where trim(b.PIPEFILE)=trim(a.PIPEFILE) and trim(b.MATERIAL)=trim(a.MATERIAL) and trim(b.DIAMETER)=trim(a.DIAMETER) " +
-                    ") as 消防栓" +
+                    ") as 消火栓" +
                     " from " + m_PrifixName + "." + m_Vn_PipeUser + " a, " + TN_LEN_PUser + " L " +
                     " where A.Shape=L.FID " +
                     " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0.0 and not " + mc_Fn_Drawprice + " is null " +
@@ -2198,22 +2698,22 @@ namespace JJWATQuery
 
                     " group by a.MATERIAL,a.DIAMETER,a.ADDR,a.PIPEFILE,a.WORKNO,a.USERNAME,a.ASSEMBLER" +
                     " ";
-                    //" order by a.MATERIAL,a.DIAMETER";
+                //" order by a.MATERIAL,a.DIAMETER";
                 //SOURCE
                 strSQL3 = "select a.MATERIAL as 材质,a.DIAMETER as 管径,sum(L.LEN) as 长度_米,sum(a.DRAWPRICE) as 原值," +
                     "a.ADDR as 地址,a.PIPEFILE as 档号,a.WORKNO as 工号,a.USERNAME as 户名,a.ASSEMBLER as 施工单位," +
                     "( select count(b.OBJECTID) from " + m_PrifixName + "." + m_Vn_Hydrant + " b " +
                     "where trim(b.PIPEFILE)=trim(a.PIPEFILE) and trim(b.MATERIAL)=trim(a.MATERIAL) and trim(b.DIAMETER)=trim(a.DIAMETER) " +
-                    ") as 消防栓" +
+                    ") as 消火栓" +
                     " from " + m_PrifixName + "." + m_Vn_PipeSource + " a, " + TN_LEN_PSource + " L " +
                     " where A.Shape=L.FID " +
                     " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0.0 and not " + mc_Fn_Drawprice + " is null " +
                     " and " + strBuildDateCondition +
-                   // " and trim(a.STATUS)=" + mc_StatusCompletionPipe +
+                    // " and trim(a.STATUS)=" + mc_StatusCompletionPipe +
                     //2015-03-03 不统计数据类型为刨找的                    
                     //" and (A.DATATYPE is NULL or trim(A.DATATYPE)<>" + mc_strDataTypeDigFound + ")" +
                     " group by a.MATERIAL,a.DIAMETER,a.ADDR,a.PIPEFILE,a.WORKNO,a.USERNAME,a.ASSEMBLER" +
-                   // " order by a.MATERIAL,a.DIAMETER";
+                    // " order by a.MATERIAL,a.DIAMETER";
                    " ";
             }
             else
@@ -2223,7 +2723,7 @@ namespace JJWATQuery
                     "a.ADDR as 地址,a.PIPEFILE as 档号,a.WORKNO as 工号,a.USERNAME as 户名,a.ASSEMBLER as 施工单位," +
                     "( select count(b.OBJECTID) from " + m_PrifixName + "." + m_Vn_Hydrant + " b " +
                     "where trim(b.PIPEFILE)=trim(a.PIPEFILE) and trim(b.MATERIAL)=trim(a.MATERIAL) and trim(b.DIAMETER)=trim(a.DIAMETER) " +
-                    ") as 消防栓" +
+                    ") as 消火栓" +
                     " from " + m_PrifixName + "." + m_Vn_PipeMain + " a, " + TN_LEN_PMain + " L " +
                     " where A.Shape=L.FID " +
                     " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0.0 and not " + mc_Fn_Drawprice + " is null " +
@@ -2241,7 +2741,7 @@ namespace JJWATQuery
                     "a.ADDR as 地址,a.PIPEFILE as 档号,a.WORKNO as 工号,a.USERNAME as 户名,a.ASSEMBLER as 施工单位," +
                     "( select count(b.OBJECTID) from " + m_PrifixName + "." + m_Vn_Hydrant + " b " +
                     "where trim(b.PIPEFILE)=trim(a.PIPEFILE) and trim(b.MATERIAL)=trim(a.MATERIAL) and trim(b.DIAMETER)=trim(a.DIAMETER) " +
-                    ") as 消防栓" +
+                    ") as 消火栓" +
                     " from " + m_PrifixName + "." + m_Vn_PipeUser + " a, " + TN_LEN_PUser + " L " +
                     " where A.Shape=L.FID " +
                     " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0.0 and not " + mc_Fn_Drawprice + " is null " +
@@ -2258,7 +2758,7 @@ namespace JJWATQuery
                     "a.ADDR as 地址,a.PIPEFILE as 档号,a.WORKNO as 工号,a.USERNAME as 户名,a.ASSEMBLER as 施工单位," +
                     "( select count(b.OBJECTID) from " + m_PrifixName + "." + m_Vn_Hydrant + " b " +
                     "where trim(b.PIPEFILE)=trim(a.PIPEFILE) and trim(b.MATERIAL)=trim(a.MATERIAL) and trim(b.DIAMETER)=trim(a.DIAMETER) " +
-                    ") as 消防栓" +
+                    ") as 消火栓" +
                     " from " + m_PrifixName + "." + m_Vn_PipeSource + " a, " + TN_LEN_PSource + " L " +
                     " where A.Shape=L.FID " +
                     " and trim(" + mc_Fn_WorkChar + ")='" + strSelInvest + "' and " + mc_Fn_Drawprice + "<>0.0 and not " + mc_Fn_Drawprice + " is null " +
@@ -2279,17 +2779,17 @@ namespace JJWATQuery
             //strSQL = strSQL3;
             //dDataTableS = Get_QuerySheet(strSQL);            
 
-            strSQL = "select 材质,管径,round(长度_米,3) 长度_米,round(原值,2) 原值,地址,档号,工号,户名,施工单位,消防栓 from( " +
+            strSQL = "select 材质,管径,round(长度_米,3) 长度_米,round(原值,2) 原值,地址,档号,工号,户名,施工单位,消火栓 from( " +
                 strSQL1 + " union " +
                 strSQL2 + " union " +
                 strSQL3 +
-                ") group by  材质,管径,长度_米,原值,地址,档号,工号,户名,施工单位,消防栓 " +
+                ") group by  材质,管径,长度_米,原值,地址,档号,工号,户名,施工单位,消火栓 " +
                 " order by 档号,材质,管径";//按要求统计结果顺序调整为档号、材质、管径；原为档号，管径、材质2015-03-04；长度改为3,2015-3-13；
 
             dDataTableTotal = Get_QuerySheet(strSQL);
 
             //if (dDataTableM.Rows.Count < 1 && dDataTableU.Rows.Count < 1 && dDataTableS.Rows.Count < 1)
-            if (dDataTableTotal.Rows.Count<1)
+            if (dDataTableTotal.Rows.Count < 1)
             {
                 MessageBox.Show("所选统计类型记录为空，导出终止！", "提示！");
                 this.Cursor = Cursors.Default;
@@ -2367,15 +2867,15 @@ namespace JJWATQuery
 
 
                     string strCompMaterial = string.Empty;
-                    int intCompDiameter=0 ;
+                    int intCompDiameter = 0;
                     string strComPipefile = string.Empty;
                     string strComWorkNo = string.Empty;
 
                     for (int i = 0; i < dDataTableTotal.Rows.Count; i++)
                     {
-                             
-                        string dcHydrantName=string.Empty;
-                        
+
+                        string dcHydrantName = string.Empty;
+
                         for (int j = 0; j < dDataTableTotal.Columns.Count; j++)
                         {
                             DataColumn dcols = dDataTableTotal.Columns[j];
@@ -2391,14 +2891,14 @@ namespace JJWATQuery
                                 sw.Write("\r\n");
                             }
 
-                            dcHydrantName=dDataTableTotal.Columns[j].ColumnName;
+                            dcHydrantName = dDataTableTotal.Columns[j].ColumnName;
                             if (i == 0)
                             {
                                 sw.Write(dDataTableTotal.Rows[i][j].ToString().Trim() + "\t");
                             }
                             //存在重复的情况,统计时消火栓仅统计一次:
                             //材质，管径，档号，工号；和上一次记录比较
-                            if (dcHydrantName == "消防栓" &&
+                            if (dcHydrantName == "消火栓" &&
                                 strCompMaterial == dDataTableTotal.Rows[i][0].ToString().Trim() &&
                                 intCompDiameter == Convert.ToInt32(dDataTableTotal.Rows[i][1].ToString().Trim()) &&
                                 strComPipefile == dDataTableTotal.Rows[i][5].ToString().Trim() &&
@@ -2407,10 +2907,10 @@ namespace JJWATQuery
                             {
                                 sw.Write("0" + "\t");
                             }
-                            else if(i>0)
+                            else if (i > 0)
                             {
                                 sw.Write(dDataTableTotal.Rows[i][j].ToString().Trim() + "\t");
- 
+
                             }
                         }
 
@@ -2434,8 +2934,8 @@ namespace JJWATQuery
                     }
                     //sw.WriteLine("月折旧额：{0} 元", Math.Round(dbl_YZJESum, 2));
                     sw.WriteLine("\r\n");
-                    sw.WriteLine("长度合计：{0} 米 \t\t 原值合计：{1} 元", Math.Round(dbl_ChangDSum, 3),Math.Round(dbl_YuanZSum, 2));//长度2改为3，2015-03-13；zhou
-                    
+                    sw.WriteLine("长度合计：{0} 米 \t\t 原值合计：{1} 元", Math.Round(dbl_ChangDSum, 3), Math.Round(dbl_YuanZSum, 2));//长度2改为3，2015-03-13；zhou
+
 
                     byte[] s = System.Text.Encoding.GetEncoding("gb2312").GetBytes(sw.ToString());
                     FileStream fs = new FileStream(objSave.FileName, FileMode.Create, FileAccess.Write);
@@ -2445,8 +2945,8 @@ namespace JJWATQuery
                     this.Cursor = Cursors.Default;
                     if (MessageBox.Show("导出完毕,点击【确定】打开！", "提示", MessageBoxButtons.OK) == DialogResult.OK)
                     {
-                        string strMacroName = "PERSONAL.XLSB!固定资产增加明细表";                        
-                        OpenFolderAndSelectFile(objSave.FileName, m_strExcelTemplate, strMacroName); 
+                        string strMacroName = "PERSONAL.XLSB!固定资产增加明细表";
+                        OpenFolderAndSelectFile(objSave.FileName, m_strExcelTemplate, strMacroName);
                     }
 
                 }
@@ -2494,9 +2994,9 @@ namespace JJWATQuery
                 {
                     //状态改为只统计竣工；
                     strSQL = "select addr 地址,username 单位名称,userno 户号,diameter 口径,count(*) 消火栓个数 from " + m_CurParameter.GWUserName +
-                        ".hydrant "+" where "+
+                        ".hydrant " + " where " +
                         //"checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " +
-                        CheckDtComplex +
+                        NewDtComplex +
                         strWhere +
                         //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
@@ -2508,12 +3008,12 @@ namespace JJWATQuery
                 else
                 {
                     strSQL = "select addr 地址,username 单位名称,userno 户号,diameter 口径,count(*) 消火栓个数 from " + m_CurParameter.GWUserName +
-                        ".hydrant "+ " where "+
+                        ".hydrant " + " where " +
                         //" checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + 
-                        CheckDtComplex +
-                        strWhere + 
+                        NewDtComplex +
+                        strWhere +
                         //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
-                                " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')"+
+                                " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
                         //" and (STATUS IS NULL or (STATUS <> " + mc_StatusTempPipe + "and STATUS<>" + mc_StatusDisusedPipe+" )) and WATERTYPE='" + cboWaterType.Text + "'"+
                         //" and STATUS=" + mc_StatusCompletionPipe + 
                         " and WATERTYPE='" + cboWaterType.Text + "' " +
@@ -2591,8 +3091,8 @@ namespace JJWATQuery
                     fs.Close();
                     if (MessageBox.Show("导出完毕,点击【确定】打开！", "提示", MessageBoxButtons.OK) == DialogResult.OK)
                     {
-                        string strMacroName = "PERSONAL.XLSB!新安消火栓个数统计月报";                        
-                        OpenFolderAndSelectFile(objSave.FileName, m_strExcelTemplate, strMacroName); 
+                        string strMacroName = "PERSONAL.XLSB!新安消火栓个数统计月报";
+                        OpenFolderAndSelectFile(objSave.FileName, m_strExcelTemplate, strMacroName);
                     }
 
                 }
@@ -2632,10 +3132,10 @@ namespace JJWATQuery
             OleDbDataReader adoReader = null;
             Boolean blnTONGJI = false;
 
-            
+
             string cstrVavleCount_en = "VCount";
             string cstrValveCount_cn = "总数(座)";
-            
+
             try
             {
                 IFeatureLayer pFeatureLayer = m_objMap.GetLayerByName(mc_strValveLayerName).FeatureLayer;
@@ -2644,8 +3144,8 @@ namespace JJWATQuery
                 m_dicRowCodeDesc = GetSubtypes(pFeatureLayer.FeatureClass, mc_FieldNameDiameter);
             }
             catch (Exception ex)
-            {                
-                MessageBox.Show(ex.Message,"提示");
+            {
+                MessageBox.Show(ex.Message, "提示");
                 return;
             }
 
@@ -2659,7 +3159,7 @@ namespace JJWATQuery
                     //STATUS只筛选竣工 20150119
                     //SZTYPE 修改为 WATERTYPE 20141421
                     //strSQL = "select " + mc_FieldNameDiameter + "," + mc_FieldNameVstate + ", count(*) Vcount from " + m_CurParameter.GWUserName + ".valve where trim(DIAMETER) is not null " + strWhere + " and (STATUS IS NULL or (STATUS IS NOT NULL and trim(STATUS) <> " + mc_StatusTempPipe + ")) group by " + mc_FieldNameDiameter + "," + mc_FieldNameVstate + " order by " + mc_FieldNameDiameter;
-                    strSQL = "select " + mc_FieldNameDiameter + "," + mc_FieldNameVstate + ", count(*) Vcount from " + m_CurParameter.GWUserName + ".valve "+
+                    strSQL = "select " + mc_FieldNameDiameter + "," + mc_FieldNameVstate + ", count(*) Vcount from " + m_CurParameter.GWUserName + ".valve " +
 
                         //" where STATUS IS NULL or (STATUS <> " + mc_StatusTempPipe +"and STATUS<> "+mc_StatusDisusedPipe+") "+
                         //" STATUS=" + mc_StatusCompletionPipe +
@@ -2673,11 +3173,11 @@ namespace JJWATQuery
                 else
                 {
                     //strSQL = "select " + mc_FieldNameDiameter + "," + mc_FieldNameVstate + ", count(*) Vcount from " + m_CurParameter.GWUserName + ".valve where trim(DIAMETER) is not null " + strWhere + " and (STATUS IS NULL or (STATUS IS NOT NULL and trim(STATUS) <> " + mc_StatusTempPipe + ")) and WATERTYPE ='" + cboWaterType.Text + "' group by " + mc_FieldNameDiameter + "," + mc_FieldNameVstate + " order by " + mc_FieldNameDiameter;
-                    strSQL = "select " + mc_FieldNameDiameter + "," + mc_FieldNameVstate + ", count(*) Vcount from " + m_CurParameter.GWUserName + ".valve"+
+                    strSQL = "select " + mc_FieldNameDiameter + "," + mc_FieldNameVstate + ", count(*) Vcount from " + m_CurParameter.GWUserName + ".valve" +
                         " where" +
                         //" STATUS IS NULL or (STATUS <> " + mc_StatusTempPipe + " and STATUS <> "+mc_StatusDisusedPipe+"  and WATERTYPE ='" + cboWaterType.Text + "')"+
                         //" STATUS="+mc_StatusCompletionPipe+
-                        " WATERTYPE='"+cboWaterType.Text+"' "+
+                        " WATERTYPE='" + cboWaterType.Text + "' " +
                         //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
                         " group by " + mc_FieldNameDiameter + "," + mc_FieldNameVstate + " order by " + mc_FieldNameDiameter;
@@ -2687,11 +3187,11 @@ namespace JJWATQuery
                 try
                 {
                     if (m_objDBCON == null)
-                    m_objDBCON = CDBCon.GetInstance();
+                        m_objDBCON = CDBCon.GetInstance();
                     //Get_sqlDBReader(strSQL, ref adoReader);
                     m_objDBCON.ExecuteSQLReturn(strSQL, ref adoReader);
                     //if (adoReader != null)
-                    if(adoReader.HasRows)
+                    if (adoReader.HasRows)
                     {
                         string strDBresult = string.Empty;
                         string strDiameter = string.Empty;
@@ -2960,12 +3460,12 @@ namespace JJWATQuery
                     FileStream fs = new FileStream(objSave.FileName, FileMode.Create, FileAccess.Write);
                     fs.Write(s, 0, s.Length);
                     fs.Close();
-                    if(MessageBox.Show("导出完毕,点击【确定】打开！", "提示",MessageBoxButtons.OK)==DialogResult.OK)
+                    if (MessageBox.Show("导出完毕,点击【确定】打开！", "提示", MessageBoxButtons.OK) == DialogResult.OK)
                     {
-                        string strMacroName = "PERSONAL.XLSB!配水管线闸门统计";                        
+                        string strMacroName = "PERSONAL.XLSB!配水管线闸门统计";
                         OpenFolderAndSelectFile(objSave.FileName, m_strExcelTemplate, strMacroName);
                     }
-                    
+
                 }
                 else
                 {
@@ -3044,7 +3544,7 @@ namespace JJWATQuery
                     getLayerID("PIPESECTIONSOURCE"), cboWaterType.Text);
 
             }
-            
+
 
 
             m_pFeatureLayer = m_objMap.GetLayerByName(mc_strPipesectionMainName).FeatureLayer;
@@ -3088,10 +3588,10 @@ namespace JJWATQuery
                                 "select diameter,material,sum(cd) shape_length from ((select diameter,material,len cd from " +
                                 strPipeSectionMain + " where " +
                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " +
-                                CheckDtComplex +
+                                NewDtComplex +
                                 strWherePipesectionMain +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
-                                " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')"+
+                                " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
                                 //" and STATUS IS NULL or (STATUS <> " + mc_StatusDisusedPipe + " and STATUS <> " + mc_StatusTempPipe + 
                                 //" and STATUS ="+ mc_StatusCompletionPipe +
                                 //")) union all " +
@@ -3099,20 +3599,20 @@ namespace JJWATQuery
                                 "(select diameter,material,len cd from " +
                                 strPipeSectionUser + " where " +
                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + 
-                                CheckDtComplex +
+                                NewDtComplex +
                                 strWherePipesectionUser +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
-                                 //" and STATUS =" + mc_StatusCompletionPipe +
+                                //" and STATUS =" + mc_StatusCompletionPipe +
                                 ") union all " +
                                 "(select diameter,material,len cd from " +
                                 strPipeSectionSource + " where " +
                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + 
-                                CheckDtComplex +
+                                NewDtComplex +
                                 strWherePipesectionSource +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
-                                 //" and STATUS =" + mc_StatusCompletionPipe +
+                                //" and STATUS =" + mc_StatusCompletionPipe +
                                 ")) group by diameter,material order by  " + mc_FieldNameDiameter;
 
                             m_strTitleOfExportExcelFileName = mc_strNameReport_NewMains;
@@ -3124,20 +3624,20 @@ namespace JJWATQuery
                                 "select diameter,material,sum(cd) shape_length from ((select diameter,material,len cd from " +
                                 strPipeSectionMain + " where " +
                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + 
-                                CheckDtComplex +
-                                strWherePipesectionMain +                                
+                                NewDtComplex +
+                                strWherePipesectionMain +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
                                 //" and STATUS IS NULL or (STATUS <> " + mc_StatusDisusedPipe + " and STATUS <> " + mc_StatusTempPipe + " and WATERTYPE='" + cboWaterType.Text + 
-                               // " and STATUS ="+mc_StatusCompletionPipe +
-                                " and WATERTYPE='"+cboWaterType.Text+
+                                // " and STATUS ="+mc_StatusCompletionPipe +
+                                " and WATERTYPE='" + cboWaterType.Text +
                                 //"')) union all " +
                                 "') union all " +
                                 "(select diameter,material,len cd from " +
                                 strPipeSectionUser + " where " +
                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + 
-                                CheckDtComplex +
-                                strWherePipesectionUser +                                
+                                NewDtComplex +
+                                strWherePipesectionUser +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
                                 //" and STATUS =" + mc_StatusCompletionPipe + 
@@ -3146,8 +3646,8 @@ namespace JJWATQuery
                                 "(select diameter,material,len cd from " +
                                 strPipeSectionSource + " where " +
                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss')  " + 
-                                CheckDtComplex +
-                                strWherePipesectionSource +                                
+                                NewDtComplex +
+                                strWherePipesectionSource +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
                                 //" and STATUS =" + mc_StatusCompletionPipe + 
@@ -3165,22 +3665,22 @@ namespace JJWATQuery
                                 "select diameter,material,sum(cd) shape_length from ((select diameter,material,len cd from " +
                                 strPipeSectionMain + " where " +
                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + 
-                                CheckDtComplex +
+                                NewDtComplex +
                                 strWherePipesectionMain +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
-                                 //"and STATUS IS NULL or (STATUS <> " + mc_StatusDisusedPipe + " and STATUS <> " + mc_StatusTempPipe+
-                                 //" and STATUS ="+mc_StatusCompletionPipe+
-                                 //")) union all "+ 
-                                 ") union all"+
+                                //"and STATUS IS NULL or (STATUS <> " + mc_StatusDisusedPipe + " and STATUS <> " + mc_StatusTempPipe+
+                                //" and STATUS ="+mc_StatusCompletionPipe+
+                                //")) union all "+ 
+                                 ") union all" +
                                  "(select diameter,material,len cd from " +
                                  strPipeSectionUser + " where " +
-                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + strWherePipesectionUser +
-                                   CheckDtComplex +
+                                //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + strWherePipesectionUser +
+                                   NewDtComplex +
                                    strWherePipesectionUser +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
-                                 //" and STATUS =" + mc_StatusCompletionPipe +
+                                //" and STATUS =" + mc_StatusCompletionPipe +
                                  "))group by diameter,material order by " + mc_FieldNameDiameter;
                             m_strTitleOfExportExcelFileName = mc_strNameReport_NewUser;
                         }
@@ -3191,22 +3691,22 @@ namespace JJWATQuery
                                 "select diameter,material,sum(cd) shape_length from ((select diameter,material,len cd from " +
                                 strPipeSectionMain + " where " +
                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + strWherePipesectionMain +
-                                CheckDtComplex +
+                                NewDtComplex +
                                 strWherePipesectionMain +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
-                                 //"and STATUS IS NULL or (STATUS <> " + mc_StatusDisusedPipe + " and STATUS <> " + mc_StatusTempPipe + 
-                                 //" and STATUS ="+mc_StatusCompletionPipe+
-                                 //") and WATERTYPE='" + cboWaterType.Text + "') union all " +
+                                //"and STATUS IS NULL or (STATUS <> " + mc_StatusDisusedPipe + " and STATUS <> " + mc_StatusTempPipe + 
+                                //" and STATUS ="+mc_StatusCompletionPipe+
+                                //") and WATERTYPE='" + cboWaterType.Text + "') union all " +
                                  " and WATERTYPE='" + cboWaterType.Text + "') union all " +
                                  "(select diameter,material,len cd from " +
                                  strPipeSectionUser + " where " +
-                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + strWherePipesectionUser +
-                                 CheckDtComplex +
+                                //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + strWherePipesectionUser +
+                                 NewDtComplex +
                                  strWherePipesectionUser +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
-                                 //" and STATUS =" + mc_StatusCompletionPipe +
+                                //" and STATUS =" + mc_StatusCompletionPipe +
                                  " and WATERTYPE='" + cboWaterType.Text + "'))group by diameter,material order by " + mc_FieldNameDiameter;
 
                             m_strTitleOfExportExcelFileName = mc_strNameReport_NewUser;
@@ -3219,7 +3719,7 @@ namespace JJWATQuery
                             strSQL = "select diameter,material,sum(cd) shape_length from ((select diameter,material,len cd from " +
                                 strPipeSectionSource + " where " +
                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + strWherePipesectionSource +
-                                CheckDtComplex +
+                                NewDtComplex +
                                 strWherePipesectionSource +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
@@ -3236,7 +3736,7 @@ namespace JJWATQuery
                             strSQL = "select diameter,material,sum(cd) shape_length from ((select diameter,material,len cd from " +
                                 strPipeSectionSource + " where " +
                                 //"where checkedate >= to_date('" + strBegDate + "000000','yyyyMMddhh24:mi:ss') and checkedate<= to_date('" + strEndDate + "235959','yyyyMMddhh24:mi:ss') " + strWherePipesectionSource +
-                                CheckDtComplex +
+                                NewDtComplex +
                                 strWherePipesectionSource +
                                 //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
@@ -3258,13 +3758,13 @@ namespace JJWATQuery
                             //    "select diameter,material,sde.st_length(shape) cd from " + m_CurParameter.GWUserName + ".pipesectionuser where (STATUS IS NULL or (STATUS IS NOT NULL and trim(STATUS) <> " + mc_StatusdisusedPipe + " and trim(STATUS) <> " + mc_StatusTempPipe + ")) union all " +
                             //    "select diameter,material,sde.st_length(shape) cd from " + m_CurParameter.GWUserName + ".pipesectionsource where (STATUS IS NULL or (STATUS IS NOT NULL and trim(STATUS) <> " + mc_StatusdisusedPipe + " and trim(STATUS) <> " + mc_StatusTempPipe + 
                             //    ")) ) group by diameter,material order by  " + mc_FieldNameDiameter;
-                            strSQL=
+                            strSQL =
                                  "select diameter,material,sum(cd) shape_length from ((select diameter,material,len cd from " +
                                 strPipeSectionMain + " " +
                                 //"where STATUS IS NULL or (STATUS <> " + mc_StatusDisusedPipe + " and STATUS <> " + mc_StatusTempPipe + 
                                 //" where  STATUS ="+mc_StatusCompletionPipe+                                
                                 //")) union all " +
-                                ") union all "+
+                                ") union all " +
                                 "(select diameter,material,len cd from " +
                                 strPipeSectionUser + " " +
                                 //" where  STATUS =" + mc_StatusCompletionPipe +
@@ -3288,7 +3788,7 @@ namespace JJWATQuery
                                 strPipeSectionMain + " " +
                                 //"where STATUS IS NULL or (STATUS <> " + mc_StatusDisusedPipe + " and STATUS <> " + mc_StatusTempPipe +                                 
                                 //" where STATUS= "+mc_StatusCompletionPipe+
-                                " where "+
+                                " where " +
                                 //" and WATERTYPE= '" + cboWaterType.Text + "')) union all " +
 
                                 " WATERTYPE= '" + cboWaterType.Text + "') union all " +
@@ -3301,7 +3801,7 @@ namespace JJWATQuery
                                 strPipeSectionSource + " " +
                                 //" where STATUS= " + mc_StatusCompletionPipe +
                                 " where " +
-                                "  WATERTYPE='" + cboWaterType.Text + 
+                                "  WATERTYPE='" + cboWaterType.Text +
                                 "')) group by diameter,material order by  " + mc_FieldNameDiameter;
                         }
                         break;
@@ -3318,7 +3818,7 @@ namespace JJWATQuery
                     m_objDBCON.ExecuteSQLReturn(strSQL, ref adoReader);
                     //Get_sqlDBReader(strSQL, ref adoReader);
                     //if (adoReader == null)
-                    if(adoReader.HasRows)
+                    if (adoReader.HasRows)
                     {
                         string strDBresult = string.Empty;
                         string strDiameter = string.Empty;
@@ -3473,7 +3973,7 @@ namespace JJWATQuery
                                     string[] s = r.Split(',');
                                     if (strCodeofRow + "," + strCodeofColumn == s[0] + "," + s[1])
                                     {
-                                        dr[k] = Math.Round(Convert.ToDecimal(s[2]),2);//改为2位2015-03-04
+                                        dr[k] = Math.Round(Convert.ToDecimal(s[2]), 2);//改为2位2015-03-04
                                         break;
                                     }
                                 }
@@ -3589,8 +4089,8 @@ namespace JJWATQuery
                     fs.Close();
                     if (MessageBox.Show("导出完毕,点击【确定】打开！", "提示", MessageBoxButtons.OK) == DialogResult.OK)
                     {
-                        string strMacroName = "PERSONAL.XLSB!新增管线统计月报";                        
-                        OpenFolderAndSelectFile(objSave.FileName, m_strExcelTemplate, strMacroName); 
+                        string strMacroName = "PERSONAL.XLSB!新增管线统计月报";
+                        OpenFolderAndSelectFile(objSave.FileName, m_strExcelTemplate, strMacroName);
                     }
 
                 }
@@ -3746,7 +4246,7 @@ namespace JJWATQuery
                         ") union all " +
                         "(select diameter,material,len cd from " +
                         strPipeSectionSource + " " +
-                       // "where STATUS=" + mc_StatusCompletionPipe +
+                        // "where STATUS=" + mc_StatusCompletionPipe +
                         //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " WHERE WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
                         ")) group by diameter,material order by  " + mc_FieldNameDiameter;
@@ -3772,7 +4272,7 @@ namespace JJWATQuery
                         "(select diameter,material,len cd from " +
                         strPipeSectionUser + " " +
                         //"where STATUS =" + mc_StatusCompletionPipe +
-                        "where " + 
+                        "where " +
                         "  WATERTYPE='" + cboWaterType.Text + "'" +
                         //2015-03-13 周:涉及到时间的统计均不统计1900.有问题时他们都会把录入日期改为1900；日期为空不统计
                                 " and WRITEDATE IS NOT NULL and WRITEDATE>to_date('19491001150000','yyyyMMddhh24:mi:ss')" +
@@ -4063,8 +4563,8 @@ namespace JJWATQuery
                     fs.Close();
                     if (MessageBox.Show("导出完毕,点击【确定】打开！", "提示", MessageBoxButtons.OK) == DialogResult.OK)
                     {
-                        string strMacroName = "PERSONAL.XLSB!市区配水管网统计月报";                        
-                        OpenFolderAndSelectFile(objSave.FileName, m_strExcelTemplate, strMacroName); 
+                        string strMacroName = "PERSONAL.XLSB!市区配水管网统计月报";
+                        OpenFolderAndSelectFile(objSave.FileName, m_strExcelTemplate, strMacroName);
                     }
 
                 }
@@ -4141,20 +4641,20 @@ namespace JJWATQuery
         }
 
         //private static Microsoft.Office.Interop.Excel.Application ExcelApp;//Define a Excel Application object
-        
-        private void OpenFolderAndSelectFile(string fileFullName,string strTemplateFileName,string strMacro4Run)
+
+        private void OpenFolderAndSelectFile(string fileFullName, string strTemplateFileName, string strMacro4Run)
         {
             // 打开文件所在的目录
             //System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("Explorer.exe");
             //psi.Arguments = "/e,/select," + fileFullName;
             //System.Diagnostics.Process.Start(psi);
             //System.Diagnostics.Process.Start(fileFullName);
-            
+
 
             //判断模板是否存在
-            if(!File.Exists(strTemplateFileName))
+            if (!File.Exists(strTemplateFileName))
             {
-                MessageBox.Show("模板文件不存在，请联系技术人员!","操作提示");
+                MessageBox.Show("模板文件不存在，请联系技术人员!", "操作提示");
                 return;
             }
             Excel.Application ExcelApp = new Excel.Application();
@@ -4183,16 +4683,17 @@ namespace JJWATQuery
                 ExcelApp.AlertBeforeOverwriting = false;
 
                 ExcelApp.Run(strMacro4Run, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing);
-                
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"错误提示");
+                MessageBox.Show(ex.Message, "错误提示");
                 return;
             }
 
         }
-        //撤出管线统计时间条件选择
+
+        #region 撤出管线统计时间条件选择
         private void cboBuildDt_SelectedIndexChanged(object sender, EventArgs e)
         {
             lbl_To.Visible = (cboRemoveDt.Text == mc_WithinSymbol);
@@ -4204,11 +4705,12 @@ namespace JJWATQuery
                                            DateToChar(dTPDateFrom.Value),
                                            DateToChar(dTPDateTo.Value)
                                             );
+
         }
         //撤除时间From
         private void dTPDateFrom_ValueChanged(object sender, EventArgs e)
         {
-            BuildDtSimple = "";
+            RemoveDtSimple = "";
             RemoveDtComplex = CombWhereDate(cboRemoveDt.Text, mc_StrQueryBFFieldNameRemovedt, DateToChar(dTPDateFrom.Value), DateToChar(dTPDateTo.Value));
 
             //简单查询
@@ -4218,17 +4720,18 @@ namespace JJWATQuery
                 string strCond = string.Empty;
                 strDt = dTPDateFrom.Value.ToString();
                 strCond = " SUBSTR( TRIM(" + mc_StrQueryBFFieldNameRemovedt + "),1,6)=" + strDt.Substring(1, 6);
-                BuildDtSimple = strCond;
+                RemoveDtSimple = strCond;
                 //BuildDataTitle = formatDataCN(strDt).Substring(1, 8);
             }
         }
         //撤除时间To
         private void dTPDateTo_ValueChanged(object sender, EventArgs e)
         {
-            BuildDtSimple = "";
+            RemoveDtSimple = "";
             RemoveDtComplex = CombWhereDate(cboRemoveDt.Text, mc_StrQueryBFFieldNameRemovedt, DateToChar(dTPDateFrom.Value), DateToChar(dTPDateTo.Value));
-       
+
         }
+        #endregion
 
         //将日期型数据 年月日--改成字符型数据进行查询统计
         private string DateToChar(DateTime dateTime)
@@ -4271,11 +4774,17 @@ namespace JJWATQuery
                     //strRetTitle = "从" + formatDataCN(strStartNum) + "起";
                     break;
                 case mc_SmallSymbol:
-                    m_strRet = "(" + strField + "<to_date('" + strStartNum + "000000','yyyyMMddhh24:mi:ss'))";
+                    if (strField == mc_StrAnnualReportStatusDate)//年报统计时 之前用录入日期，且统计为空，介于用审核日期。2015-06-30 贾主任
+                    { m_strRet = "(" + strField + " is null or " + strField + "<to_date('" + strStartNum + "000000','yyyyMMddhh24:mi:ss'))"; }
                     //strRetTitle = "" + formatDataCN(strStartNum) + "之前";
+                    else
+                    { m_strRet = "(" + strField + "<to_date('" + strStartNum + "000000','yyyyMMddhh24:mi:ss'))"; }
                     break;
                 case mc_SmallEqualSymbol:
-                    m_strRet = "(" + strField + "<=to_date('" + strStartNum + "235959','yyyyMMddhh24:mi:ss'))";
+                    if (strField == mc_StrAnnualReportStatusDate)//年报统计时 之前用录入日期，且统计为空，介于用审核日期。2015-06-30 贾主任
+                    { m_strRet = "(" + strField + " is null or " + strField + "<=to_date('" + strStartNum + "235959','yyyyMMddhh24:mi:ss'))"; }
+                    else
+                    { m_strRet = "(" + strField + "<=to_date('" + strStartNum + "235959','yyyyMMddhh24:mi:ss'))"; }
                     //strRetTitle = "从" + formatDataCN(strStartNum) + "起之前";
                     break;
                 case mc_WithinSymbol:
@@ -4288,15 +4797,15 @@ namespace JJWATQuery
             return m_strRet;
 
         }
-        
-        //新增统计月报：时间条件
+
+        #region 新增统计月报：时间条件选择
         private void cboCheckDt_SelectedIndexChanged(object sender, EventArgs e)
         {
             lblTo.Visible = (cboCheckDt.Text == mc_WithinSymbol);
             dtpEndStateDate.Enabled = true;
             lblTo.Enabled = true;
             dtpEndStateDate.Visible = lblTo.Visible;
-            CheckDtComplex = CombWhereDate(cboCheckDt.Text,
+            NewDtComplex = CombWhereDate(cboCheckDt.Text,
                                            mc_StrQueryGWFieldNameCheckdt,
                                            DateToChar(dtpBegStateDate.Value),
                                            DateToChar(dtpEndStateDate.Value)
@@ -4305,8 +4814,8 @@ namespace JJWATQuery
         //新增统计月报：From  Time变化
         private void dtpBegStateDate_ValueChanged(object sender, EventArgs e)
         {
-            BuildDtSimple = "";
-            CheckDtComplex = CombWhereDate(cboCheckDt.Text,
+            NewBuildDtSimple = "";
+            NewDtComplex = CombWhereDate(cboCheckDt.Text,
                                             mc_StrQueryGWFieldNameCheckdt,
                                             DateToChar(dtpBegStateDate.Value),
                                             DateToChar(dtpEndStateDate.Value)
@@ -4319,24 +4828,122 @@ namespace JJWATQuery
                 string strCond = string.Empty;
                 strDt = dtpBegStateDate.Value.ToString();
                 strCond = " SUBSTR( TRIM(" + mc_StrQueryGWFieldNameCheckdt + "),1,6)=" + strDt.Substring(1, 6);
-                BuildDtSimple = strCond;
+                NewBuildDtSimple = strCond;
                 //BuildDataTitle = formatDataCN(strDt).Substring(1, 8);
             }
         }
         //新增统计月报：To Time 变化
         private void dtpEndStateDate_ValueChanged(object sender, EventArgs e)
         {
-            BuildDtSimple = "";
-            CheckDtComplex = CombWhereDate(
-                                            cboCheckDt.Text,
+            NewBuildDtSimple = "";
+            NewDtComplex = CombWhereDate(cboCheckDt.Text,
                                             mc_StrQueryGWFieldNameCheckdt,
                                             DateToChar(dtpBegStateDate.Value),
                                             DateToChar(dtpEndStateDate.Value)
                 );
-       
+
+        }
+        #endregion
+
+        private void tabControl1_Selected(object sender, TabControlEventArgs e)
+        {
+
+            if (e.TabPage == tabPage1 || e.TabPage == tabPage2)
+            {
+                cboWaterType.Enabled = true;
+            }
+            else if (e.TabPage == tabPage3 || e.TabPage == tabPage4)
+            {
+                cboWaterType.Enabled = false;
+            }
+
         }
 
-       
+        #region 管网年报统计时间选择
+        private void cboCheckDt4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lblTo4.Visible = (cboCheckDt4.Text == mc_WithinSymbol);
+            dtpEndStateDate4.Enabled = true;
+            lblTo4.Enabled = true;
+            dtpEndStateDate4.Visible = lblTo4.Visible;
+            //年报统计时 之前用录入日期，且统计为空，介于用审核日期。2015-06-18 贾主任
+            if (cboCheckDt4.Text == mc_SmallEqualSymbol || cboCheckDt4.Text == mc_SmallSymbol)
+            {
+                AnnualDtComplex = CombWhereDate(cboCheckDt4.Text,
+                                           mc_StrAnnualReportStatusDate,//统计采用的时间
+                                           DateToChar(dtpBegStateDate4.Value),
+                                           DateToChar(dtpEndStateDate4.Value)
+                                            );
+            }
+            else
+            {
+                AnnualDtComplex = CombWhereDate(cboCheckDt4.Text,
+                                           mc_StrQueryGWFieldNameCheckdt,//统计采用的时间
+                                           DateToChar(dtpBegStateDate4.Value),
+                                           DateToChar(dtpEndStateDate4.Value)
+                                            );
+            }
+
+        }
+        //管网统计年报：From  Time变化
+        private void dtpBegStateDate4_ValueChanged(object sender, EventArgs e)
+        {
+            AnnualDtSimple = "";
+            //年报统计时 之前用录入日期，且统计为空，介于用审核日期。2015-06-18 贾主任
+            if (cboCheckDt4.Text == mc_SmallEqualSymbol || cboCheckDt4.Text == mc_SmallSymbol)
+            {
+                AnnualDtComplex = CombWhereDate(cboCheckDt4.Text,
+                                            mc_StrAnnualReportStatusDate,
+                                            DateToChar(dtpBegStateDate4.Value),
+                                            DateToChar(dtpEndStateDate4.Value)
+                                            );
+            }
+            else
+            {
+                //其他的用审核日期
+                AnnualDtComplex = CombWhereDate(cboCheckDt4.Text,
+                                            mc_StrQueryGWFieldNameCheckdt,
+                                            DateToChar(dtpBegStateDate4.Value),
+                                            DateToChar(dtpEndStateDate4.Value)
+                                            );
+            }
+
+
+            //简单查询
+            if (cboCheckDt4.Text != mc_WithinSymbol)
+            {
+                string strDt = string.Empty;
+                string strCond = string.Empty;
+                strDt = dtpBegStateDate4.Value.ToString();
+                strCond = " SUBSTR( TRIM(" + mc_StrQueryGWFieldNameCheckdt + "),1,6)=" + strDt.Substring(1, 6);
+                AnnualDtSimple = strCond;
+                //BuildDataTitle = formatDataCN(strDt).Substring(1, 8);
+            }
+        }
+
+
+        //管网统计年报：To Time变化
+        private void dtpEndStateDate4_ValueChanged(object sender, EventArgs e)
+        {
+            AnnualDtSimple = "";
+
+
+            AnnualDtComplex = CombWhereDate(cboCheckDt4.Text,
+                                            mc_StrQueryGWFieldNameCheckdt,
+                                            DateToChar(dtpBegStateDate4.Value),
+                                            DateToChar(dtpEndStateDate4.Value)
+                );
+        }
+
+        #endregion
+
+        private void btnState_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
 
 
 

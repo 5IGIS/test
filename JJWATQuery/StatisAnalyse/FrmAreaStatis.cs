@@ -13,6 +13,7 @@ using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.esriSystem;
 using System.Reflection;
 using Microsoft.Office.Interop.Excel;
+using ESRI.ArcGIS.Carto;
 
 namespace JJWATQuery
 {
@@ -135,10 +136,21 @@ namespace JJWATQuery
                 Dictionary<string, double> dic;
                 m_DicCounts = new Dictionary<string, Dictionary<string, double>>();
                 m_DicSums = new Dictionary<string, double>();
-                Dictionary<string, AFFeatureLayer> dicPointLayers = ClsFrmShow.m_objMap.GetDicLayerByWorkSpaceAndShapeType(XMLConfig.GetProName(), esriGeometryType.esriGeometryPoint);
-
-                Dictionary<string, AFFeatureLayer> dicLineLayers = ClsFrmShow.m_objMap.GetDicLayerByWorkSpaceAndShapeType(XMLConfig.GetProName(), esriGeometryType.esriGeometryPolyline);
-
+                UtilitysMgs Mgs = new UtilitysMgs(ClsFrmShow.m_App);
+                List<IFeatureLayer> m_lsPLayer = Mgs.GetPtFLayerList();
+                List<IFeatureLayer> m_lsLLayer = Mgs.GetPlFLayerList();
+                Dictionary<string, IFeatureLayer> dicPointLayers = new Dictionary<string, IFeatureLayer>();
+                for (int i = 0; i < m_lsPLayer.Count; i++)
+                {
+                    dicPointLayers.Add(m_lsPLayer[i].Name, m_lsPLayer[i]);
+                }
+                Dictionary<string, IFeatureLayer> dicLineLayers = new Dictionary<string, IFeatureLayer>();
+                for (int i = 0; i < m_lsLLayer.Count; i++)
+                {
+                    dicLineLayers.Add(m_lsLLayer[i].Name, m_lsLLayer[i]);
+                }
+                //Dictionary<string, AFFeatureLayer> dicPointLayers = ClsFrmShow.m_objMap.GetDicLayerByWorkSpaceAndShapeType(XMLConfig.GetProName(), esriGeometryType.esriGeometryPoint);
+                //Dictionary<string, AFFeatureLayer> dicLineLayers = ClsFrmShow.m_objMap.GetDicLayerByWorkSpaceAndShapeType(XMLConfig.GetProName(), esriGeometryType.esriGeometryPolyline);
                 dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
                 //统计之前清空 接边数据 表
                 BaseCon.ExecuteNonQueryMdb("delete from DC_STATIS");
@@ -162,10 +174,10 @@ namespace JJWATQuery
                     {
                         foreach (string key in m_DicFeatures.Keys)
                         {
-                            pSFilter.GeometryField = dicPointLayers[layerName].FeatureLayer.FeatureClass.ShapeFieldName;
+                            pSFilter.GeometryField = dicPointLayers[layerName].FeatureClass.ShapeFieldName;
                             pSFilter.Geometry = m_DicFeatures[key].Shape;
                             pSFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelContains;
-                            count = dicPointLayers[layerName].FeatureLayer.FeatureClass.FeatureCount(pSFilter);
+                            count = dicPointLayers[layerName].FeatureClass.FeatureCount(pSFilter);
                             if (!m_DicCounts.ContainsKey(layerName))
                             {
                                 dic = new Dictionary<string, double>();
@@ -190,10 +202,10 @@ namespace JJWATQuery
                     {
                         foreach (string key in m_DicFeatures.Keys)
                         {
-                            pSFilter.GeometryField = dicPointLayers[layerName].FeatureLayer.FeatureClass.ShapeFieldName;
+                            pSFilter.GeometryField = dicPointLayers[layerName].FeatureClass.ShapeFieldName;
                             pSFilter.Geometry = m_DicFeatures[key].Shape;
                             pSFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelTouches;
-                            pCursor = dicPointLayers[layerName].FeatureLayer.Search(pSFilter, false);
+                            pCursor = dicPointLayers[layerName].Search(pSFilter, false);
                             pf = pCursor.NextFeature();
                             count = 0;
                             while (pf != null)
@@ -234,9 +246,9 @@ namespace JJWATQuery
                             pSFilter.Geometry = m_DicFeatures[key].Shape;
                             pSFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelContains;
                             //查询包含在每个行政区下的管线
-                            pCursor = dicLineLayers[layerName].FeatureLayer.Search(pSFilter, false);
+                            pCursor = dicLineLayers[layerName].Search(pSFilter, false);
                             dataStatistics = new DataStatisticsClass();
-                            dataStatistics.Field = dicLineLayers[layerName].FeatureLayer.FeatureClass.LengthField.Name;
+                            dataStatistics.Field = dicLineLayers[layerName].FeatureClass.LengthField.Name;
                             dataStatistics.Cursor = pCursor as ICursor;
                             statisticsResults = dataStatistics.Statistics;
                             lenght = statisticsResults.Sum;
@@ -267,7 +279,7 @@ namespace JJWATQuery
                             pSFilter.Geometry = m_DicFeatures[key].Shape;
                             pSFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelCrosses;
                             //查询包含在每个行政区下的管线
-                            pCursor = dicLineLayers[layerName].FeatureLayer.Search(pSFilter, false);
+                            pCursor = dicLineLayers[layerName].Search(pSFilter, false);
                             pf = pCursor.NextFeature();
                             lenght = 0;
                             while (pf != null)
@@ -278,7 +290,7 @@ namespace JJWATQuery
                                     continue;
                                 }
                                 BaseCon.ExecuteNonQueryMdb(string.Format("insert into DC_STATIS(LAYERNAME,OID) values('{0}','{1}')", layerName, pf.OID));
-                                lenght = lenght + Convert.ToDouble(pf.get_Value(pf.Fields.FindField(dicLineLayers[layerName].FeatureLayer.FeatureClass.LengthField.Name)));
+                                lenght = lenght + Convert.ToDouble(pf.get_Value(pf.Fields.FindField(dicLineLayers[layerName].FeatureClass.LengthField.Name)));
                                 pf = pCursor.NextFeature();
                             }
                             if (!m_DicCounts.ContainsKey(layerName))
@@ -368,10 +380,10 @@ namespace JJWATQuery
                     //统计每个行政区 范围内 包含的管点
                     foreach (string layerName in dicPointLayers.Keys)
                     {
-                        pSFilter.GeometryField = dicPointLayers[layerName].FeatureLayer.FeatureClass.ShapeFieldName;
+                        pSFilter.GeometryField = dicPointLayers[layerName].FeatureClass.ShapeFieldName;
                         pSFilter.Geometry = m_DicFeatures[listBox1.SelectedItem.ToString()].Shape;
                         pSFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelContains;
-                        count = dicPointLayers[layerName].FeatureLayer.FeatureClass.FeatureCount(pSFilter);
+                        count = dicPointLayers[layerName].FeatureClass.FeatureCount(pSFilter);
                         if (!m_DicCounts.ContainsKey(layerName))
                         {
                             dic = new Dictionary<string, double>();
@@ -393,10 +405,10 @@ namespace JJWATQuery
                     //统计每个行政区 范围内 接边的管点
                     foreach (string layerName in dicPointLayers.Keys)
                     {
-                        pSFilter.GeometryField = dicPointLayers[layerName].FeatureLayer.FeatureClass.ShapeFieldName;
+                        pSFilter.GeometryField = dicPointLayers[layerName].FeatureClass.ShapeFieldName;
                         pSFilter.Geometry = m_DicFeatures[listBox1.SelectedItem.ToString()].Shape;
                         pSFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelTouches;
-                        pCursor = dicPointLayers[layerName].FeatureLayer.Search(pSFilter, false);
+                        pCursor = dicPointLayers[layerName].Search(pSFilter, false);
                         pf = pCursor.NextFeature();
                         count = 0;
                         while (pf != null)
@@ -436,9 +448,9 @@ namespace JJWATQuery
                             pSFilter.Geometry = m_DicFeatures[key].Shape;
                             pSFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelContains;
                             //查询包含在每个行政区下的管线
-                            pCursor = dicLineLayers[layerName].FeatureLayer.Search(pSFilter, false);
+                            pCursor = dicLineLayers[layerName].Search(pSFilter, false);
                             dataStatistics = new DataStatisticsClass();
-                            dataStatistics.Field = dicLineLayers[layerName].FeatureLayer.FeatureClass.LengthField.Name;
+                            dataStatistics.Field = dicLineLayers[layerName].FeatureClass.LengthField.Name;
                             dataStatistics.Cursor = pCursor as ICursor;
                             statisticsResults = dataStatistics.Statistics;
                             lenght = statisticsResults.Sum;
@@ -467,7 +479,7 @@ namespace JJWATQuery
                         pSFilter.Geometry = m_DicFeatures[listBox1.SelectedItem.ToString()].Shape;
                         pSFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelCrosses;
                         //查询包含在每个行政区下的管线
-                        pCursor = dicLineLayers[layerName].FeatureLayer.Search(pSFilter, false);
+                        pCursor = dicLineLayers[layerName].Search(pSFilter, false);
                         pf = pCursor.NextFeature();
                         lenght = 0;
                         while (pf != null)
@@ -478,7 +490,7 @@ namespace JJWATQuery
                                 continue;
                             }
                             BaseCon.ExecuteNonQueryMdb(string.Format("insert into DC_STATIS(LAYERNAME,OID) values('{0}','{1}')", layerName, pf.OID));
-                            lenght = lenght + Convert.ToDouble(pf.get_Value(pf.Fields.FindField(dicLineLayers[layerName].FeatureLayer.FeatureClass.LengthField.Name)));
+                            lenght = lenght + Convert.ToDouble(pf.get_Value(pf.Fields.FindField(dicLineLayers[layerName].FeatureClass.LengthField.Name)));
                             pf = pCursor.NextFeature();
                         }
                         if (!m_DicCounts.ContainsKey(layerName))
@@ -652,17 +664,18 @@ namespace JJWATQuery
                     Microsoft.Office.Interop.Excel.Sheets m_objWorkSheets = m_objBook.Sheets; ;
                     Microsoft.Office.Interop.Excel.Worksheet m_objWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)m_objWorkSheets[1];
                     int index = (dataGridView1.Columns.Count + 1) % 2 == 0 ? (dataGridView1.Columns.Count + 1) / 2 : Convert.ToInt32((dataGridView1.Columns.Count + 1) / 2) + 1;
-                    m_objExcel.Cells[1, index] = "行政区统计报表";
+                    m_objExcel.Cells[1, index] = comboBox2.Text + "统计报表";
+                    m_objExcel.Cells[2, dataGridView1.Columns.Count + 1] = "打印时间：" + DateTime.Now;
                     for (int i = 0; i < dataGridView1.Columns.Count; i++)
                     {
-                        m_objExcel.Cells[2, i + 2] = dataGridView1.Columns[i].HeaderText;
+                        m_objExcel.Cells[3, i + 2] = dataGridView1.Columns[i].HeaderText;
                     }
                     for (int i = 0; i < dataGridView1.Rows.Count; i++)
                     {
-                        m_objExcel.Cells[i + 3, 1] = dataGridView1.Rows[i].HeaderCell.Value;
+                        m_objExcel.Cells[i + 4, 1] = dataGridView1.Rows[i].HeaderCell.Value;
                         for (int j = 0; j < dataGridView1.Columns.Count; j++)
                         {
-                            m_objExcel.Cells[i + 3, j + 2] = dataGridView1.Rows[i].Cells[j].Value;
+                            m_objExcel.Cells[i + 4, j + 2] = dataGridView1.Rows[i].Cells[j].Value;
                         }
                     }
                     Range rangeTitle = m_objWorkSheet.get_Range(m_objExcel.Cells[1, index], m_objExcel.Cells[1, index]);
@@ -671,7 +684,8 @@ namespace JJWATQuery
                     //合并单元格
                     rangeTitle.Merge(rangeTitle.MergeCells);
                     m_objWorkSheet.get_Range("A1", m_objExcel.Cells[1, dataGridView1.Columns.Count + 1]).Merge(m_objWorkSheet.get_Range("A1", m_objExcel.Cells[1, dataGridView1.Columns.Count + 1]).MergeCells);
-                    Range rangeContent = m_objWorkSheet.get_Range(m_objExcel.Cells[1, 1], m_objExcel.Cells[2 + dataGridView1.Rows.Count, dataGridView1.Columns.Count + 1]);
+                    //m_objWorkSheet.get_Range("A2", m_objExcel.Cells[2, dataGridView1.Columns.Count + 1]).Merge(m_objWorkSheet.get_Range("A2", m_objExcel.Cells[2, dataGridView1.Columns.Count + 1]).MergeCells);
+                    Range rangeContent = m_objWorkSheet.get_Range(m_objExcel.Cells[1, 1], m_objExcel.Cells[3 + dataGridView1.Rows.Count, dataGridView1.Columns.Count + 1]);
                     rangeContent.EntireColumn.AutoFit();
                     rangeContent.HorizontalAlignment = XlHAlign.xlHAlignCenter;
                     m_objExcel.DisplayAlerts = false;

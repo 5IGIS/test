@@ -55,7 +55,7 @@
             this.btnAreaClear.Name = "btnAreaClear";
             this.btnAreaClear.Size = new System.Drawing.Size(61, 23);
             this.btnAreaClear.TabIndex = 43;
-            this.btnAreaClear.Text = "清除(&C)";
+            this.btnAreaClear.Text = "清除";
             this.btnAreaClear.UseVisualStyleBackColor = true;
             this.btnAreaClear.Click += new System.EventHandler(this.btnAreaClear_Click);
             // 
@@ -116,7 +116,7 @@
             this.btnAreaSelect.Name = "btnAreaSelect";
             this.btnAreaSelect.Size = new System.Drawing.Size(61, 23);
             this.btnAreaSelect.TabIndex = 42;
-            this.btnAreaSelect.Text = "选择(&S)";
+            this.btnAreaSelect.Text = "选择";
             this.btnAreaSelect.UseVisualStyleBackColor = true;
             this.btnAreaSelect.Click += new System.EventHandler(this.btnAreaSelect_Click);
             // 
@@ -165,7 +165,7 @@
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(61, 23);
             this.btnClose.TabIndex = 46;
-            this.btnClose.Text = "退出(&Q)";
+            this.btnClose.Text = "退出";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
@@ -176,7 +176,7 @@
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(61, 23);
             this.btnQuery.TabIndex = 45;
-            this.btnQuery.Text = "查询(&I)";
+            this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = true;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click_1);
             // 
@@ -218,7 +218,7 @@
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(61, 23);
             this.btnClear.TabIndex = 44;
-            this.btnClear.Text = "重置(&R)";
+            this.btnClear.Text = "重置";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click_1);
             // 

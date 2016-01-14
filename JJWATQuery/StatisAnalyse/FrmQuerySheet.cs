@@ -719,7 +719,7 @@ namespace JJWATQuery
                     {
                         string sql = string.Format("select count(*) as num from(select distinct({0}) from {1} t)", pField.Name, (m_FeatureLayer.FeatureClass as IDataset).Name);
                         DataTable dt = BaseCon.ExecuteQueryOra(sql);
-                        sql = string.Format("select {0},count({1}) as num from {2} t group by {3} order by num desc", pField.Name, pField.Name, (m_FeatureLayer.FeatureClass as IDataset).Name, pField.Name);
+                        sql = string.Format("select * from (select {0},count({1}) as num from {2} t group by {3} order by num desc) where rownum <= 200", pField.Name, pField.Name, (m_FeatureLayer.FeatureClass as IDataset).Name, pField.Name);
                         dt = BaseCon.ExecuteQueryOra(sql);
                         foreach (DataRow r in dt.Rows)
                         {
@@ -927,6 +927,28 @@ namespace JJWATQuery
             else
             {
                 time_CHECKEDATE2.Enabled = true;
+            }
+        }
+
+        private void btnQuery_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (textBox1.Text != "")
+                {
+                    cbAll.Checked = false;
+                    string sql = string.Format("select distinct({0}) from {1} t where {2} like '%{3}%' and rownum<=200 order by {4}", pField.Name, (m_FeatureLayer.FeatureClass as IDataset).Name, pField.Name, textBox1.Text, pField.Name);
+                    DataTable dt = BaseCon.ExecuteQueryOra(sql);
+                    clbList.Items.Clear();
+                    foreach (DataRow r in dt.Rows)
+                    {
+                        clbList.Items.Add(r[pField.Name]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MsgBox.Show(ex.ToString());
             }
         }
     }

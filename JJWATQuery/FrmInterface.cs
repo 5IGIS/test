@@ -44,7 +44,6 @@ namespace JJWATQuery
         IList<IFeatureLayer> pListFeatL = new List<IFeatureLayer>();
         public void inApplication(IApplication Application)
         {
-
             m_App = Application;
             m_MxDoc = (m_App.Document) as IMxDocument;
             m_pMap = m_MxDoc.FocusMap;
@@ -206,8 +205,10 @@ namespace JJWATQuery
                 }
                 else
                 {
+                    frm.Close();
+                    frm = new UtilitysResultForm();
                     frm.Init(pQuery, m_App);
-                    frm.Activate();
+                    frm.Show();
                 }
                 this.Cursor = Cursors.Default;
             }
@@ -242,6 +243,7 @@ namespace JJWATQuery
         {
             this.Close();
         }
+
         private void btnClear_Click(object sender, EventArgs e)
         {
             if (cbLayerAll.Checked)
@@ -316,7 +318,14 @@ namespace JJWATQuery
                     }
                 }
                 cbArea.SelectedIndex = 0;
-                dTypeDomain = Mgs.GetDomainsByName(Mgs.SfrmName);
+                AFFeatureLayer oLayer = modMain.m_objMap.GetLayerByName(XMLConfig.ValveDevice());
+                if (oLayer == null)
+                {
+                    MsgBox.Show("地图没有加载‘" + XMLConfig.ValveDevice() + "’图层，请修改配置表！");
+                    return;
+                }
+                IField pfd = oLayer.FeatureLayer.FeatureClass.Fields.get_Field(oLayer.FeatureLayer.FeatureClass.Fields.FindFieldByAliasName(Mgs.SfrmName));
+                dTypeDomain = Mgs.GetDomainsByName(pfd);
                 if (dTypeDomain.Count != 0)
                 {
                     iListSelectType.Clear();

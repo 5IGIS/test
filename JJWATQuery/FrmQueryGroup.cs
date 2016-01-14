@@ -88,15 +88,21 @@ namespace JJWATQuery
                 }
                 IFeatureLayer pFLayer = Mgs.GetFLayer(cbLayer.Text);
                 List<string> lTypes = new List<string>();
-                if (pFLayer == null) return;
+                if (pFLayer == null)
+                {
+                    return;
+                }
                 IFeatureClass pFeaClass = pFLayer.FeatureClass;
                 if (pFLayer.FeatureClass.FeatureDataset.Workspace.Type == esriWorkspaceType.esriLocalDatabaseWorkspace)
+                {
                     sSqlSign = "*";
+                }
                 else
+                {
                     sSqlSign = "%";
+                }
                 for (int i = 0; i < pFeaClass.Fields.FieldCount; i++)
                 {
-
                     if (pFeaClass.Fields.get_Field(i).Type.ToString() == "esriFieldTypeString" || pFeaClass.Fields.get_Field(i).Type.ToString() == "esriFieldTypeInteger" || pFeaClass.Fields.get_Field(i).Type.ToString() == "esriFieldTypeDate")
                     {
                         DataRow dr = dTable.NewRow();
@@ -108,6 +114,7 @@ namespace JJWATQuery
                             dr["column0"] = pFeaClass.Fields.get_Field(i).AliasName;
                         dr["column1"] = pFeaClass.Fields.get_Field(i).Name;
                         dr["column2"] = pFeaClass.Fields.get_Field(i).Type.ToString();
+                        //dr["column3"] = pFeaClass.Fields.get_Field(i).
                         dTable.Rows.Add(dr);
                     }
                 }
@@ -115,7 +122,8 @@ namespace JJWATQuery
                 {
                     dTypeDomain.Clear();
                     string sName = "";
-                    dTypeDomain = Mgs.GetDomainsByName(dTable.Rows[j][0].ToString());
+                    IField pfd = pFeaClass.Fields.get_Field(pFeaClass.Fields.FindFieldByAliasName(dTable.Rows[j][0].ToString()));
+                    dTypeDomain = Mgs.GetDomainsByName(pfd);
                     foreach (var item in dTypeDomain)
                     {
                         sName = item.Key;
@@ -168,7 +176,6 @@ namespace JJWATQuery
                                 plSelect.Controls.Add(UserDate);
                                 TableLayoutPanel tLayPan = plSelect.Controls[j].Controls[0] as TableLayoutPanel;
                                 FieldsValue(tLayPan, dTable.Rows[j][0].ToString());
-
                             }
                         }
                     }
@@ -292,15 +299,44 @@ namespace JJWATQuery
                     UserCoTet UserTet = obj as UserCoTet;
                     TableLayoutPanel TablePanel = UserTet.Controls[0] as TableLayoutPanel;
                     CheckBox cbx = TablePanel.Controls[0] as CheckBox;
+                    CheckBox cbxFQ = TablePanel.Controls[2] as CheckBox;
                     if (cbx is CheckBox)
                     {
                         if (cbx.Checked == true)
                         {
                             TextBox tbx = TablePanel.Controls[1] as TextBox;
-                            if (string.IsNullOrEmpty(tbx.Text.Trim()) == false)
+                            if (cbxFQ.Checked == true)
                             {
-                                sWhere = DEnglish[cbx.Text] + " like '" + sSqlSign + "" + tbx.Text + "" + sSqlSign + "'";
-                                ListSqlWhere.Add(sWhere);
+                                if (string.IsNullOrEmpty(tbx.Text.Trim()) == false)
+                                {
+                                    if (SysParameters.m_CurSysName == SysParameters.CurSysName.BJWATER)
+                                    {
+                                        if (cbx.Text == "档案号" || cbx.Text == "户号")
+                                        {
+                                            sWhere = DEnglish[cbx.Text] + " = '" + tbx.Text + "'";
+                                        }
+                                        else
+                                        {
+                                            sWhere = DEnglish[cbx.Text] + " like '" + sSqlSign + "" + tbx.Text + "" + sSqlSign + "'";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        sWhere = DEnglish[cbx.Text] + " like '" + sSqlSign + "" + tbx.Text + "" + sSqlSign + "'";
+                                    }
+                                    ListSqlWhere.Add(sWhere);
+                                }
+                            }
+                            else
+                            {
+                                if (string.IsNullOrEmpty(tbx.Text.Trim()) == false)
+                                {
+                                    if (SysParameters.m_CurSysName == SysParameters.CurSysName.BJWATER)
+                                    {
+                                        sWhere = DEnglish[cbx.Text] + " = '" + tbx.Text + "'";
+                                    }
+                                    ListSqlWhere.Add(sWhere);
+                                }
                             }
                         }
                     }
@@ -314,7 +350,8 @@ namespace JJWATQuery
                     {
                         if (cbx.Checked == true)
                         {
-                            TextBox tbx = TablePanel.Controls[2] as TextBox;
+                            //TextBox tbx = TablePanel.Controls[2] as TextBox;
+                            TextBox tbx = TablePanel.Controls[1] as TextBox;
                             if (string.IsNullOrEmpty(tbx.Text.Trim()) == false)
                             {
                                 string ss;
@@ -363,7 +400,7 @@ namespace JJWATQuery
                                             break;
                                         case AFConst.DataSourceType.AFisAccess:
                                             sWhere = "";
-                                            break;  
+                                            break;
                                         case AFConst.DataSourceType.AFisOracle:
                                             sWhere = DEnglish[cbx.Text] + ">= to_date('" + lTimeB + " 00:00:00','yyyy/mm/dd hh24:mi:ss') and " + DEnglish[cbx.Text] + "<=to_date('" + lTimnE + " 23:59:59','yyyy/mm/dd hh24:mi:ss')";
                                             break;
@@ -437,8 +474,14 @@ namespace JJWATQuery
                 }
                 else
                 {
+                    frm.Close();
+                    frm = new UtilitysResultForm();
                     frm.Init(pQuery, m_App);
-                    frm.Activate();
+                    frm.Show();
+                    //frm.Init(pQuery, m_App);
+                    //frm.WindowState = FormWindowState.Normal;
+                    //frm.Activate();
+                    //frm.TopLevel = true;
                 }
                 this.Cursor = Cursors.Default;
             }
@@ -525,7 +568,8 @@ namespace JJWATQuery
                         if (cbx.Checked == true)
                         {
                             cbx.Checked = false;
-                            TextBox tbx = TablePanel.Controls[2] as TextBox;
+                            //TextBox tbx = TablePanel.Controls[2] as TextBox;
+                            TextBox tbx = TablePanel.Controls[1] as TextBox;
                             if (string.IsNullOrEmpty(tbx.Text.Trim()) == false)
                             {
                                 tbx.Text = "";

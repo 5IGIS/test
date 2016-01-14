@@ -53,6 +53,8 @@
             this.btnDown = new System.Windows.Forms.Button();
             this.btnUp = new System.Windows.Forms.Button();
             this.gbList = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnQuery = new System.Windows.Forms.Button();
             this.cbAll = new System.Windows.Forms.CheckBox();
             this.clbList = new System.Windows.Forms.CheckedListBox();
             this.dGridView = new System.Windows.Forms.DataGridView();
@@ -252,22 +254,22 @@
             // btn_ExportExcel
             // 
             this.btn_ExportExcel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_ExportExcel.Location = new System.Drawing.Point(211, 598);
+            this.btn_ExportExcel.Location = new System.Drawing.Point(247, 598);
             this.btn_ExportExcel.Name = "btn_ExportExcel";
-            this.btn_ExportExcel.Size = new System.Drawing.Size(88, 23);
+            this.btn_ExportExcel.Size = new System.Drawing.Size(73, 23);
             this.btn_ExportExcel.TabIndex = 12;
-            this.btn_ExportExcel.Text = "转出Excel(&E)";
+            this.btn_ExportExcel.Text = "转出Excel";
             this.btn_ExportExcel.UseVisualStyleBackColor = true;
             this.btn_ExportExcel.Click += new System.EventHandler(this.btn_ExportExcel_Click);
             // 
             // btnStats
             // 
             this.btnStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStats.Location = new System.Drawing.Point(313, 598);
+            this.btnStats.Location = new System.Drawing.Point(326, 598);
             this.btnStats.Name = "btnStats";
             this.btnStats.Size = new System.Drawing.Size(73, 23);
             this.btnStats.TabIndex = 13;
-            this.btnStats.Text = "统  计(&S)";
+            this.btnStats.Text = "统计";
             this.btnStats.UseVisualStyleBackColor = true;
             this.btnStats.Click += new System.EventHandler(this.btnStats_Click);
             // 
@@ -278,7 +280,7 @@
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(73, 23);
             this.btnClose.TabIndex = 14;
-            this.btnClose.Text = "退 出(&Q)";
+            this.btnClose.Text = "关闭";
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
@@ -339,7 +341,6 @@
             this.clbStats.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.clbStats.CheckOnClick = true;
             this.clbStats.FormattingEnabled = true;
             this.clbStats.Location = new System.Drawing.Point(5, 16);
             this.clbStats.Name = "clbStats";
@@ -374,6 +375,8 @@
             this.gbList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbList.Controls.Add(this.textBox1);
+            this.gbList.Controls.Add(this.btnQuery);
             this.gbList.Controls.Add(this.cbAll);
             this.gbList.Controls.Add(this.clbList);
             this.gbList.Location = new System.Drawing.Point(3, 9);
@@ -383,11 +386,29 @@
             this.gbList.TabStop = false;
             this.gbList.Text = "分组类型:";
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 20);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(169, 21);
+            this.textBox1.TabIndex = 4;
+            // 
+            // btnQuery
+            // 
+            this.btnQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnQuery.Location = new System.Drawing.Point(182, 20);
+            this.btnQuery.Name = "btnQuery";
+            this.btnQuery.Size = new System.Drawing.Size(40, 22);
+            this.btnQuery.TabIndex = 3;
+            this.btnQuery.Text = "查询";
+            this.btnQuery.UseVisualStyleBackColor = true;
+            this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
+            // 
             // cbAll
             // 
             this.cbAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbAll.AutoSize = true;
-            this.cbAll.Location = new System.Drawing.Point(179, 16);
+            this.cbAll.Location = new System.Drawing.Point(182, 48);
             this.cbAll.Name = "cbAll";
             this.cbAll.Size = new System.Drawing.Size(48, 16);
             this.cbAll.TabIndex = 1;
@@ -402,9 +423,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbList.CheckOnClick = true;
             this.clbList.FormattingEnabled = true;
-            this.clbList.Location = new System.Drawing.Point(5, 16);
+            this.clbList.Location = new System.Drawing.Point(5, 48);
             this.clbList.Name = "clbList";
-            this.clbList.Size = new System.Drawing.Size(171, 212);
+            this.clbList.Size = new System.Drawing.Size(171, 180);
             this.clbList.TabIndex = 0;
             this.clbList.SelectedIndexChanged += new System.EventHandler(this.clbList_SelectedIndexChanged);
             // 
@@ -440,7 +461,6 @@
             this.Name = "FrmQuerySheet";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "固定格式报表";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.FrmQuerySheet_Load);
             this.gbLayers.ResumeLayout(false);
             this.gbLayers.PerformLayout();
@@ -489,6 +509,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DateTimePicker time_CHECKEDATE2;
         private System.Windows.Forms.DateTimePicker time_CHECKEDATE1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button btnQuery;
 
 
     }

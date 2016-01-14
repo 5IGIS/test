@@ -42,7 +42,7 @@
             this.cmdCenter.Name = "cmdCenter";
             this.cmdCenter.Size = new System.Drawing.Size(58, 21);
             this.cmdCenter.TabIndex = 6;
-            this.cmdCenter.Text = "退出(&Q)";
+            this.cmdCenter.Text = "取消(&C)";
             this.cmdCenter.UseVisualStyleBackColor = true;
             this.cmdCenter.Click += new System.EventHandler(this.cmdCenter_Click);
             // 
@@ -53,7 +53,7 @@
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(58, 21);
             this.cmdOK.TabIndex = 5;
-            this.cmdOK.Text = "确定(&Y)";
+            this.cmdOK.Text = "确定(&A)";
             this.cmdOK.UseVisualStyleBackColor = true;
             this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
             // 
@@ -95,7 +95,6 @@
             this.Name = "UtilitysFields";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "配置导出字段";
-            this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.UtilitysFields_FormClosed);
             this.Load += new System.EventHandler(this.UtilitysFields_Load);
             this.ResumeLayout(false);
